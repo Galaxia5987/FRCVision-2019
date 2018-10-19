@@ -375,3 +375,9 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/macos,linux,python,pycharm,windows,pycharm+iml,pycharm+all
+
+fuel\.py
+
+switch\.py
+
+settings\.txt
