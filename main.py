@@ -1,5 +1,12 @@
-import cv2
-import numpy as np
+from display import Display
+from trackbars import Trackbars
 
-# put -1/0/1 in VideoCapture()
-cap = cv2.VideoCapture(1)
+name = "target"
+target = __import__(name).Target(name)
+
+display = Display()
+trackbars = Trackbars(name)
+
+while True:
+    frame = display.get_frame()
+    frame = target.pre_processing(frame)

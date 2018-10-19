@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+
 def aspect_ratio(cnt):
     rect = cv2.minAreaRect(cnt)
     width = rect[1][0]
