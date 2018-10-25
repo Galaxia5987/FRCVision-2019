@@ -44,7 +44,7 @@ def run(target):
         mask = utils.hsv_mask(frame, trackbars.get_hsv())
         frame = cv2.bitwise_and(frame, frame, mask=mask)
         display.show_frame(frame)
-        k = cv2.waitKey(100) & 0xFF  # Wait time to remove freezing
+        k = cv2.waitKey(1) & 0xFF  # Wait time to remove freezing
         if k in (27, 113):
             break
 
