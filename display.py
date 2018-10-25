@@ -7,7 +7,7 @@ class Display:
 
     def get_frame(self):
         image = self.camera.read()[1]
-        return image
+        return image.copy()
 
     def show_frame(self, frame, title='image'):
         cv2.imshow(title, frame)
