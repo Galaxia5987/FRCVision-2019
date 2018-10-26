@@ -16,14 +16,16 @@ class Target:
         mask = utils.hsv_mask(frame, self.hsv)
         # create a cross kernel
         mask = utils.morphology(mask, self.kernel)
-        _, mask = cv2.threshold(mask, 127, 255, 0)
+        mask = cv2.threshold(mask, 127, 255, 0)[1]
         return mask
 
-    def find_contours(self, mask):
+    @staticmethod
+    def find_contours(mask):
         im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
-    def filter_contours(self, contours):
+    @staticmethod
+    def filter_contours(contours):
         correct_contours = []
 
         if contours is not None:
@@ -33,5 +35,6 @@ class Target:
 
         return correct_contours
 
-    def draw_contours(self, filtered_contours, original):
+    @staticmethod
+    def draw_contours(filtered_contours, original):
         cv2.drawContours(original, filtered_contours, -1, (255, 255, 0), 3)
