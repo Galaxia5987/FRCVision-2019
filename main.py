@@ -1,3 +1,5 @@
+from importlib import import_module
+
 import cv2
 
 import utils
@@ -5,14 +7,15 @@ from display import Display
 from trackbars import Trackbars
 
 name = "target"
-target = __import__(name).Target(name)
+target = import_module(f'targets.{name}').Target(name)
+
 
 display = Display()
 trackbars = Trackbars(name)
 
 while True:
     frame = display.get_frame()
-    # Seperate frames for display purposes
+    # Separate frames for display purposes
     original = frame.copy()
     contour_image = frame.copy()
     # Target functions
