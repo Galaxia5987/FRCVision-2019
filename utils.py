@@ -23,10 +23,7 @@ def load_file(name):
         return json.load(f)
 
 
-def aspect_ratio(cnt):
-    rect = cv2.minAreaRect(cnt)
-    width = rect[1][0]
-    height = rect[1][1]
+def aspect_ratio(width, height):
     return width / height
 
 

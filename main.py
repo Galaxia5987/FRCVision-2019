@@ -6,7 +6,7 @@ import utils
 from display import Display
 from trackbars import Trackbars
 
-name = "target"
+name = "fuel"
 target = import_module(f'targets.{name}').Target(name)
 
 
@@ -19,7 +19,7 @@ while True:
     original = frame.copy()
     contour_image = frame.copy()
     # Target functions
-    mask = target.create_mask(frame)
+    mask = target.create_mask(frame, trackbars.get_hsv())
     contours = target.find_contours(mask)
     filtered_contours = target.filter_contours(contours)
     # Draw contours
