@@ -27,6 +27,13 @@ def aspect_ratio(width, height):
     return width / height
 
 
+def solidity(cnt):
+    area = cv2.contourArea(cnt)
+    hull = cv2.convexHull(cnt)
+    hull_area = cv2.contourArea(hull)
+    return float(area) / hull_area
+
+
 def hsv_mask(frame, hsv):
     hsv_colors = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     lower_hsv = np.array([hsv["H"][0], hsv["S"][0], hsv["V"][0]])
@@ -44,3 +51,9 @@ def morphology(mask, kernel):
 def bitwise_mask(frame, mask):
     frame = frame.copy()
     return cv2.bitwise_and(frame, frame, mask=mask)
+
+
+def contour_in_area(cnt1, cnt2):
+    x1, y1, w1, h1 = cv2.boundingRect(cnt1)
+    x2, y2, w2, h2 = cv2.boundingRect(cnt2)
+    return x1 <= x2 <= x1 + w1 and y1 <= y2 <= y1 + h1

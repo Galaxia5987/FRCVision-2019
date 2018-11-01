@@ -6,7 +6,7 @@ import utils
 from display import Display
 from trackbars import Trackbars
 
-name = "fuel"
+name = "fuel_new"
 target = import_module(f'targets.{name}').Target(name)
 
 
