@@ -23,50 +23,52 @@ class Target:
         im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
-    def is_circle(self, cnt, ratio):
-        ratio = utils.solidity(cnt)
-        if ratio <= ratio <= 1:
+    def is_circle(self, cnt, minimum):
+        ratio = utils.circle_ratio(cnt)
+        if minimum <= ratio <= 1:
             return True
         return False
 
     def find_circles(self, contours):
         circles = []
         for cnt in contours:
-            if self.is_circle(cnt, 0.80):
+            if self.is_circle(cnt, 0.5):
                 circles.append(cnt)
         return circles
 
     def size_filtering(self, contours):
         correct_contours = []
         for cnt in contours:
-            if cv2.contourArea(cnt) > 5_000 and self.is_circle(cnt, 0.93):
+            if cv2.contourArea(cnt) > 3_000 and self.is_circle(cnt, 0.8):
                 correct_contours.append(cnt)
         return correct_contours
 
     def filter_contours(self, contours):
         if not contours:
-            print(f'Bad contours: {contours}')
             return
         circles = self.find_circles(contours)
         if not circles:
-            print("No circles found")
             return
         filtered_circles = self.size_filtering(circles)
         if not filtered_circles:
-            print("No circles that match the criteria were found")
             return
-        for filtered_circle in filtered_circles:
-            circles.remove(filtered_circle)
+        final_contours = []
         for circle in circles:
             for filtered_circle in filtered_circles:
-                if utils.contour_in_area(circle, filtered_circle):
-                    print(cv2.contourArea(circle))
-        return circles
+                if filtered_circle is circle:
+                    continue
+                if utils.contour_in_area(filtered_circle, circle):
+                    if cv2.contourArea(circle) > 300:
+                        _, circle_radius = cv2.minEnclosingCircle(circle)
+                        _, filtered_radius = cv2.minEnclosingCircle(filtered_circle)
+                        ratio = utils.circle_area(circle_radius) / utils.circle_area(filtered_radius)
+                        if ratio >= 0.01:
+                            final_contours.append(filtered_circle)
+        return final_contours
 
     @staticmethod
     def draw_contours(filtered_contours, original):
         if not filtered_contours:
-            print(f'Bad filtered contours: {filtered_contours}')
             return
         for cnt in filtered_contours:
             # x, y, w, h = cv2.boundingRect(cnt)

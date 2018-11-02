@@ -1,4 +1,5 @@
 import json
+import math
 import os
 
 import cv2
@@ -27,11 +28,15 @@ def aspect_ratio(width, height):
     return width / height
 
 
-def solidity(cnt):
-    area = cv2.contourArea(cnt)
+def circle_area(radius):
+    return radius ** 2 * math.pi
+
+
+def circle_ratio(cnt):
+    _, radius = cv2.minEnclosingCircle(cnt)
     hull = cv2.convexHull(cnt)
     hull_area = cv2.contourArea(hull)
-    return float(area) / hull_area
+    return hull_area / float(circle_area(radius))
 
 
 def hsv_mask(frame, hsv):
