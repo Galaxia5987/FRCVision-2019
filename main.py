@@ -10,11 +10,12 @@ from trackbars import Trackbars
 name = "fuel_new"
 target = import_module(f'targets.{name}').Target(name)
 
-display = Display()
+display = Display(port=1)
 trackbars = Trackbars(name)
 
 timer = time.time()
 avg = 0
+
 while True:
     frame = display.get_frame()
     # Separate frames for display purposes
@@ -26,15 +27,12 @@ while True:
     filtered_contours = target.filter_contours(contours)
     # Draw contours
     target.draw_contours(filtered_contours, contour_image)
+    # Show FPS
+    avg = utils.show_fps(contour_image, time.time(), timer, avg)
+    timer = time.time()
     # Display
     display.show_frame(contour_image)
     display.show_frame(utils.bitwise_mask(original, mask), title="mask")
-    avg = (avg + (time.time() - timer)) / 2
-    timer = time.time()
-    print("{:.3f}".format(1 / avg))
-    # TODO: make this work instead of print
-    cv2.putText(original, "{:.3f}".format(1 / (avg / 1000)), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 4, (0, 0, 0), 2,
-                cv2.LINE_AA)
     k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
     if k in (27, 113):
         break

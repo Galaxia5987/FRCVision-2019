@@ -62,3 +62,10 @@ def contour_in_area(cnt1, cnt2):
     x1, y1, w1, h1 = cv2.boundingRect(cnt1)
     x2, y2, w2, h2 = cv2.boundingRect(cnt2)
     return x1 <= x2 <= x1 + w1 and y1 <= y2 <= y1 + h1
+
+
+def show_fps(frame, current_time, last_time, avg):
+    avg = (avg + (current_time - last_time)) / 2
+    cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+    return avg
+
