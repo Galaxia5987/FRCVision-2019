@@ -50,4 +50,4 @@ def run(target):
 
 
 if __name__ == "__main__":
-    run("test")
+    run("power_cube")
