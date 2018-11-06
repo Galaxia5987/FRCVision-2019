@@ -33,6 +33,7 @@ while True:
     # Display
     display.show_frame(contour_image)
     display.show_frame(utils.bitwise_mask(original, mask), title="mask")
+    display.stream()
     k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
     if k in (27, 113):
         break
