@@ -10,7 +10,7 @@ from trackbars import Trackbars
 name = "fuel_new"
 target = import_module(f'targets.{name}').Target(name)
 
-display = Display(port=1)
+display = Display()
 trackbars = Trackbars(name)
 
 timer = time.time()
@@ -28,7 +28,7 @@ while True:
     # Draw contours
     target.draw_contours(filtered_contours, contour_image)
     # Show FPS
-    avg = utils.show_fps(contour_image, time.time(), timer, avg)
+    avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
     timer = time.time()
     # Display
     display.show_frame(contour_image)
