@@ -12,7 +12,7 @@ display = Display()
 
 
 def run():
-    name = "fuel_new"
+    name = "target"
     target = import_module(f'targets.{name}').Target(name)
 
     trackbars = Trackbars(name)

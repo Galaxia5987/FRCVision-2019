@@ -1,6 +1,7 @@
 import cv2
 import netifaces as ni
 from flask import Flask, render_template, Response
+from gevent.pywsgi import WSGIServer
 
 
 class Display:
@@ -49,4 +50,4 @@ class Display:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def run_app(self):
-        self.app.run(host=self.ip, port=80, debug=False)
+        WSGIServer(('0.0.0.0', 5987), self.app).serve_forever()
