@@ -6,18 +6,18 @@ from flask import Flask, render_template, Response
 class Display:
     def __init__(self, port=0):
         self.camera = cv2.VideoCapture(port)
+        self.last_frame = self.get_frame()
 
         self.ip = None
         while self.ip is None:
             for interface in ni.interfaces():
                 try:
                     addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                    # print(addrs)
                     self.ip = addrs[0]['addr']  # The first IP address (probably the local one)
                     if self.ip is not '127.0.0.1':
                         break
                 except:
-                    pass
+                    self.ip = '0.0.0.0'
 
         print("IP: " + self.ip)
 
@@ -29,20 +29,24 @@ class Display:
 
         @self.app.route('/mjpg/video.mjpg')
         def video_feed():  # Initiate the feed
-            return Response(self.gen_frame(),
+            return Response(self.stream_frame(),
                             mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def get_frame(self):
         image = self.camera.read()[1]
         return image.copy()
 
+    def set_frame(self, frame):
+        self.last_frame = frame
+
     @staticmethod
     def show_frame(frame, title='image'):
         cv2.imshow(title, frame)
 
-    def gen_frame(self):
-        jpg = cv2.imencode('.jpg', self.get_frame)[1].tostring()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
+    def stream_frame(self):
+        while True:
+            jpg = cv2.imencode('.jpg', self.last_frame)[1].tostring()
+            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
-    def stream(self):
+    def run_app(self):
         self.app.run(host=self.ip, port=80, debug=False)
