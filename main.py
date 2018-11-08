@@ -41,6 +41,6 @@ def loop():
             break
 
 
-Thread(target=run).start()
+Thread(target=loop).start()
 print("IP: " + utils.get_ip())
 display.run_app()
