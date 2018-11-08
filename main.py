@@ -11,7 +11,7 @@ from trackbars import Trackbars
 display = Display()
 
 
-def run():
+def loop():
     name = "target"
     target = import_module(f'targets.{name}').Target(name)
 

@@ -14,7 +14,7 @@ class Display:
         def index():  # Returns the HTML template (lower case 't')
             return render_template('index.html')
 
-        @self.app.route('/mjpg/video.mjpg')
+        @self.app.route('/stream.mjpg')
         def video_feed():  # Initiate the feed
             return Response(self.stream_frame(),
                             mimetype='multipart/x-mixed-replace; boundary=frame')
