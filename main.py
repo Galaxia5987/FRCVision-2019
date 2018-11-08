@@ -42,4 +42,5 @@ def run():
 
 
 Thread(target=run).start()
+print("IP: " + utils.get_ip())
 display.run_app()

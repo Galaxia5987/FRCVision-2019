@@ -5,6 +5,8 @@ import os
 import cv2
 import numpy as np
 
+import netifaces as ni
+
 default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
 
 
@@ -69,3 +71,17 @@ def calculate_fps(frame, current_time, last_time, avg):
     cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
     return avg
 
+
+def get_ip():
+    ip = None
+    while ip is None:
+        for interface in ni.interfaces():
+            try:
+                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
+                ip = addrs[0]['addr']  # The first IP address (probably the local one)
+                if ip is not '127.0.0.1':
+                    break
+            except:
+                ip = '0.0.0.0'
+
+    return ip

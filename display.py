@@ -1,5 +1,4 @@
 import cv2
-import netifaces as ni
 from flask import Flask, render_template, Response
 from gevent.pywsgi import WSGIServer
 
@@ -8,19 +7,6 @@ class Display:
     def __init__(self, port=0):
         self.camera = cv2.VideoCapture(port)
         self.last_frame = self.get_frame()
-
-        self.ip = None
-        while self.ip is None:
-            for interface in ni.interfaces():
-                try:
-                    addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                    self.ip = addrs[0]['addr']  # The first IP address (probably the local one)
-                    if self.ip is not '127.0.0.1':
-                        break
-                except:
-                    self.ip = '0.0.0.0'
-
-        print("IP: " + self.ip)
 
         self.app = Flask(__name__)  # the app used for streaming
 
