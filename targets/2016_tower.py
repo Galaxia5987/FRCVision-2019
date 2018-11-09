@@ -24,4 +24,13 @@ class Target:
     def filter_contours(self, contours):
         if not contours:
             return
-        
+
+    @staticmethod
+    def draw_contours(filtered_contours, original):
+        if not filtered_contours:
+            return
+        for cnt in filtered_contours:
+            rect = cv2.minAreaRect(cnt)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+            cv2.drawContours(original,[box],0,(0,0,255),2)
