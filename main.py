@@ -12,8 +12,10 @@ display = Display()
 
 
 def loop():
+    table = utils.nt_table()
     name = "target"
     target = import_module(f'targets.{name}').Target(name)
+    target.values(table)
 
     trackbars = Trackbars(name)
     timer = time.time()

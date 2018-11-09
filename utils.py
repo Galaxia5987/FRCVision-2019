@@ -7,7 +7,10 @@ import numpy as np
 
 import netifaces as ni
 
+from networktables import NetworkTables
+
 default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
+
 
 
 def get_filename(name):
@@ -85,3 +88,50 @@ def get_ip():
                 ip = '0.0.0.0'
 
     return ip
+
+
+def get_nt_server():
+    return "roboRIO-{team_number}-FRC.local".format(team_number=5987)
+
+
+def nt_table():
+    NetworkTables.initialize(server=get_nt_server())
+    return NetworkTables.getTable("Vision")
+
+
+def set_item(table, key, value):
+    """
+    Summary: Add a value to SmartDashboard.
+
+    Parameters:
+        * table: The current networktable.
+        * key : The name the value will be stored under and displayed.
+        * value : The information the key will hold.
+        * value_type : The type of the value it recieved (string, integer, boolean, etc.).
+    """
+    value_type = type(value)
+    if value_type is str:
+        table.putString(key, value)
+    elif value_type is int or value_type is float:
+        table.putNumber(key, value)
+    elif value_type is bool:
+        table.putBoolean(key, value)
+
+
+def get_item(table, key, default_value):
+    """
+    Summary: Get a value from SmartDashboard.
+
+    Parameters:
+        * table: The current networktable.
+        * key : The name the value is stored under.
+        * default_value : The value returned if key holds none.
+    """
+    try:
+        res = table.getString(key, default_value)
+    except:
+        try:
+            res = table.getNumber(key, default_value)
+        except:
+            res = table.getBoolean(key, default_value)
+    return res
