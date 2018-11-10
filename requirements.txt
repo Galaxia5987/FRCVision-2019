@@ -1,4 +1,6 @@
+opencv-python
 numpy
 netifaces
 flask
 gevent
+pynetworktables
