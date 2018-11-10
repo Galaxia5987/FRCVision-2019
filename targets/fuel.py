@@ -13,9 +13,6 @@ class Target:
                                 [1, 1, 1],
                                 [0, 1, 0]], dtype=np.uint8)
 
-    def values(self, table):
-        utils.set_item(table, "target", self.name)
-
     def create_mask(self, frame, hsv):
         mask = utils.hsv_mask(frame, hsv)
         # create a cross kernel

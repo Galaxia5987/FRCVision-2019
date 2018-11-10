@@ -12,12 +12,15 @@ display = Display()
 
 
 def loop():
-    table = utils.nt_table()
+    # call the target
     name = "target"
     target = import_module(f'targets.{name}').Target(name)
-    target.values(table)
-
+    # create the network table and add values to it
+    table = utils.nt_table()
+    utils.set_values(table, name)
+    # create HSV trackbars
     trackbars = Trackbars(name)
+    # timer for FPS display
     timer = time.time()
     avg = 0
     while True:
@@ -40,6 +43,9 @@ def loop():
         display.show_frame(utils.bitwise_mask(original, mask), title="mask")
         k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
         if k in (27, 113):
+            # save the values for the target and clear the table of their entries
+            utils.get_values(table, name)
+            utils.clear_table(table)
             break
 
 
