@@ -9,22 +9,30 @@ import netifaces as ni
 
 from networktables import NetworkTables
 
-default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
+
+persistent_file = 'global'
 
 
-def get_filename(name):
-    return "hsv/{}.json".format(name)
+def default_value(name, folder):
+    if folder is 'hsv':
+        return {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
+    if folder is 'values':
+        return {name+"_name": name}
 
 
-def save_file(name, hsv):
-    with open(get_filename(name), "w") as f:
-        json.dump(hsv, f)
+def get_filename(name, folder):  # TODO: de-spaghettify
+    return folder + "/{}.json".format(name)
 
 
-def load_file(name):
-    if not os.path.isfile(get_filename(name)):
-        save_file(name, default)
-    with open(get_filename(name), "r") as f:
+def save_file(name, folder, data):
+    with open(get_filename(name, folder), "w") as f:
+        json.dump(data, f)
+
+
+def load_file(name, folder):
+    if not os.path.isfile(get_filename(name, folder)):
+        save_file(name, folder, default_value(name, folder))
+    with open(get_filename(name, folder), "r") as f:
         return json.load(f)
 
 
@@ -93,9 +101,11 @@ def get_nt_server():
     return "roboRIO-{team_number}-FRC.local".format(team_number=5987)
 
 
-def nt_table():
+def nt_table():  # create the table and load all persistent values
     NetworkTables.initialize(server=get_nt_server())
-    return NetworkTables.create('Vision')  # TODO: test
+    table = NetworkTables.create('Vision')
+    table.loadPersistent(get_filename(persistent_file, 'values'))
+    return table  # TODO: test
 
 
 def set_item(table, key, value):
@@ -120,3 +130,18 @@ def get_item(table, key, default_value):
         * default_value : The value returned if key holds none.
     """
     return table.getValue(key, default_value)  # TODO: test
+
+
+def set_values(table, name):  # load values from the associated file and add them to the table
+    values = table.loadEntries(filename=get_filename(name, 'values'), prefix=name+'_')
+    for key in values:
+        set_item(table, key, values[key])
+
+
+def get_values(table, name):  # save values from the table to the associated file
+    table.saveEntries(filename=get_filename(name, 'values'), prefix=name+'_')
+
+
+def clear_table(table):  # save all persistent values and clean the table of other values
+    table.savePersistent(filename=get_filename(persistent_file, 'values'))
+    table.deleteAllEntries()

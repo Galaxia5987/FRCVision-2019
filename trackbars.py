@@ -10,12 +10,12 @@ class Trackbars:
         self.create_trackbars()
 
     def callback(self, value):
-        utils.save_file(self.name, self.get_hsv())
+        utils.save_file(self.name, 'hsv', self.get_hsv())
 
     def create_trackbars(self):
         cv2.namedWindow("HSV")
 
-        hsv = utils.load_file(self.name)
+        hsv = utils.load_file(self.name, 'hsv')
         # create trackbars for color change
         cv2.createTrackbar('lowH', 'HSV', hsv['H'][0], 179, self.callback)
         cv2.createTrackbar('highH', 'HSV', hsv['H'][1], 179, self.callback)
