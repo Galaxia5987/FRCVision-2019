@@ -10,27 +10,30 @@ import utils
 from display import Display
 from trackbars import Trackbars
 
-display = Display()
-
 parser = argparse.ArgumentParser()
-
+# Add ui argument
 parser.add_argument('-ui', action='store_true', default=False,
                     dest='ui',
                     help='Set a ui to true')
-
+# Add stream argument
 parser.add_argument('-stream', action='store_true', default=False,
                     dest='stream',
                     help='Set a stream to true')
-
+# Add local argument
 parser.add_argument('-local', action='store_true', default=False,
                     dest='local',
                     help='Set a local to true')
+# Add camera port argument
+parser.add_argument('-port', default='0', type=int)
+# Add target argument
+parser.add_argument('-target', default='target', type=str)
 
 results = parser.parse_args()
 
+display = Display(results.port)
 
 def loop():
-    name = "target"
+    name = results.target
     target = import_module(f'targets.{name}').Target(name)
 
     trackbars = Trackbars(name)
@@ -50,18 +53,22 @@ def loop():
         # Show FPS
         avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
         timer = time.time()
-        # Display
-        display.set_frame(contour_image)
-        display.show_frame(contour_image)
-        display.show_frame(utils.bitwise_mask(original, mask), title="mask")
+        #
+        if results.local:
+            display.show_frame(contour_image)
+            display.show_frame(utils.bitwise_mask(original, mask), title="mask")
+        if results.stream:
+            display.set_frame(contour_image)
+
         k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
         if k in (27, 113):
             break
 
+if results.stream:
+    # Run web server
+    Thread(target=display.run_app, daemon=True).start()
+    # Print out ip and port for ease of use
+    print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
 
-# Run web server
-Thread(target=display.run_app, daemon=True).start()
-# Print out ip and port for ease of use
-print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
 # Run main vision loop
 loop()
