@@ -1,19 +1,13 @@
-from multiprocessing import Process
 from threading import Thread
-
-from gevent.monkey import patch_all; patch_all()
 
 import cv2
 from flask import Flask, render_template, Response, request
-from gevent.pywsgi import WSGIServer
-from gevent.server import _tcp_listener
 
 
 class Web:
     def __init__(self):
         self.last_frame = None  # Keep last frame for streaming
         self.app = Flask("Web")  # Flask app
-        #self.listener = _tcp_listener(('0.0.0.0', 5200))  # Web tcp listener
 
         @self.app.route('/')
         def index():  # Returns the HTML template
@@ -42,13 +36,10 @@ class Web:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
-        WSGIServer(('0.0.0.0', 5987), self.app).serve_forever()
-
-    def run_app(self):
-        Thread(target=self.serve, daemon=True).start()
+        self.app.run('0.0.0.0', 5987, threaded=True)
 
     def start_thread(self):
-        self.run_app()
+        Thread(target=self.serve, daemon=True).start()
 
     def set_frame(self, frame):
         self.last_frame = frame
