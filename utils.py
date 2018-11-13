@@ -97,14 +97,13 @@ def get_ip():
     return ip
 
 
-def get_nt_server():
-    return "roboRIO-{team_number}-FRC.local".format(team_number=5987)
+def get_nt_server(team_number=5987):
+    return "roboRIO-{}-FRC.local".format(team_number)
 
 
 def nt_table():  # create the table and load all persistent values
     NetworkTables.initialize(server=get_nt_server())
-    table = NetworkTables.create('Vision')
-    table.loadPersistent(get_filename(persistent_file, 'values'))
+    table = NetworkTables.getTable('SmartDashboard')
     return table  # TODO: test
 
 
@@ -118,6 +117,7 @@ def set_item(table, key, value):
         * value : The information the key will hold.
     """
     table.setDefaultValue(key, value)  # TODO: test
+    print("value set")
 
 
 def get_item(table, key, default_value):
@@ -133,9 +133,10 @@ def get_item(table, key, default_value):
 
 
 def set_values(table, name):  # load values from the associated file and add them to the table
-    values = table.loadEntries(filename=get_filename(name, 'values'), prefix=name+'_')
+    values = load_file(name, 'values')
     for key in values:
         set_item(table, key, values[key])
+        print(key, values[key])
 
 
 def get_values(table, name):  # save values from the table to the associated file
@@ -143,5 +144,4 @@ def get_values(table, name):  # save values from the table to the associated fil
 
 
 def clear_table(table):  # save all persistent values and clean the table of other values
-    table.savePersistent(filename=get_filename(persistent_file, 'values'))
     table.deleteAllEntries()
