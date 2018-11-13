@@ -4,11 +4,29 @@ from threading import Thread
 
 import cv2
 
+import argparse
+
 import utils
 from display import Display
 from trackbars import Trackbars
 
 display = Display()
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-ui', action='store_true', default=False,
+                    dest='ui',
+                    help='Set a ui to true')
+
+parser.add_argument('-stream', action='store_true', default=False,
+                    dest='stream',
+                    help='Set a stream to true')
+
+parser.add_argument('-local', action='store_true', default=False,
+                    dest='local',
+                    help='Set a local to true')
+
+results = parser.parse_args()
 
 
 def loop():
