@@ -1,9 +1,49 @@
 <html>
-  <head>
+<head>
+    <style>
+        img {
+            max-width: 500px;
+            max-height: 500px;
+        }
+
+        /*https://www.w3schools.com/css/css3_buttons.asp*/
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
     <title>Video Stream</title>
-  </head>
-  <body>
-    <h1>Video Stream</h1>
-    <img src="{{ url_for('video_feed') }}">
-  </body>
+</head>
+<body>
+<script>
+
+    function save() {
+        var http = new XMLHttpRequest();
+        http.open('POST', window.location.origin + "/save", true);
+        http.send();
+    }
+
+    function update() {
+        var http = new XMLHttpRequest();
+        http.open('POST', window.location.origin + "/update", true);
+        http.send(document.getElementById("target").value);
+    }
+
+</script>
+<h1>Video Stream</h1>
+<img src="{{ url_for('video_feed') }}">
+<br>
+<br>
+<h1>Controls</h1>
+Target: <input type="text" id="target">
+<br><br>
+<button onclick="save()">Save</button>
+<button onclick="update()">Update</button>
+</body>
 </html>
