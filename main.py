@@ -18,7 +18,7 @@ def loop():
     target = import_module(f'targets.{name}').Target(name)
     # create the network table and add values to it
     table = nt.nt_table()
-    nt.set_values(table, name)
+    nt.load_values(table, name)
     # create HSV trackbars
     trackbars = Trackbars(name)
     # timer for FPS display
@@ -45,8 +45,8 @@ def loop():
         k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
         if k in (27, 113):
             # save the values for the target and clear the table of their entries
-            nt.get_values(table, name)
-            nt.clear_table(table)
+            nt.save_values(name)
+            nt.clear_table()
             break
 
 

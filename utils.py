@@ -8,7 +8,15 @@ import numpy as np
 
 persistent_file = 'global'
 
-default_value = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
+
+# Default value for value files
+def default_value(name, folder):
+    if folder == 'hsv':
+        return
+    elif folder == 'values':
+        return {name + "_name": name}
+    else:
+        print("[Default value] This should happen")
 
 
 def get_filename(name, folder):
@@ -22,7 +30,7 @@ def save_file(name, folder, data):
 
 def load_file(name, folder):
     if not os.path.isfile(get_filename(name, folder)):
-        save_file(name, folder, default_value)
+        save_file(name, folder, default_value(name, folder))
     with open(get_filename(name, folder), "r") as f:
         return json.load(f)
 
