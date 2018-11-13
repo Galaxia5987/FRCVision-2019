@@ -4,6 +4,7 @@ from threading import Thread
 
 import cv2
 
+import nt
 import utils
 from display import Display
 from trackbars import Trackbars
@@ -16,8 +17,8 @@ def loop():
     name = "target"
     target = import_module(f'targets.{name}').Target(name)
     # create the network table and add values to it
-    table = utils.nt_table()
-    utils.set_values(table, name)
+    table = nt.nt_table()
+    nt.set_values(table, name)
     # create HSV trackbars
     trackbars = Trackbars(name)
     # timer for FPS display
@@ -44,8 +45,8 @@ def loop():
         k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
         if k in (27, 113):
             # save the values for the target and clear the table of their entries
-            utils.get_values(table, name)
-            utils.clear_table(table)
+            nt.get_values(table, name)
+            nt.clear_table(table)
             break
 
 

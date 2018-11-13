@@ -1,27 +1,18 @@
 import json
 import math
+import netifaces as ni
 import os
 
 import cv2
 import numpy as np
 
-import netifaces as ni
-
-from networktables import NetworkTables
-
-
 persistent_file = 'global'
 
-
-def default_value(name, folder):
-    if folder is 'hsv':
-        return {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
-    if folder is 'values':
-        return {name+"_name": name}
+default_value = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
 
 
-def get_filename(name, folder):  # TODO: de-spaghettify
-    return folder + "/{}.json".format(name)
+def get_filename(name, folder):
+    return "{}/{}.json".format(folder, name)
 
 
 def save_file(name, folder, data):
@@ -31,7 +22,7 @@ def save_file(name, folder, data):
 
 def load_file(name, folder):
     if not os.path.isfile(get_filename(name, folder)):
-        save_file(name, folder, default_value(name, folder))
+        save_file(name, folder, default_value)
     with open(get_filename(name, folder), "r") as f:
         return json.load(f)
 
@@ -95,53 +86,3 @@ def get_ip():
                 ip = '0.0.0.0'
 
     return ip
-
-
-def get_nt_server(team_number=5987):
-    return "roboRIO-{}-FRC.local".format(team_number)
-
-
-def nt_table():  # create the table and load all persistent values
-    NetworkTables.initialize(server=get_nt_server())
-    table = NetworkTables.getTable('SmartDashboard')
-    return table  # TODO: test
-
-
-def set_item(table, key, value):
-    """
-    Summary: Add a value to SmartDashboard.
-
-    Parameters:
-        * table: The current network table.
-        * key : The name the value will be stored under and displayed.
-        * value : The information the key will hold.
-    """
-    table.setDefaultValue(key, value)  # TODO: test
-    print("value set")
-
-
-def get_item(table, key, default_value):
-    """
-    Summary: Get a value from SmartDashboard.
-
-    Parameters:
-        * table: The current network table.
-        * key : The name the value is stored under.
-        * default_value : The value returned if key holds none.
-    """
-    return table.getValue(key, default_value)  # TODO: test
-
-
-def set_values(table, name):  # load values from the associated file and add them to the table
-    values = load_file(name, 'values')
-    for key in values:
-        set_item(table, key, values[key])
-        print(key, values[key])
-
-
-def get_values(table, name):  # save values from the table to the associated file
-    table.saveEntries(filename=get_filename(name, 'values'), prefix=name+'_')
-
-
-def clear_table(table):  # save all persistent values and clean the table of other values
-    table.deleteAllEntries()
