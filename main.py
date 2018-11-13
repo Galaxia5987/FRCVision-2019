@@ -49,6 +49,9 @@ def loop():
             break
 
 
-Thread(target=loop).start()
-print("IP: " + utils.get_ip())
-display.run_app()
+# Run web server
+Thread(target=display.run_app, daemon=True).start()
+# Print out ip and port for ease of use
+print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
+# Run main vision loop
+loop()
