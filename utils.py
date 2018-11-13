@@ -1,7 +1,7 @@
 import json
 import math
-import netifaces as ni
 import os
+import socket
 
 import cv2
 import numpy as np
@@ -74,15 +74,4 @@ def calculate_fps(frame, current_time, last_time, avg):
 
 
 def get_ip():
-    ip = None
-    while ip is None:
-        for interface in ni.interfaces():
-            try:
-                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                ip = addrs[0]['addr']  # The first IP address (probably the local one)
-                if ip is not '127.0.0.1':
-                    break
-            except:
-                ip = '0.0.0.0'
-
-    return ip
+    return socket.gethostbyname(socket.gethostname())
