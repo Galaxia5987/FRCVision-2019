@@ -6,6 +6,7 @@ import utils
 class Trackbars:
     def __init__(self, name):
         self.name = name
+        self.window = cv2.namedWindow("HSV")
         self.create_trackbars()
 
     def callback(self, value):
@@ -14,9 +15,18 @@ class Trackbars:
     def save_to_file(self):
         utils.save_file(self.name, self.get_hsv())
 
-    def create_trackbars(self):
-        cv2.namedWindow("HSV")
+    def reload_trackbars(self):
+        hsv = utils.load_file(self.name)
+        cv2.setTrackbarPos('lowH', 'HSV', hsv['H'][0])
+        cv2.setTrackbarPos('highH', 'HSV', hsv['H'][1])
 
+        cv2.setTrackbarPos('lowS', 'HSV', hsv['S'][0])
+        cv2.setTrackbarPos('highS', 'HSV', hsv['S'][1])
+
+        cv2.setTrackbarPos('lowV', 'HSV', hsv['V'][0])
+        cv2.setTrackbarPos('highV', 'HSV', hsv['V'][1])
+
+    def create_trackbars(self):
         hsv = utils.load_file(self.name)
         # create trackbars for color change
         cv2.createTrackbar('lowH', 'HSV', hsv['H'][0], 179, self.callback)

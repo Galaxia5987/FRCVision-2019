@@ -22,10 +22,10 @@ class Main:
 
     def change_name(self, name):
         print(f'Changing target to {name}')
-        self.stop = True
         self.name = name
-        self.trackbars = Trackbars(self.name)
-        self.loop()
+        self.trackbars.name = name
+        self.trackbars.reload_trackbars()
+        self.stop = True
 
     def loop(self):
         print(f'Starting loop with target {self.name}')
@@ -52,7 +52,12 @@ class Main:
             self.display.show_frame(contour_image)
             self.display.show_frame(utils.bitwise_mask(original, mask), title="mask")
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
-            if k in (27, 113) or self.stop:
+            if self.stop:
+                print("Restarting...")
+                self.loop()
+                break
+            if k in (27, 113):
+                print("Q pressed, stopping...")
                 break
 
 
