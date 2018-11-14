@@ -17,10 +17,13 @@ class Main:
         self.web = Web(self)
         # Run web server
         self.web.start_thread()
-        # Run main vision loop
         self.stop = False
 
     def change_name(self, name):
+        """
+        Changes the name and starts a new loop
+        :param name:
+        """
         print(f'Changing target to {name}')
         self.name = name
         self.trackbars.name = name
@@ -30,7 +33,9 @@ class Main:
     def loop(self):
         print(f'Starting loop with target {self.name}')
         self.stop = False
+        # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target(self.name)
+        # Timer for FPS counter
         timer = time.time()
         avg = 0
         while True:
@@ -53,6 +58,7 @@ class Main:
             self.display.show_frame(utils.bitwise_mask(original, mask), title="mask")
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if self.stop:
+                # If stop signal was sent we call loop again to start with new name
                 print("Restarting...")
                 self.loop()
                 break

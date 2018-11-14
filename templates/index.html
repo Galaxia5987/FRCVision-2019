@@ -23,12 +23,14 @@
 <body>
 <script>
 
+    //Send post request to save endpoint
     function save() {
         var http = new XMLHttpRequest();
         http.open('POST', window.location.origin + "/save", true);
         http.send();
     }
 
+    //Send post request to update endpoint with the target name as the data
     function update() {
         var http = new XMLHttpRequest();
         http.open('POST', window.location.origin + "/update", true);

@@ -7,25 +7,33 @@ import utils
 
 
 class Web:
+    """
+    This class handles the web server we use for streaming & control
+    """
+
     def __init__(self, main):
         self.main = main
         self.last_frame = None  # Keep last frame for streaming
-        self.app = Flask("Web")  # Flask app
+        self.app = Flask("Web")  # Flask app for web
 
+        # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
             return render_template('index.html')
 
+        # Video feed enpdoint
         @self.app.route('/stream.mjpg')
         def video_feed():  # Initiate the feed
             return Response(self.stream_frame(),
                             mimetype='multipart/x-mixed-replace; boundary=frame')
 
+        # Save HSV values
         @self.app.route("/save", methods=['POST'])
         def save():
             self.main.trackbars.save_to_file()
             return '', 204
 
+        # Change target
         @self.app.route("/update", methods=['POST'])
         def update():
             target = request.data.decode("utf-8")
@@ -33,6 +41,10 @@ class Web:
             return '', 204
 
     def stream_frame(self):
+        """
+        This is the generator that encodes and streams the last frame to the stream endpoint
+        :return: Jpeg encoded frame
+        """
         while True:
             if self.last_frame is None:
                 continue
@@ -40,12 +52,20 @@ class Web:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
+        """
+        Starts the web server
+        """
         # Print out ip and port for ease of use
         print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
+        # Run flask and bind to all IPs
         self.app.run('0.0.0.0', 5987, threaded=True)
 
     def start_thread(self):
+        # Run web server in a thread - daemon so it lets the program exit
         Thread(target=self.serve, daemon=True).start()
 
     def set_frame(self, frame):
+        """
+        Method called from main to save the last frame
+        """
         self.last_frame = frame

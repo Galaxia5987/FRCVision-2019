@@ -4,18 +4,33 @@ import utils
 
 
 class Trackbars:
+    """
+    This class handles the trackbar window that allows us to change and set the HSV values
+    """
+
     def __init__(self, name):
         self.name = name
+        # Create window
         self.window = cv2.namedWindow("HSV")
         self.create_trackbars()
 
     def callback(self, value):
+        """
+        Dry callback for trackbars
+        :param value: value from trackbar
+        """
         pass
 
     def save_to_file(self):
+        """
+        Saves hsv to correct file
+        """
         utils.save_file(self.name, self.get_hsv())
 
     def reload_trackbars(self):
+        """
+        Reloads the trackbars from the file
+        """
         hsv = utils.load_file(self.name)
         cv2.setTrackbarPos('lowH', 'HSV', hsv['H'][0])
         cv2.setTrackbarPos('highH', 'HSV', hsv['H'][1])
@@ -27,6 +42,9 @@ class Trackbars:
         cv2.setTrackbarPos('highV', 'HSV', hsv['V'][1])
 
     def create_trackbars(self):
+        """
+        Creates the trackbars intiially with the value from the file
+        """
         hsv = utils.load_file(self.name)
         # create trackbars for color change
         cv2.createTrackbar('lowH', 'HSV', hsv['H'][0], 179, self.callback)
@@ -40,6 +58,10 @@ class Trackbars:
 
     @staticmethod
     def get_hsv():
+        """
+        Gets HSV values from trackbars
+        :return: HSV dictionary
+        """
         low_h = cv2.getTrackbarPos('lowH', 'HSV')
         high_h = cv2.getTrackbarPos('highH', 'HSV')
         low_s = cv2.getTrackbarPos('lowS', 'HSV')
