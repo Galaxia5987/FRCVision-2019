@@ -42,9 +42,10 @@ def loop():
             break
 
 
-# Run web server
-web.start_thread()
-# Print out ip and port for ease of use
-print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
-# Run main vision loop
-loop()
+if __name__ == "__main__":
+    # Run web server
+    web.start_thread()
+    # Print out ip and port for ease of use
+    print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
+    # Run main vision loop
+    loop()
