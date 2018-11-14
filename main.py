@@ -1,3 +1,4 @@
+import os
 import time
 from importlib import import_module
 
@@ -24,6 +25,9 @@ class Main:
         Changes the name and starts a new loop
         :param name:
         """
+        if not os.path.isfile(f'targets/{name}.py'):
+            print("Target doesn't exist")
+            return
         print(f'Changing target to {name}')
         self.name = name
         self.trackbars.name = name
