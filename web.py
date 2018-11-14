@@ -29,7 +29,7 @@ class Web:
         @self.app.route("/update", methods=['POST'])
         def update():
             target = request.data.decode("utf-8")
-            self.main.update_target(target)
+            self.main.change_name(target)
             return '', 204
 
     def stream_frame(self):
