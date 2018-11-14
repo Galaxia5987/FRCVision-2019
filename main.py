@@ -24,6 +24,7 @@ class Main:
         print(f'Changing target to {name}')
         self.stop = True
         self.name = name
+        self.trackbars = Trackbars(self.name)
         self.loop()
 
     def loop(self):
