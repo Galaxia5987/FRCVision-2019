@@ -9,6 +9,9 @@ class Trackbars:
         self.create_trackbars()
 
     def callback(self, value):
+        pass
+
+    def save_to_file(self):
         utils.save_file(self.name, self.get_hsv())
 
     def create_trackbars(self):

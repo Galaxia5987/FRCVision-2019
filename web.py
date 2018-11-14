@@ -3,9 +3,12 @@ from threading import Thread
 import cv2
 from flask import Flask, render_template, Response, request
 
+import utils
+
 
 class Web:
-    def __init__(self):
+    def __init__(self, main):
+        self.main = main
         self.last_frame = None  # Keep last frame for streaming
         self.app = Flask("Web")  # Flask app
 
@@ -20,12 +23,13 @@ class Web:
 
         @self.app.route("/save", methods=['POST'])
         def save():
-            print("Save")
+            self.main.trackbars.save_to_file()
             return '', 204
 
         @self.app.route("/update", methods=['POST'])
         def update():
-            print("Update: " + request.data.decode("utf-8"))
+            target = request.data.decode("utf-8")
+            self.main.update_target(target)
             return '', 204
 
     def stream_frame(self):
@@ -36,6 +40,8 @@ class Web:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
+        # Print out ip and port for ease of use
+        print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
         self.app.run('0.0.0.0', 5987, threaded=True)
 
     def start_thread(self):
