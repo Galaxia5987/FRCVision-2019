@@ -14,7 +14,7 @@ class Trackbars:
 
     def save_hsv_values(self):
         """Save HSV values to correct file."""
-        utils.save_file(self.name, self.get_hsv())
+        utils.save_file(self.name, 'hsv',self.get_hsv())
 
     def reload_trackbars(self):
         """Reloads the trackbars from the file."""
