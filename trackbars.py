@@ -23,7 +23,7 @@ class Trackbars:
 
     def save_to_file(self):
         """
-        Saves hsv to correct file
+    """Save HSV values to correct file."""
         """
         utils.save_file(self.name, self.get_hsv())
 
