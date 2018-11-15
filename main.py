@@ -4,7 +4,7 @@ from importlib import import_module
 
 import cv2
 
-import nt
+import nt_handler
 import utils
 from display import Display
 from trackbars import Trackbars
@@ -18,8 +18,9 @@ class Main:
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
         self.web.start_thread()  # Run web server
-        self.table = nt.nt_table()
-        nt.load_values(self.table, self.name)
+        self.nt = nt_handler.NT()
+        self.table = self.nt.nt_table()
+        self.nt.load_values(self.table, self.name)
         self.stop = False
 
     def change_name(self, name):
@@ -69,8 +70,7 @@ class Main:
                 self.loop()
                 break
             if k in (27, 113):
-                nt.save_values(self.name)
-                nt.clear_table()
+                self.nt.clear_table()
                 print("Q pressed, stopping...")
                 break
 

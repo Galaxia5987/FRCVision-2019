@@ -1,36 +1,8 @@
-import json
 import math
-import os
 import socket
 
 import cv2
 import numpy as np
-
-
-# Default value for value files
-def default_value(name, folder):
-    if folder == 'hsv':
-        return {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
-    elif folder == 'values':
-        return {name + "_name": name}
-    else:
-        print("[Default value] This should happen")
-
-
-def get_filename(name, folder):
-    return "{}/{}.json".format(folder, name)
-
-
-def save_file(name, folder, data):
-    with open(get_filename(name, folder), "w") as f:
-        json.dump(data, f)
-
-
-def load_file(name, folder):
-    if not os.path.isfile(get_filename(name, folder)):
-        save_file(name, folder, default_value(name, folder))
-    with open(get_filename(name, folder), "r") as f:
-        return json.load(f)
 
 
 def aspect_ratio(width, height):
