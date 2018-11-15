@@ -70,6 +70,7 @@ class Main:
                 self.loop()
                 break
             if k in (27, 113):
+                self.nt.save_values(self.name)
                 self.nt.clear_table()
                 print("Q pressed, stopping...")
                 break
