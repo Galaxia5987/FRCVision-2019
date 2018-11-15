@@ -41,7 +41,7 @@ class Web:
     def stream_frame(self):
         """
         This is the generator that encodes and streams the last frame to the stream endpoint
-        :return: Jpeg encoded frame
+        :return: JPEG encoded frame
         """
         while True:
             if self.last_frame is None:
