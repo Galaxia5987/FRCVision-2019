@@ -6,13 +6,11 @@ import socket
 import cv2
 import numpy as np
 
-persistent_file = 'global'
-
 
 # Default value for value files
 def default_value(name, folder):
     if folder == 'hsv':
-        return
+        return {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
     elif folder == 'values':
         return {name + "_name": name}
     else:

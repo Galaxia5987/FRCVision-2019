@@ -18,6 +18,8 @@ class Main:
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
         self.web.start_thread()  # Run web server
+        self.table = nt.nt_table()
+        nt.load_values(self.table, self.name)
         self.stop = False
 
     def change_name(self, name):
@@ -67,6 +69,8 @@ class Main:
                 self.loop()
                 break
             if k in (27, 113):
+                nt.save_values(self.name)
+                nt.clear_table()
                 print("Q pressed, stopping...")
                 break
 
