@@ -7,7 +7,7 @@ import utils
 
 
 class Web:
-    """This class handles the web server we use for streaming & control"""
+    """This class handles the web server we use for streaming & control."""
 
     def __init__(self, main):
         self.main = main
@@ -33,14 +33,14 @@ class Web:
 
         @self.app.route("/update", methods=['POST'])
         def update():
-            """Post route to change target"""
+            """Post route to change target."""
             target = request.data.decode("utf-8")
             self.main.change_name(target)
             return '', 204
 
     def stream_frame(self):
         """
-        This is the generator that encodes and streams the last frame to the stream endpoint
+        This is the generator that encodes and streams the last frame to the stream endpoint.
         :return: JPEG encoded frame
         """
         while True:
@@ -57,9 +57,9 @@ class Web:
         self.app.run('0.0.0.0', 5987, threaded=True)
 
     def start_thread(self):
-        """Run web server in a thread - daemon so it lets the program exit"""
+        """Run web server in a thread - daemon so it lets the program exit."""
         Thread(target=self.serve, daemon=True).start()
 
     def set_frame(self, frame):
-        """Save the last frame, this method is called from Main"""
+        """Save the last frame, this method is called from Main."""
         self.last_frame = frame

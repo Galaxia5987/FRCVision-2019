@@ -21,7 +21,7 @@ class Main:
 
     def change_name(self, name):
         """
-        Changes the name and starts a new loop
+        Changes the name and starts a new loop.
         :param name:
         """
         if not os.path.isfile(f'targets/{name}.py'):

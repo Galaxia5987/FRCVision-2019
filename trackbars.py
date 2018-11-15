@@ -44,7 +44,7 @@ class Trackbars:
     @staticmethod
     def get_hsv():
         """
-        Gets HSV values from trackbars
+        Gets HSV values from trackbars.
         :return: HSV values
         """
         low_h = cv2.getTrackbarPos('lowH', 'HSV')
