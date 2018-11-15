@@ -13,7 +13,7 @@ class Trackbars:
         self.callback = lambda v: None  # Dry callback for trackbars since it's not needed
 
     def save_hsv_values(self):
-        """Save HSV values to correct file"""
+        """Save HSV values to correct file."""
         utils.save_file(self.name, self.get_hsv())
 
     def reload_trackbars(self):
