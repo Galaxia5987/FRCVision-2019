@@ -1,11 +1,10 @@
 import json
 import math
+import netifaces as ni
 import os
 
 import cv2
 import numpy as np
-
-import netifaces as ni
 
 default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
 
