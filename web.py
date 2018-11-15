@@ -27,7 +27,7 @@ class Web:
 
         @self.app.route("/save", methods=['POST'])
         def save():
-            """Post route that saves HSV values"""
+            """Post route that saves HSV values."""
             self.main.trackbars.save_hsv_values()
             return '', 204
 
