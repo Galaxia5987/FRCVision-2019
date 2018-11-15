@@ -17,7 +17,7 @@ class Trackbars:
         utils.save_file(self.name, self.get_hsv())
 
     def reload_trackbars(self):
-        """Reloads the trackbars from the file"""
+        """Reloads the trackbars from the file."""
         hsv = utils.load_file(self.name)
         cv2.setTrackbarPos('lowH', 'HSV', hsv['H'][0])
         cv2.setTrackbarPos('highH', 'HSV', hsv['H'][1])
