@@ -4,7 +4,7 @@ import utils
 
 
 class Trackbars:
-    """This class handles the trackbar window that allows us to change and set the HSV values"""
+    """This class handles the trackbar window that allows us to change and set the HSV values."""
 
     def __init__(self, name):
         self.name = name
