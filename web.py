@@ -50,7 +50,7 @@ class Web:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
-        """Starts the web server """
+        """Start the web server."""
         # Print out ip and port for ease of use
         print(f'Web server: http://{utils.get_ip()}:5987')
         # Run flask and bind to all IPs
