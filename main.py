@@ -16,8 +16,7 @@ class Main:
         self.display = Display()
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
-        # Run web server
-        self.web.start_thread()
+        self.web.start_thread()  # Run web server
         self.stop = False
 
     def change_name(self, name):
@@ -72,5 +71,4 @@ class Main:
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.loop()
+    Main().loop()

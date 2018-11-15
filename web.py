@@ -7,9 +7,7 @@ import utils
 
 
 class Web:
-    """
-    This class handles the web server we use for streaming & control
-    """
+    """This class handles the web server we use for streaming & control"""
 
     def __init__(self, main):
         self.main = main
@@ -27,15 +25,15 @@ class Web:
             return Response(self.stream_frame(),
                             mimetype='multipart/x-mixed-replace; boundary=frame')
 
-        # Save HSV values
         @self.app.route("/save", methods=['POST'])
         def save():
-            self.main.trackbars.save_to_file()
+            """Post route that saves HSV values"""
+            self.main.trackbars.save_hsv_values()
             return '', 204
 
-        # Change target
         @self.app.route("/update", methods=['POST'])
         def update():
+            """Post route to change target"""
             target = request.data.decode("utf-8")
             self.main.change_name(target)
             return '', 204
@@ -52,20 +50,16 @@ class Web:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
-        """
-        Starts the web server
-        """
+        """Starts the web server """
         # Print out ip and port for ease of use
-        print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
+        print(f'Web server: http://{utils.get_ip()}:5987')
         # Run flask and bind to all IPs
         self.app.run('0.0.0.0', 5987, threaded=True)
 
     def start_thread(self):
-        # Run web server in a thread - daemon so it lets the program exit
+        """Run web server in a thread - daemon so it lets the program exit"""
         Thread(target=self.serve, daemon=True).start()
 
     def set_frame(self, frame):
-        """
-        Method called from main to save the last frame
-        """
+        """Save the last frame, this method is called from Main"""
         self.last_frame = frame
