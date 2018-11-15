@@ -10,13 +10,7 @@ class Trackbars:
         self.name = name
         self.window = cv2.namedWindow("HSV")  # Create window
         self.create_trackbars()
-
-    def callback(self, value):
-        """
-        Dry callback for trackbars
-        :param value: value from trackbar
-        """
-        pass
+        self.callback = lambda v: None  # Dry callback for trackbars since it's not needed
 
     def save_hsv_values(self):
         """Save HSV values to correct file"""
