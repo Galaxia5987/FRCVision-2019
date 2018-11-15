@@ -61,5 +61,9 @@ class Web:
         Thread(target=self.serve, daemon=True).start()
 
     def set_frame(self, frame):
-        """Save the last frame, this method is called from Main."""
+        """
+        Save the last frame.
+
+        This method is called from Main.
+        """
         self.last_frame = frame
