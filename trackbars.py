@@ -29,7 +29,7 @@ class Trackbars:
         cv2.setTrackbarPos('highV', 'HSV', hsv['V'][1])
 
     def create_trackbars(self):
-        """Create the trackbars intially with the value from the file"""
+        """Create the trackbars intially with the value from the file."""
         hsv = utils.load_file(self.name)
         # Create trackbars for color change
         cv2.createTrackbar('lowH', 'HSV', hsv['H'][0], 179, self.callback)
