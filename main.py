@@ -50,9 +50,10 @@ def loop():
             break
 
 
-# Run web server
-Thread(target=display.run_app, daemon=True).start()
-# Print out ip and port for ease of use
-print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
-# Run main vision loop
-loop()
+if __name__ == "__main__":
+    # Run web server
+    Thread(target=display.run_app, daemon=True).start()
+    # Print out ip and port for ease of use
+    print("Web server: http://{}:{}".format(utils.get_ip(), 5987))
+    # Run main vision loop
+    loop()
