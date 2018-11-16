@@ -1,5 +1,6 @@
 # Focal length dictionary
-FOCAL = {'note8': 538.5826771653543, 'lifecam': 333.82}
+FOCAL = {'note8': 538.5826,
+         'lifecam': 333.82}
 
 # Target sizes dictionary
 TARGET_SIZE = {'2015': {'width': 0.425, 'height': 0.177},
@@ -9,4 +10,5 @@ TARGET_SIZE = {'2015': {'width': 0.425, 'height': 0.177},
 # Game pieces sizes dictionary
 GAME_PIECE_SIZE = {'fuel': {'radius': 0.0635},
                    'gear': {'radius': 0.1397},
-                   'power_cube': {'width': 0.3302, 'length': 0.3302, 'height': 0.2794}}
+                   'power_cube': {'width': 0.3302, 'length': 0.3302, 'height': 0.2794},
+                   'tennis_ball': {'radius': 0.067}}
