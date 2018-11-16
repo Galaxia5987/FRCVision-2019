@@ -1,5 +1,6 @@
 import os
 import time
+import atexit
 from importlib import import_module
 
 import cv2
@@ -18,9 +19,9 @@ class Main:
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
         self.web.start_thread()  # Run web server
-        self.nt = nt_handler.NT()
-        self.table = self.nt.nt_table(self.name)
+        self.nt = nt_handler.NT(self.name)
         self.stop = False
+        # atexit.register(self.nt.close_table, self.name)
 
     def change_name(self, name):
         """
@@ -69,7 +70,6 @@ class Main:
                 self.loop()
                 break
             if k in (27, 113):
-                self.nt.close_table(self.name)
                 print("Q pressed, stopping...")
                 break
 

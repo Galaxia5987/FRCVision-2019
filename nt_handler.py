@@ -6,8 +6,12 @@ from file import File
 
 
 class NT:
-    def __init__(self):
+    def __init__(self, name):
         self.file = File(lambda name: f'[NetworkTables Storage 3.0]\nstring "/Vision/{name}_name"={name}', 'values')
+        self.name = name
+        NetworkTables.initialize(server=self.get_nt_server())
+        NetworkTables.addConnectionListener(self.connectionListener, immediateNotify=True)
+        self.table = NetworkTables.getTable('Vision')
 
     # Network tables server IP
     def get_nt_server(self, team_number=5987):
@@ -22,18 +26,9 @@ class NT:
         """
         if connected:
             print("Success: {}".format(info))
+            self.load_values()
         else:
             print("Fail: {}".format(info))
-
-    def nt_table(self, name):  # create the table and load all persistent values
-        """
-        Initiates network table
-        """
-        NetworkTables.initialize(server=self.get_nt_server())
-        NetworkTables.addConnectionListener(self.connectionListener, immediateNotify=True)
-        table = NetworkTables.getTable('Vision')
-        self.load_values(name)
-        return table
 
     def set_item(self, table, key, value):
         """
@@ -57,12 +52,12 @@ class NT:
         """
         return table.getValue(key, default_value)  # TODO: test
 
-    def load_values(self, name):  # load values from the associated file and add them to the table
-        NetworkTables.loadEntries(self.file.get_filename(name), prefix='/Vision/' + name + '_')
+    def load_values(self):  # load values from the associated file and add them to the table
+        NetworkTables.loadEntries(self.file.get_filename(self.name), prefix='/Vision/' + self.name + '_')
 
-    def save_values(self, name):  # save values from the table to the associated file
-        NetworkTables.saveEntries(filename=self.file.get_filename(name), prefix='/Vision/' + name + '_')
+    def save_values(self):  # save values from the table to the associated file
+        NetworkTables.saveEntries(filename=self.file.get_filename(self.name), prefix='/Vision/' + self.name + '_')
 
-    def close_table(self, name):  # save all persistent values and clean the table of other values
-        self.save_values(name)
+    def close_table(self):  # save all persistent values and clean the table of other values
+        self.save_values(self.name)
         NetworkTables.deleteAllEntries()
