@@ -12,11 +12,11 @@ class NT:
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
         self.table = NetworkTables.getTable('Vision')
+        self.team_number = 5987
 
     # Network tables server IP
-    @staticmethod
-    def get_nt_server(team_number=5987):
-        return "roboRIO-{}-FRC.local".format(team_number)
+    def get_nt_server(self):
+        return "roboRIO-{}-FRC.local".format(self.team_number)
 
     def connection_listener(self, connected, info):
         """
