@@ -24,8 +24,6 @@ class Target:
 
     @staticmethod
     def filter_contours(contours):
-        if not contours:
-            return
         correct_contours = []
         for cnt in contours:
             solidity = utils.solidity(cnt)
