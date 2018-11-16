@@ -33,8 +33,7 @@ class TargetBase(ABC):
         :param mask: mask of the target
         :return: list of contours in the mask
         """
-        im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
+        return cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
     @staticmethod
     @abstractmethod
