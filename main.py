@@ -19,8 +19,7 @@ class Main:
         self.web = Web(self)
         self.web.start_thread()  # Run web server
         self.nt = nt_handler.NT()
-        self.table = self.nt.nt_table()
-        self.nt.load_values(self.table, self.name)
+        self.table = self.nt.nt_table(self.name)
         self.stop = False
 
     def change_name(self, name):
@@ -70,8 +69,7 @@ class Main:
                 self.loop()
                 break
             if k in (27, 113):
-                self.nt.save_values(self.name)
-                self.nt.clear_table()
+                self.nt.close_table(self.name)
                 print("Q pressed, stopping...")
                 break
 
