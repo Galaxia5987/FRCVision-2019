@@ -28,8 +28,7 @@ class Target:
             return
         correct_contours = []
         for cnt in contours:
-            hull = cv2.convexHull(cnt)
-            area_ratio = cv2.contourArea(cnt) / cv2.contourArea(hull)
+            area_ratio = utils.solidity(cnt)
             if not (0.3 < area_ratio < 0.36):
                 correct_contours.append(cnt)
 
