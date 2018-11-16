@@ -24,7 +24,7 @@ parser.add_argument('-local', action='store_true', default=False,
                     dest='local',
                     help='Set a local to true')
 
-parser.add_argument('-port', default='0', type=int) # Add camera port argument
+parser.add_argument('-port', default=0, type=int) # Add camera port argument
 
 parser.add_argument('-target', default='target', type=str) # Add target argument
 
