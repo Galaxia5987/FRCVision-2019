@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser()
 # Add ui argument
 parser.add_argument('-ui', action='store_true', default=False,
                     dest='ui',
-                    help='Set a ui to true')
+                    help='Launch the user interface')
 # Add stream argument
 parser.add_argument('-stream', action='store_true', default=False,
                     dest='stream',
