@@ -7,11 +7,7 @@ from file import File
 
 class NT:
     def __init__(self):
-        # Variable to check if condition was met
-        self.notified = False
-        # Thread condition for waiting on network tables to connect
-        self.cond = threading.Condition()
-        self.file = File(lambda name: {f'{name}_name': name}, 'values')
+        self.file = File(lambda name: f'[NetworkTables Storage 3.0]\nstring "/Vision/{name}_name"={name}', 'values')
 
     # Network tables server IP
     def get_nt_server(self, team_number=5987):
@@ -24,27 +20,19 @@ class NT:
         :param info: Connection info
         :return:
         """
-        global notified
         if connected:
             print("Success: {}".format(info))
         else:
             print("Fail: {}".format(info))
-        with self.cond:
-            self.notified = True
-            # Notify condition
-            self.cond.notify()
 
-    def nt_table(self):  # create the table and load all persistent values
+    def nt_table(self, name):  # create the table and load all persistent values
         """
         Initiates network table
         """
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connectionListener, immediateNotify=True)
-        with self.cond:
-            print("Waiting for connection...")
-            if not self.notified:
-                self.cond.wait()
         table = NetworkTables.getTable('Vision')
+        self.load_values(name)
         return table
 
     def set_item(self, table, key, value):
@@ -69,13 +57,12 @@ class NT:
         """
         return table.getValue(key, default_value)  # TODO: test
 
-    def load_values(self, table, name):  # load values from the associated file and add them to the table
-        values = self.file.load_file(name)
-        for key, value in values.items():
-            self.set_item(table, key, value)
+    def load_values(self, name):  # load values from the associated file and add them to the table
+        NetworkTables.loadEntries(self.file.get_filename(name), prefix='/Vision/' + name + '_')
 
     def save_values(self, name):  # save values from the table to the associated file
-        NetworkTables.saveEntries(filename=self.file.get_filename(name), prefix=name + '_')
+        NetworkTables.saveEntries(filename=self.file.get_filename(name), prefix='/Vision/' + name + '_')
 
-    def clear_table(self):  # save all persistent values and clean the table of other values
+    def close_table(self, name):  # save all persistent values and clean the table of other values
+        self.save_values(name)
         NetworkTables.deleteAllEntries()
