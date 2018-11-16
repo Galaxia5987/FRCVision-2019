@@ -11,10 +11,7 @@ from display import Display
 from trackbars import Trackbars
 
 parser = argparse.ArgumentParser()
-# Add ui argument
-parser.add_argument('-ui', action='store_true', default=False,
-                    dest='ui',
-                    help='Launch the user interface')
+
 # Add stream argument
 parser.add_argument('-web', action='store_true', default=False,
                     dest='web',
