@@ -19,7 +19,7 @@ class File:
         :param name: Filename
         :return:
         """
-        return os.path.join(self.folder, name)
+        return os.path.join(self.folder, name + '.json')
 
     def save_file(self, name: str, data):
         """
