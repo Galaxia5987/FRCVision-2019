@@ -16,8 +16,8 @@ parser.add_argument('-ui', action='store_true', default=False,
                     dest='ui',
                     help='Launch the user interface')
 # Add stream argument
-parser.add_argument('-stream', action='store_true', default=False,
-                    dest='stream',
+parser.add_argument('-web', action='store_true', default=False,
+                    dest='web',
                     help='Run web server')
 # Add local argument
 parser.add_argument('-local', action='store_true', default=False,
@@ -57,7 +57,7 @@ def loop():
         if results.local:
             display.show_frame(contour_image)
             display.show_frame(utils.bitwise_mask(original, mask), title="mask")
-        if results.stream:
+        if results.web:
             display.set_frame(contour_image)
 
         k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
