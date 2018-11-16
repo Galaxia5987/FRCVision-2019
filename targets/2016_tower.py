@@ -30,7 +30,7 @@ class Target:
         for cnt in contours:
             hull = cv2.convexHull(cnt)
             area_ratio = cv2.contourArea(cnt) / cv2.contourArea(hull)
-            if area_ratio < 0.3 or area_ratio > 0.36:
+            if not (0.3 < area_ratio < 0.36):
                 continue
             correct_contours.append(cnt)
 
