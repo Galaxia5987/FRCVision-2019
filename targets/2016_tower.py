@@ -28,8 +28,8 @@ class Target:
             return
         correct_contours = []
         for cnt in contours:
-            area_ratio = utils.solidity(cnt)
-            if not (0.3 < area_ratio < 0.36):
+            solidity = utils.solidity(cnt)
+            if not (0.3 < solidity < 0.36):
                 correct_contours.append(cnt)
 
         return correct_contours
