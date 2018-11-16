@@ -16,7 +16,7 @@ class NT:
 
     # Network tables server IP
     def get_nt_server(self):
-        return "roboRIO-{}-FRC.local".format(self.team_number)
+        return f"roboRIO-{self.team_number}-FRC.local"
 
     def connection_listener(self, connected, info):
         """
@@ -26,10 +26,10 @@ class NT:
         :return:
         """
         if connected:
-            print("Success: {}".format(info))
+            print(f"Success: {info}")
             self.load_values()
         else:
-            print("Fail: {}".format(info))
+            print(f"Fail: {info}")
 
     def set_item(self, key, value):
         """
