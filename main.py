@@ -18,7 +18,7 @@ parser.add_argument('-ui', action='store_true', default=False,
 # Add stream argument
 parser.add_argument('-stream', action='store_true', default=False,
                     dest='stream',
-                    help='Set a stream to true')
+                    help='Run web server')
 # Add local argument
 parser.add_argument('-local', action='store_true', default=False,
                     dest='local',
