@@ -5,7 +5,7 @@ import os
 class File:
     """Handles reading and writing JSON files."""
 
-    def __init__(self, default: function, folder: str):
+    def __init__(self, default, folder: str):
         """
         :param default: Function providing default value
         :param folder: Folder to write files to
