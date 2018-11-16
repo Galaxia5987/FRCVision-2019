@@ -76,6 +76,9 @@ def solidity (cnt) -> float:
     hull_area = cv2.contourArea(hull)
     return float(area) / hull_area
 
+def angele ():
+    
+
 def get_ip():
     ip = None
     while ip is None:
