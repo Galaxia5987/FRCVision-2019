@@ -12,14 +12,19 @@ from trackbars import Trackbars
 
 parser = argparse.ArgumentParser()
 
-# Add stream argument
+# Add web server argument
 parser.add_argument('-web', action='store_true', default=False,
                     dest='web',
-                    help='Run web server')
+                    help='Runs web server')
 # Add local argument
 parser.add_argument('-local', action='store_true', default=False,
                     dest='local',
-                    help='Set a local to true')
+                    help='Runs local UI')
+
+# Add network tables argument
+parser.add_argument('-nt', action='store_true', default=False,
+                    dest='nt',
+                    help='Runs network tables')
 
 parser.add_argument('-port', default=0, type=int) # Add camera port argument
 
