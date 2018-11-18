@@ -10,8 +10,8 @@ class Target:
                                 [1, 1, 1],
                                 [0, 1, 0]], dtype=np.uint8)
 
-    def create_mask(self, frame, hsv):
-        mask = utils.hsv_mask(frame, hsv)
+    @classmethod
+    def filter_contours(cls, contours):
         # create a cross kernel
         mask = utils.morphology(mask, self.kernel)
         mask = cv2.threshold(mask, 127, 255, 0)[1]
@@ -22,8 +22,6 @@ class Target:
         im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
-    @staticmethod
-    def filter_contours(contours):
         correct_contours = []
         for cnt in contours:
             solidity = utils.solidity(cnt)
@@ -32,8 +30,8 @@ class Target:
 
         return correct_contours
 
-    @staticmethod
-    def draw_contours(filtered_contours, original):
+    @classmethod
+    def draw_contours(cls, filtered_contours, original):
         if not filtered_contours:
             return
         for cnt in filtered_contours:

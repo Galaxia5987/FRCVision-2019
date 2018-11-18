@@ -4,8 +4,9 @@ from targets.target_base import TargetBase
 
 
 class ExampleTarget(TargetBase):
-    @staticmethod
-    def filter_contours(contours):
+
+    @classmethod
+    def filter_contours(cls, contours):
         correct_contours = []
 
         if contours is not None:
@@ -15,6 +16,6 @@ class ExampleTarget(TargetBase):
 
         return correct_contours
 
-    @staticmethod
-    def draw_contours(filtered_contours, original):
+    @classmethod
+    def draw_contours(cls, filtered_contours, original):
         cv2.drawContours(original, filtered_contours, -1, (255, 255, 0), 3)
