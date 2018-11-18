@@ -3,7 +3,7 @@ import cv2
 from targets.target_base import TargetBase
 
 
-class ExampleTarget(TargetBase):
+class Target(TargetBase):
 
     @classmethod
     def filter_contours(cls, contours):
