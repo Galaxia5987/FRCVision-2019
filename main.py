@@ -12,7 +12,7 @@ from web import Web
 
 class Main:
     def __init__(self):
-        self.name = "example_target"
+        self.name = 'example_target'
         self.display = Display()
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
@@ -25,7 +25,7 @@ class Main:
         :param name:
         """
         if not os.path.isfile(f'targets/{name}.py'):
-            print("Target doesn't exist")
+            print('Target doesn\'t exist')
             return
         print(f'Changing target to {name}')
         self.name = name
@@ -58,17 +58,17 @@ class Main:
             # Display
             self.web.set_frame(contour_image)
             self.display.show_frame(contour_image)
-            self.display.show_frame(utils.bitwise_mask(original, mask), title="mask")
+            self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
-                print("Restarting...")
+                print('Restarting...')
                 self.loop()
                 break
             if k in (27, 113):
-                print("Q pressed, stopping...")
+                print('Q pressed, stopping...')
                 break
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     Main().loop()
