@@ -7,8 +7,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """Class representing the Tower light reflectors target from FIRST Stronghold."""
 
-    @classmethod
-    def filter_contours(cls, contours):
+    @staticmethod
+    def filter_contours(contours):
         correct_contours = []
         for cnt in contours:
             solidity = utils.solidity(cnt)
@@ -17,8 +17,8 @@ class Target(TargetBase):
 
         return correct_contours
 
-    @classmethod
-    def draw_contours(cls, filtered_contours, original):
+    @staticmethod
+    def draw_contours(filtered_contours, original):
         if not filtered_contours:
             return
         for cnt in filtered_contours:

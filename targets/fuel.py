@@ -9,8 +9,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """CLass representing the Fuel ball from FIRST Steamworks."""
 
-    @classmethod
-    def filter_contours(cls, contours):
+    @staticmethod
+    def filter_contours(contours):
         correct_contours = []
 
         if contours is not None:
@@ -31,8 +31,8 @@ class Target(TargetBase):
 
         return correct_contours
 
-    @classmethod
-    def draw_contours(cls, filtered_contours, original):
+    @staticmethod
+    def draw_contours(filtered_contours, original):
         for cnt in filtered_contours:
             (a, b), radius = cv2.minEnclosingCircle(cnt)
             center = (int(a), int(b))

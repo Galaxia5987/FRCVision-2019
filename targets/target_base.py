@@ -24,26 +24,26 @@ class TargetBase(ABC):
         mask = cv2.threshold(mask, 127, 255, 0)[1]
         return mask
 
-    @classmethod
-    def find_contours(cls, mask) -> list:
+    @staticmethod
+    def find_contours(mask) -> list:
         """
         :param mask: mask of the target
         :return: list of contours in the mask
         """
         return cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def filter_contours(cls, contours: list):
+    def filter_contours(contours: list):
         """
         Filter the contours of the target.
         :param contours: list of contours
         """
         pass
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def draw_contours(cls, filtered_contours: list, contour_image):
+    def draw_contours(filtered_contours: list, contour_image):
         """
         Draw the contours on the frame.
         :param filtered_contours: filtered contours of the mask
