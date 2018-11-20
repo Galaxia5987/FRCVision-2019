@@ -7,7 +7,7 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
-    """CLass representing the Fuel ball from FIRST Steamworks."""
+    """Class representing the Fuel ball from FIRST Steamworks."""
 
     @classmethod
     def filter_contours(cls, contours):
