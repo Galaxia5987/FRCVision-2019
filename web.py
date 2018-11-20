@@ -19,7 +19,7 @@ class Web:
         def index():  # Returns the HTML template
             return render_template('index.html')
 
-        # Video feed enpdoint
+        # Video feed endpoint
         @self.app.route('/stream.mjpg')
         def video_feed():  # Initiate the feed
             return Response(self.stream_frame(),
