@@ -2,3 +2,4 @@ numpy
 netifaces
 flask
 gevent
+termcolor

@@ -6,8 +6,7 @@ class Display:
         self.camera = cv2.VideoCapture(port)
 
     def get_frame(self):
-        image = self.camera.read()[1]
-        return image.copy()
+        return self.camera.read()[1]
 
     @staticmethod
     def show_frame(frame, title='image'):
