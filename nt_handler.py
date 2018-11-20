@@ -8,11 +8,11 @@ from file import File
 class NT:
     def __init__(self, name):
         self.name = name
+        self.team_number = 5987
         self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values')
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
         self.table = NetworkTables.getTable('Vision')
-        self.team_number = 5987
 
     # Network tables server IP
     def get_nt_server(self):
