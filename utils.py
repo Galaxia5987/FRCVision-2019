@@ -70,11 +70,26 @@ def calculate_fps(frame, current_time, last_time, avg):
     cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
     return avg
 
-def solidity (cnt) -> float:
+
+def solidity(cnt) -> float:
     hull = cv2.convexHull(cnt)
     area = cv2.contourArea(cnt)
     hull_area = cv2.contourArea(hull)
     return float(area) / hull_area
+
+
+def get_children(contour, contours, hierarchy):
+    """
+    Returns child contours of a specific contour
+    :param contour:
+    :param contours:
+    :param hierarchy:
+    :return:
+    """
+    hierarchy = hierarchy[0]
+    index = contours.index(contour)
+    return [child for child, h in zip(contours, hierarchy) if h[3] == index]
+
 
 def get_ip():
     ip = None

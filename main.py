@@ -52,8 +52,8 @@ class Main:
             contour_image = frame.copy()
             # Target functions
             mask = target.create_mask(frame, self.trackbars.get_hsv())
-            contours = target.find_contours(mask)
-            filtered_contours = target.filter_contours(contours)
+            contours, hierarchy = target.find_contours(mask)
+            filtered_contours = target.filter_contours(contours, hierarchy)
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Show FPS
