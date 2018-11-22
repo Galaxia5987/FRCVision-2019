@@ -21,7 +21,7 @@ class Main:
         self.web.start_thread()  # Run web server
         self.nt = nt_handler.NT(self.name)
         self.stop = False
-        # atexit.register(self.nt.close_table, self.name)
+        atexit.register(self.nt.save_values)
 
     def change_name(self, name):
         """

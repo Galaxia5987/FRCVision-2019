@@ -8,6 +8,7 @@ from file import File
 class NT:
     def __init__(self, name):
         self.name = name
+        self.prefix = '/Vision/' + self.name + '_'
         self.team_number = 5987
         self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values')
         NetworkTables.initialize(server=self.get_nt_server())
@@ -58,7 +59,3 @@ class NT:
 
     def save_values(self):  # save values from the table to the associated file
         NetworkTables.saveEntries(self.file.get_filename(self.name), prefix='/Vision/' + self.name + '_')
-
-    def close_table(self):  # save all persistent values and clean the table of other values
-        self.save_values()
-        NetworkTables.deleteAllEntries()
