@@ -10,7 +10,7 @@ class NT:
         self.name = name
         self.prefix = '/Vision/' + self.name + '_'
         self.team_number = 5987
-        self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values')
+        self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values', 'nt')
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
         self.table = NetworkTables.getTable('Vision')

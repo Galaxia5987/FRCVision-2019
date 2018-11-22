@@ -5,13 +5,14 @@ import os
 class File:
     """Handles reading and writing JSON files."""
 
-    def __init__(self, default, folder: str):
+    def __init__(self, default, folder: str, extension):
         """
         :param default: Function providing default value
         :param folder: Folder to write files to
         """
         self.default = default
         self.folder = folder
+        self.extension = extension
 
     def get_filename(self, name: str):
         """
@@ -19,7 +20,7 @@ class File:
         :param name: Filename
         :return:
         """
-        return f'{self.folder}/{name}.json'
+        return f'{self.folder}/{name}.{self.extension}'
 
     def save_file(self, name: str, data):
         """
