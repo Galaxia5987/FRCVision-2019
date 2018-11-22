@@ -8,7 +8,7 @@ class Trackbars:
 
     def __init__(self, name):
         self.name = name
-        self.window = cv2.namedWindow("HSV")  # Create window
+        self.window = cv2.namedWindow('HSV')  # Create window
         self.callback = lambda v: None  # Dry callback for trackbars since it's not needed
         self.create_trackbars()
 
@@ -53,4 +53,4 @@ class Trackbars:
         high_s = cv2.getTrackbarPos('highS', 'HSV')
         low_v = cv2.getTrackbarPos('lowV', 'HSV')
         high_v = cv2.getTrackbarPos('highV', 'HSV')
-        return {"H": (low_h, high_h), "S": (low_s, high_s), "V": (low_v, high_v)}
+        return {'H': (low_h, high_h), 'S': (low_s, high_s), 'V': (low_v, high_v)}
