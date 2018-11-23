@@ -28,13 +28,12 @@ class NT:
         Callback for when network tables connect
         :param connected: Connected bool
         :param info: Connection info
-        :return:
         """
         if connected:
-            print(f"Success: {info}")
+            print(f'Success: {info}')
             self.load_values()
         else:
-            print(f"Fail: {info}")
+            print(f'Fail: {info}')
 
     def set_item(self, key, value):
         """
