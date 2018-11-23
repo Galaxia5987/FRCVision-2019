@@ -1,28 +1,9 @@
-import json
 import math
-import os
+import socket
 
 import cv2
 import netifaces as ni
 import numpy as np
-
-default = {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}
-
-
-def get_filename(name):
-    return 'hsv/{}.json'.format(name)
-
-
-def save_file(name, hsv):
-    with open(get_filename(name), 'w') as f:
-        json.dump(hsv, f)
-
-
-def load_file(name):
-    if not os.path.isfile(get_filename(name)):
-        save_file(name, default)
-    with open(get_filename(name), 'r') as f:
-        return json.load(f)
 
 
 def aspect_ratio(width, height):
@@ -79,15 +60,4 @@ def solidity(cnt) -> float:
 
 
 def get_ip():
-    ip = None
-    while ip is None:
-        for interface in ni.interfaces():
-            try:
-                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                ip = addrs[0]['addr']  # The first IP address (probably the local one)
-                if ip is not '127.0.0.1':
-                    break
-            except:
-                ip = '0.0.0.0'
-
-    return ip
+    return socket.gethostbyname(socket.gethostname())

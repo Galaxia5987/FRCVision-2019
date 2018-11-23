@@ -1,10 +1,12 @@
 import os
 import time
+import atexit
 from importlib import import_module
 
 import cv2
 from termcolor import colored
 
+import nt_handler
 import utils
 from display import Display
 from trackbars import Trackbars
@@ -18,7 +20,9 @@ class Main:
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
         self.web.start_thread()  # Run web server
+        self.nt = nt_handler.NT(self.name)
         self.stop = False
+        atexit.register(self.nt.save_values)
 
     def change_name(self, name):
         """
