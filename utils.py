@@ -78,6 +78,10 @@ def solidity (cnt) -> float:
     return float(area) / hull_area
 
 
+def distance (focal, object_width, object_width_pixels):
+    return (focal*object_width)/object_width_pixels
+
+
 def get_ip():
     ip = None
     while ip is None:
