@@ -1,6 +1,6 @@
 import json
 import math
-import netifaces as ni
+# import netifaces as ni
 import os
 
 import cv2
@@ -82,16 +82,16 @@ def distance (focal, object_width, object_width_pixels):
     return (focal*object_width)/object_width_pixels
 
 
-def get_ip():
-    ip = None
-    while ip is None:
-        for interface in ni.interfaces():
-            try:
-                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                ip = addrs[0]['addr']  # The first IP address (probably the local one)
-                if ip is not '127.0.0.1':
-                    break
-            except:
-                ip = '0.0.0.0'
-
-    return ip
+# def get_ip():
+#     ip = None
+#     while ip is None:
+#         for interface in ni.interfaces():
+#             try:
+#                 addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
+#                 ip = addrs[0]['addr']  # The first IP address (probably the local one)
+#                 if ip is not '127.0.0.1':
+#                     break
+#             except:
+#                 ip = '0.0.0.0'
+#
+#     return ip

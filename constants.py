@@ -8,7 +8,7 @@ TARGET_SIZE = {'2015': {'width': 0.425, 'height': 0.177},
                '2018': {'width': 0.508, 'height': 0.203}}
 
 # Game pieces sizes dictionary
-GAME_PIECE_SIZE = {'fuel': {'radius': 0.0635},
-                   'gear': {'radius': 0.1397},
+GAME_PIECE_SIZE = {'fuel': {'diameter': 0.127},
+                   'gear': {'diameter': 0.2794},
                    'power_cube': {'width': 0.3302, 'length': 0.3302, 'height': 0.2794},
-                   'tennis_ball': {'radius': 0.067}}
+                   'tennis_ball': {'diameter': 0.134}}

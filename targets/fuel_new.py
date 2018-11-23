@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 import utils
-
+import constants
 
 class Target:
     def __init__(self, name):
@@ -71,9 +71,9 @@ class Target:
         if not filtered_contours:
             return
         for cnt in filtered_contours:
-            # x, y, w, h = cv2.boundingRect(cnt)
-            # print(cv2.contourArea(cnt))
-            # cv2.putText(original, str(cv2.contourArea(cnt)), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 2, cv2.LINE_AA)
             (a, b), radius = cv2.minEnclosingCircle(cnt)
+            distance = utils.distance(constants.FOCAL['lifecam'], constants.GAME_PIECE_SIZE['fuel']['diameter'], radius*2)
             center = (int(a), int(b))
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)
+            cv2.putText(original, "{} cm".format(int(distance*100)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1,
+                        cv2.LINE_AA)
