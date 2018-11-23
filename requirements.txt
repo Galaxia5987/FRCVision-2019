@@ -2,3 +2,4 @@ numpy
 flask
 gevent
 pynetworktables
+termcolor

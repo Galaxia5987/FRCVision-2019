@@ -2,6 +2,7 @@ import math
 import socket
 
 import cv2
+import netifaces as ni
 import numpy as np
 
 
@@ -22,8 +23,8 @@ def circle_ratio(cnt):
 
 def hsv_mask(frame, hsv):
     hsv_colors = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_hsv = np.array([hsv["H"][0], hsv["S"][0], hsv["V"][0]])
-    higher_hsv = np.array([hsv["H"][1], hsv["S"][1], hsv["V"][1]])
+    lower_hsv = np.array({hsv['H'][0], hsv['S'][0], hsv['V'][0]})
+    higher_hsv = np.array([hsv['H'][1], hsv['S'][1], hsv['V'][1]])
     mask = cv2.inRange(hsv_colors, lower_hsv, higher_hsv)
     return mask
 
@@ -47,8 +48,15 @@ def contour_in_area(cnt1, cnt2):
 
 def calculate_fps(frame, current_time, last_time, avg):
     avg = (avg + (current_time - last_time)) / 2
-    cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+    cv2.putText(frame, '{} FPS'.format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
     return avg
+
+
+def solidity(cnt) -> float:
+    hull = cv2.convexHull(cnt)
+    area = cv2.contourArea(cnt)
+    hull_area = cv2.contourArea(hull)
+    return float(area) / hull_area
 
 
 def get_ip():
