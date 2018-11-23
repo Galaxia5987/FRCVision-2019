@@ -20,12 +20,10 @@ class Target:
     @staticmethod
     def find_contours(mask):
         im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
+        return contours, hierarchy
 
     @staticmethod
-    def filter_contours(contours):
-        if not contours:
-            return
+    def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
             solidity = utils.solidity(cnt)

@@ -1,27 +1,27 @@
 import json
 import math
-# import netifaces as ni
 import os
 
 import cv2
+import netifaces as ni
 import numpy as np
 
-default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
+default = {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}
 
 
 def get_filename(name):
-    return "hsv/{}.json".format(name)
+    return 'hsv/{}.json'.format(name)
 
 
 def save_file(name, hsv):
-    with open(get_filename(name), "w") as f:
+    with open(get_filename(name), 'w') as f:
         json.dump(hsv, f)
 
 
 def load_file(name):
     if not os.path.isfile(get_filename(name)):
         save_file(name, default)
-    with open(get_filename(name), "r") as f:
+    with open(get_filename(name), 'r') as f:
         return json.load(f)
 
 
@@ -42,8 +42,8 @@ def circle_ratio(cnt):
 
 def hsv_mask(frame, hsv):
     hsv_colors = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_hsv = np.array([hsv["H"][0], hsv["S"][0], hsv["V"][0]])
-    higher_hsv = np.array([hsv["H"][1], hsv["S"][1], hsv["V"][1]])
+    lower_hsv = np.array({hsv['H'][0], hsv['S'][0], hsv['V'][0]})
+    higher_hsv = np.array([hsv['H'][1], hsv['S'][1], hsv['V'][1]])
     mask = cv2.inRange(hsv_colors, lower_hsv, higher_hsv)
     return mask
 
@@ -67,16 +67,41 @@ def contour_in_area(cnt1, cnt2):
 
 def calculate_fps(frame, current_time, last_time, avg):
     avg = (avg + (current_time - last_time)) / 2
-    cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+    cv2.putText(frame, '{} FPS'.format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
     return avg
 
 
-def solidity (cnt) -> float:
+def solidity(cnt) -> float:
     hull = cv2.convexHull(cnt)
     area = cv2.contourArea(cnt)
     hull_area = cv2.contourArea(hull)
     return float(area) / hull_area
 
+
+def get_children(contour, contours, hierarchy):
+    """
+    Returns child contours of a specific contour
+    :param contour:
+    :param contours:
+    :param hierarchy:
+    :return:
+    """
+    hierarchy = hierarchy[0]
+    index = contours.index(contour)
+    return [child for child, h in zip(contours, hierarchy) if h[3] == index]
+
+
+def get_ip():
+    ip = None
+    while ip is None:
+        for interface in ni.interfaces():
+            try:
+                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
+                ip = addrs[0]['addr']  # The first IP address (probably the local one)
+                if ip is not '127.0.0.1':
+                    break
+            except:
+                ip = '0.0.0.0'
 
 def distance (focal, object_width, object_width_pixels):
     return (focal*object_width)/object_width_pixels
