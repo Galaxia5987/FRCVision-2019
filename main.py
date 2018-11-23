@@ -12,7 +12,7 @@ from web import Web
 
 class Main:
     def __init__(self):
-        self.name = "example_target"
+        self.name = "fuel_new"
         self.display = Display()
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
