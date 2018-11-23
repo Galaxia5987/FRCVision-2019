@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Callable
 
 
 class File:
@@ -38,6 +39,9 @@ class File:
         :return: The data from the file
         """
         if not os.path.isfile(self.get_filename()):
-            self.save_file(self.default())
+            if isinstance(self.default, Callable):
+                self.save_file(self.default(self.name))
+            else:
+                self.save_file(self.default)
         with open(self.get_filename(), 'r') as f:
             return json.load(f)
