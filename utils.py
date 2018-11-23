@@ -2,12 +2,13 @@ import math
 import socket
 
 import cv2
-import netifaces as ni
+#import netifaces as ni
 import numpy as np
 
 
-def aspect_ratio(width, height):
-    return width / height
+def aspect_ratio(cnt):
+    x, y, w, h = cv2.boundingRect(cnt)
+    return w / h
 
 
 def circle_area(radius):
@@ -23,7 +24,7 @@ def circle_ratio(cnt):
 
 def hsv_mask(frame, hsv):
     hsv_colors = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_hsv = np.array({hsv['H'][0], hsv['S'][0], hsv['V'][0]})
+    lower_hsv = np.array([hsv['H'][0], hsv['S'][0], hsv['V'][0]])
     higher_hsv = np.array([hsv['H'][1], hsv['S'][1], hsv['V'][1]])
     mask = cv2.inRange(hsv_colors, lower_hsv, higher_hsv)
     return mask
@@ -38,6 +39,16 @@ def morphology(mask, kernel):
 def bitwise_mask(frame, mask):
     frame = frame.copy()
     return cv2.bitwise_and(frame, frame, mask=mask)
+
+
+def binary_thresh(frame, thresh):
+    return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
+
+
+def edge_detection(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    img = cv2.blur(gray, (5, 5))
+    return cv2.Laplacian(img, cv2.CV_64F)
 
 
 def contour_in_area(cnt1, cnt2):

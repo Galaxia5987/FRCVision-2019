@@ -4,6 +4,7 @@ import atexit
 from importlib import import_module
 
 import cv2
+import numpy as np
 from termcolor import colored
 
 import nt_handler
@@ -15,14 +16,14 @@ from web import Web
 
 class Main:
     def __init__(self):
-        self.name = 'example_target'
+        self.name = 'cube'
         self.display = Display()
         self.trackbars = Trackbars(self.name)
-        self.web = Web(self)
-        self.web.start_thread()  # Run web server
-        self.nt = nt_handler.NT(self.name)
+        # self.web = Web(self)
+        # self.web.start_thread()  # Run web server
+        # self.nt = nt_handler.NT(self.name)
         self.stop = False
-        atexit.register(self.nt.save_values)
+        # atexit.register(self.nt.save_values)
 
     def change_name(self, name):
         """
@@ -56,17 +57,24 @@ class Main:
             contour_image = frame.copy()
             # Target functions
             mask = target.create_mask(frame, self.trackbars.get_hsv())
-            contours = target.find_contours(mask)
-            filtered_contours = target.filter_contours(contours)
-            # Draw contours
-            target.draw_contours(filtered_contours, contour_image)
+
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            self.web.set_frame(contour_image)
+
+            cut_mask = utils.bitwise_mask(original, mask[0])
+            self.display.show_frame(cut_mask, title='mask')
+            edge = utils.edge_detection(cut_mask)
+            edge = utils.binary_thresh(edge, 20)
+            edge = cv2.bitwise_not(mask[0], mask[0], mask=np.array(edge, dtype=np.uint8))
+            self.display.show_frame(edge, 'edgy')
+            contours = cv2.findContours(edge, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
+            filtered_contours = target.filter_contours(contours)
+            # Draw contours
+            target.draw_contours(contours, contour_image)
+            # self.web.set_frame(contour_image)
             self.display.show_frame(contour_image)
-            self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
