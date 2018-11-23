@@ -4,12 +4,13 @@ from file import File
 
 
 class NT:
-    """
-    This is a class for handling all networktables operations, mainly starting a server and sending to and receiving
-    variables from it.
-    """
     def __init__(self, name):
-        self.name = name  # The name of the target, will be used to load its values
+        """
+        This is a class for handling all networktables operations, mainly starting a server and sending to and receiving
+        variables from it.
+        :param name: The name of the target
+        """
+        self.name = name
         self.prefix = '/Vision/' + self.name + '_'  # Prefix for working with files
         self.team_number = 5987  # Our team number, used for the server IP
         self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values', 'nt')
@@ -39,9 +40,8 @@ class NT:
         """
         Summary: Add a value to SmartDashboard.
 
-        Parameters:
-            * key : The name the value will be stored under and displayed.
-            * value : The information the key will hold.
+        :param key: The name the value will be stored under and displayed.
+        :param value: The information the key will hold.
         """
         self.table.setDefaultValue(key, value)
 
@@ -49,9 +49,9 @@ class NT:
         """
         Summary: Get a value from SmartDashboard.
 
-        Parameters:
-            * key : The name the value is stored under.
-            * default_value : The value returned if key holds none.
+        :param key: The name the value is stored under.
+        :param default_value: The value returned if key holds none.
+        :return: The value that the key holds, default_value if it holds none.
         """
         return self.table.getValue(key, default_value)
 
