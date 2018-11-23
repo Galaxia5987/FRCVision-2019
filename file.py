@@ -10,7 +10,7 @@ class File:
         """
         Instantiate a file.
         :param name: The name of the target
-        :param default: Function providing default value
+        :param default: Default value
         :param folder: Folder to write files to
         """
         self.name = name
@@ -20,14 +20,14 @@ class File:
 
     def get_filename(self) -> str:
         """
-        Formats filename.
+        Format filename.
         :return: The filename in a folder/name.extension format
         """
         return f'{self.folder}/{self.name}.{self.extension}'
 
     def save_file(self, data):
         """
-        Saves file according to format.
+        Save file according to format.
         :param data: The data to save to the file
         """
         with open(self.get_filename(), 'w') as f:
@@ -35,7 +35,7 @@ class File:
 
     def load_file(self):
         """
-        Loads file from name.
+        Load file from name.
         :return: The data from the file
         """
         if not os.path.isfile(self.get_filename()):
