@@ -3,7 +3,7 @@ import math
 import os
 
 import cv2
-import netifaces as ni
+
 import numpy as np
 
 default = {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}
@@ -42,7 +42,7 @@ def circle_ratio(cnt):
 
 def hsv_mask(frame, hsv):
     hsv_colors = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_hsv = np.array({hsv['H'][0], hsv['S'][0], hsv['V'][0]})
+    lower_hsv = np.array([hsv['H'][0], hsv['S'][0], hsv['V'][0]])
     higher_hsv = np.array([hsv['H'][1], hsv['S'][1], hsv['V'][1]])
     mask = cv2.inRange(hsv_colors, lower_hsv, higher_hsv)
     return mask
@@ -91,21 +91,8 @@ def get_children(contour, contours, hierarchy):
     return [child for child, h in zip(contours, hierarchy) if h[3] == index]
 
 
-def get_ip():
-    ip = None
-    while ip is None:
-        for interface in ni.interfaces():
-            try:
-                addrs = ni.ifaddresses(interface)[ni.AF_INET]  # IPv4 addresses for current interface
-                ip = addrs[0]['addr']  # The first IP address (probably the local one)
-                if ip is not '127.0.0.1':
-                    break
-            except:
-                ip = '0.0.0.0'
-
-def distance (focal, object_width, object_width_pixels):
-    return (focal*object_width)/object_width_pixels
-
+def distance(focal, object_width, object_width_pixels):
+    return (focal * object_width) / object_width_pixels
 
 # def get_ip():
 #     ip = None
@@ -118,5 +105,3 @@ def distance (focal, object_width, object_width_pixels):
 #                     break
 #             except:
 #                 ip = '0.0.0.0'
-#
-#     return ip

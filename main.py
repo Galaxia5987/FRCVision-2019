@@ -13,11 +13,11 @@ from web import Web
 
 class Main:
     def __init__(self):
-        self.name = 'example_target'
+        self.name = 'fuel_new'
         self.display = Display()
         self.trackbars = Trackbars(self.name)
-        self.web = Web(self)
-        self.web.start_thread()  # Run web server
+        # self.web = Web(self)
+        # self.web.start_thread()  # Run web server
         self.stop = False
 
     def change_name(self, name):
@@ -60,7 +60,7 @@ class Main:
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            self.web.set_frame(contour_image)
+            # self.web.set_frame(contour_image)
             self.display.show_frame(contour_image)
             self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing

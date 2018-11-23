@@ -4,6 +4,8 @@ import cv2
 class Display:
     def __init__(self, port=0):
         self.camera = cv2.VideoCapture(port)
+        self.camera.set(15, -8)
+
 
     def get_frame(self):
         return self.camera.read()[1]
