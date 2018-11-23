@@ -1,4 +1,5 @@
 numpy
-netifaces
 flask
 gevent
+pynetworktables
+termcolor
