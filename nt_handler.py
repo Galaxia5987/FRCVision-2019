@@ -13,7 +13,7 @@ class NT:
         self.name = name
         self.prefix = '/Vision/' + self.name + '_'  # Prefix for working with files
         self.team_number = 5987  # Our team number, used for the server IP
-        self.file = File(f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values', 'nt')
+        self.file = File(self.name, f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values', 'nt')
         # The values file for the target, with a default value for when no such file exists ye
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
@@ -59,11 +59,11 @@ class NT:
         Loads the target's values onto networktables, using its values file.
         Values files are found in the 'values' folder and have the .nt extension.
         """
-        NetworkTables.loadEntries(self.file.get_filename(self.name), prefix='/Vision/' + self.name + '_')
+        NetworkTables.loadEntries(self.file.get_filename(), prefix='/Vision/' + self.name + '_')
 
     def save_values(self):
         """
         Save the target's values from networktables, to its values file.
         Values files are found in the 'values' folder and have the .nt extension.
         """
-        NetworkTables.saveEntries(self.file.get_filename(self.name), prefix='/Vision/' + self.name + '_')
+        NetworkTables.saveEntries(self.file.get_filename(), prefix='/Vision/' + self.name + '_')
