@@ -15,15 +15,19 @@ class Target:
         # create a cross kernel
         mask = utils.morphology(mask, self.kernel)
         mask = utils.binary_thresh(mask, 127)
-        return mask, frame
+        return mask
 
-    def find_contours(self, data: tuple):
-        mask, frame = data
-        edge = utils.bitwise_mask(frame, mask)
+    @staticmethod
+    def edge_detection(frame, mask):
+        edge = utils.bitwise_and(frame, mask)
         edge = utils.edge_detection(edge)
         edge = utils.binary_thresh(edge, 20)
         edge = np.array(edge, dtype=np.uint8)
-        mask = cv2.bitwise_not(mask, mask, mask=edge)[1]
+        return edge
+
+    @staticmethod
+    def find_contours(mask, edge):
+        mask = utils.bitwise_not(mask, edge)
         img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 

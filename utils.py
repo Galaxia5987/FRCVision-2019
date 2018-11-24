@@ -36,9 +36,14 @@ def morphology(mask, kernel):
     return mask
 
 
-def bitwise_mask(frame, mask):
+def bitwise_and(frame, mask):
     frame = frame.copy()
     return cv2.bitwise_and(frame, frame, mask=mask)
+
+
+def bitwise_not(frame, mask):
+    frame = frame.copy()
+    return cv2.bitwise_not(frame, frame, mask=mask)
 
 
 def binary_thresh(frame, thresh):
