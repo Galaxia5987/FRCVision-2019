@@ -1,6 +1,5 @@
 import cv2
 
-import utils
 from file import File
 
 
