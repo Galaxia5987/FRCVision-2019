@@ -1,5 +1,4 @@
 import argparse
-import atexit
 import os
 import time
 from importlib import import_module
