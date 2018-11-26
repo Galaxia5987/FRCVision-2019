@@ -1,11 +1,10 @@
 import json
 import math
+import netifaces as ni
 import os
 
 import cv2
 import numpy as np
-
-import netifaces as ni
 
 default = {"H": (0, 255), "S": (0, 255), "V": (0, 255)}
 
@@ -71,6 +70,11 @@ def calculate_fps(frame, current_time, last_time, avg):
     cv2.putText(frame, "{} FPS".format(int(1 / avg)), (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
     return avg
 
+def solidity (cnt) -> float:
+    hull = cv2.convexHull(cnt)
+    area = cv2.contourArea(cnt)
+    hull_area = cv2.contourArea(hull)
+    return float(area) / hull_area
 
 def get_ip():
     ip = None
