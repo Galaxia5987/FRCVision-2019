@@ -44,7 +44,7 @@ class Target:
             for c in childs:
                 if cv2.contourArea(c) > 300 and self.is_circle(c, 0.5):
                     circle_radius = cv2.minEnclosingCircle(c)[1]
-                    _, filtered_radius = cv2.minEnclosingCircle(cnt)
+                    filtered_radius = cv2.minEnclosingCircle(cnt)[1]
                     ratio = utils.circle_area(circle_radius) / utils.circle_area(filtered_radius)
                     if ratio >= 0.01:
                         final_contours.append(cnt)
