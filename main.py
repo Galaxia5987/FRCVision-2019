@@ -15,29 +15,25 @@ from web import Web
 
 def get_args():
     parser = argparse.ArgumentParser()
-    # Add ui argument
-    parser.add_argument('-ui', action='store_true', default=False,
-                        dest='ui',
-                        help='Set a ui to true')
-    # Add stream argument
-    parser.add_argument('-stream', action='store_true', default=False,
-                        dest='stream',
-                        help='Set a stream to true')
-    # Add local argument
+    # Add web server argument
+    parser.add_argument('-web', action='store_true', default=True,
+                        dest='web',
+                        help='Launch web server UI')
+    # Add local ui argument
     parser.add_argument('-local', action='store_true', default=False,
                         dest='local',
-                        help='Set a local to true')
+                        help='Launch local UI')
     # Add camera port argument
-    parser.add_argument('-port', default='0', type=int)
+    parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
-    parser.add_argument('-target', default='target', type=str)
+    parser.add_argument('-target', default='example_target', dest='target', help='Target file', type=str)
     return parser.parse_args()
 
 
 class Main:
     def __init__(self):
-        self.name = "example_target"
         self.results = get_args()
+        self.name = self.results.target
         self.display = Display()
         self.trackbars = Trackbars(self.name)
         self.web = Web(self)
