@@ -43,7 +43,7 @@ class Target:
             childs = utils.get_children(cnt, contours, hierarchy)
             for c in childs:
                 if cv2.contourArea(c) > 300 and self.is_circle(c, 0.5):
-                    _, circle_radius = cv2.minEnclosingCircle(c)
+                    circle_radius = cv2.minEnclosingCircle(c)[1]
                     _, filtered_radius = cv2.minEnclosingCircle(cnt)
                     ratio = utils.circle_area(circle_radius) / utils.circle_area(filtered_radius)
                     if ratio >= 0.01:
