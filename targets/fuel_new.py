@@ -25,23 +25,30 @@ class Target:
 
     @staticmethod
     def is_circle(cnt, minimum):
+        """
+        Checks the circle ratio and returns true if it meets the minimum
+        :param cnt:
+        :param minimum:
+        :return:
+        """
         ratio = utils.circle_ratio(cnt)
         return minimum <= ratio <= 1
 
     def first_pass(self, contours):
-        correct_contours = []
-        for cnt in contours:
-            if cv2.contourArea(cnt) > 3_000 and self.is_circle(cnt, 0.8):
-                correct_contours.append(cnt)
-        return correct_contours
+        """
+        First pass detection.
+        :param contours:
+        :return:
+        """
+        return [cnt for cnt in contours if cv2.contourArea(cnt) > 3_000 and self.is_circle(cnt, 0.8)]
 
     def filter_contours(self, contours, hierarchy):
         filtered_circles = self.first_pass(contours)
         final_contours = []
         children = []
         for cnt in filtered_circles:
-            childs = utils.get_children(cnt, contours, hierarchy)
-            for c in childs:
+            children = utils.get_children(cnt, contours, hierarchy)
+            for c in children:
                 if cv2.contourArea(c) > 300 and self.is_circle(c, 0.5):
                     circle_radius = cv2.minEnclosingCircle(c)[1]
                     filtered_radius = cv2.minEnclosingCircle(cnt)[1]
