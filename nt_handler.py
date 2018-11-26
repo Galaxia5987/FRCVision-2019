@@ -1,3 +1,5 @@
+import atexit
+
 from networktables import NetworkTables
 
 from file import File
@@ -13,11 +15,13 @@ class NT:
         self.name = name
         self.prefix = '/Vision/' + self.name + '_'  # Prefix for working with files
         self.team_number = 5987  # Our team number, used for the server IP
-        self.file = File(self.name, f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}', 'values', 'nt')
+        self.file = File(self.name, f'[NetworkTables Storage 3.0]\nstring "/Vision/{self.name}_name"={self.name}',
+                         'values', 'nt')
         # The values file for the target, with a default value for when no such file exists ye
         NetworkTables.initialize(server=self.get_nt_server())
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
         self.table = NetworkTables.getTable('Vision')  # Create our own table instead of clogging SmartDashboard
+        atexit.register(self.save_values)
 
     # Network tables server IP
     def get_nt_server(self):

@@ -45,7 +45,6 @@ class Main:
         self.web.start_thread()  # Run web server
         self.nt = nt_handler.NT(self.name)
         self.stop = False
-        atexit.register(self.nt.save_values)
 
     def change_name(self, name):
         """
@@ -87,18 +86,18 @@ class Main:
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
+            self.web.set_frame(contour_image)
             self.display.show_frame(contour_image)
             self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
-            self.web.set_frame(contour_image)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))
                 self.loop()
                 break
+            k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if k in (27, 113):
                 print(colored('Q pressed, stopping...', 'red'))
                 break
-            k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
 
 
 if __name__ == '__main__':
