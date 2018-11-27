@@ -23,10 +23,10 @@ class Target:
     @staticmethod
     def find_contours(mask):
         im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
+        return contours, hierarchy
 
     @staticmethod
-    def filter_contours(contours):
+    def filter_contours(contours, hierarchy):
         correct_contours = []
 
         if contours is not None:

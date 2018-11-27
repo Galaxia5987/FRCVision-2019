@@ -59,5 +59,18 @@ def solidity(cnt) -> float:
     return float(area) / hull_area
 
 
+def get_children(contour, contours, hierarchy):
+    """
+    Returns child contours of a specific contour
+    :param contour:
+    :param contours:
+    :param hierarchy:
+    :return:
+    """
+    hierarchy = hierarchy[0]
+    index = contours.index(contour)
+    return [child for child, h in zip(contours, hierarchy) if h[3] == index]
+
+
 def get_ip():
     return socket.gethostbyname(socket.gethostname())
