@@ -17,9 +17,9 @@ from web import Web
 def get_args():
     parser = argparse.ArgumentParser()
     # Add web server argument
-    parser.add_argument('-web', action='store_true', default=True,
+    parser.add_argument('-no-web', action='store_false', default=True,
                         dest='web',
-                        help='Launch web server UI')
+                        help='Disable web server UI')
     parser.add_argument('-networktables', '-nt', action='store_true', default=False,
                         dest='networktables',
                         help='Initiate network tables')
@@ -65,7 +65,7 @@ class Main:
         self.stop = True
 
     def loop(self):
-        print(colored(f'\nStarting loop with target {self.name}', 'green'))
+        print(colored(f'Starting loop with target {self.name}', 'green'))
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target(self.name)
