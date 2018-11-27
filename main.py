@@ -16,8 +16,8 @@ from web import Web
 
 def get_args():
     """
-    Adds command line arguments and returns the results after parsing.
-    :return:
+    Adds command line arguments.
+    :return: Parsed arguments.
     """
     parser = argparse.ArgumentParser()
     # Add web server argument
