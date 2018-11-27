@@ -15,6 +15,10 @@ from web import Web
 
 
 def get_args():
+    """
+    Adds command line arguments and returns the results after parsing.
+    :return:
+    """
     parser = argparse.ArgumentParser()
     # Add web server argument
     parser.add_argument('-no-web', action='store_false', default=True,

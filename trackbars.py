@@ -10,7 +10,7 @@ class Trackbars:
         self.name = name
         self.window = cv2.namedWindow('HSV')  # Create window
         self.callback = lambda v: None  # Dry callback for trackbars since it's not needed
-        self.file = File(self.name, lambda x: {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}, 'hsv', 'json')
+        self.file = File(self.name, {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}, 'hsv', 'json')
         self.create_trackbars()
 
     def save_hsv_values(self):
