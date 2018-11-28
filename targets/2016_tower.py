@@ -5,10 +5,10 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
-    """Class representing the Tower light reflectors target from FIRST Stronghold."""
+    """The Tower light reflectors target from FIRST Stronghold."""
 
     @staticmethod
-    def filter_contours(contours):
+    def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
             solidity = utils.solidity(cnt)

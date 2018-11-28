@@ -12,29 +12,29 @@ class Web:
     def __init__(self, main):
         self.main = main
         self.last_frame = None  # Keep last frame for streaming
-        self.app = Flask("Web")  # Flask app for web
+        self.app = Flask('Web')  # Flask app for web
 
         # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
             return render_template('index.html')
 
-        # Video feed enpdoint
+        # Video feed endpoint
         @self.app.route('/stream.mjpg')
         def video_feed():  # Initiate the feed
             return Response(self.stream_frame(),
                             mimetype='multipart/x-mixed-replace; boundary=frame')
 
-        @self.app.route("/save", methods=['POST'])
+        @self.app.route('/save', methods=['POST'])
         def save():
             """Post route that saves HSV values."""
-            self.main.trackbars.save_hsv_values()
+            self.main.hsv_handler.save_hsv_values()
             return '', 204
 
-        @self.app.route("/update", methods=['POST'])
+        @self.app.route('/update', methods=['POST'])
         def update():
             """Post route to change target."""
-            target = request.data.decode("utf-8")
+            target = request.data.decode('utf-8')
             self.main.change_name(target)
             return '', 204
 

@@ -7,10 +7,10 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
-    """Class representing the Fuel ball from FIRST Steamworks."""
+    """The Fuel ball from FIRST Steamworks."""
 
     @staticmethod
-    def filter_contours(contours):
+    def filter_contours(contours, hierarchy):
         correct_contours = []
 
         if contours is not None:

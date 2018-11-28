@@ -4,9 +4,10 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
-
+  """An example target."""
+  
     @staticmethod
-    def filter_contours(contours):
+    def filter_contours(contours, hierarchy):
         correct_contours = []
 
         if contours is not None:
