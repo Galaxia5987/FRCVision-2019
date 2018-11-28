@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+
 import utils
 from targets.target_base import TargetBase
 

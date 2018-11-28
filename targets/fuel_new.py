@@ -1,10 +1,12 @@
+import cv2
+
 import utils
 from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
     """A better version of recognition of the Fuel ball from FIRST Steamworks."""
-    
+
     @staticmethod
     def is_circle(cnt, minimum):
         """

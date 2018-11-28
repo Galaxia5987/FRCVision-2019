@@ -25,18 +25,20 @@ class TargetBase(ABC):
         return mask
 
     @staticmethod
-    def find_contours(mask) -> list:
+    def find_contours(mask) -> tuple:
         """
         :param mask: mask of the target
         :return: list of contours in the mask
         """
-        return cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
+        _, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        return contours, hierarchy
 
     @staticmethod
     @abstractmethod
-    def filter_contours(contours: list):
+    def filter_contours(contours: list, hierarchy):
         """
         Filter the contours of the target.
+        :param hierarchy: contour hierarchy data
         :param contours: list of contours
         """
         pass
