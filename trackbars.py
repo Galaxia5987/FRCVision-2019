@@ -43,7 +43,7 @@ class Trackbars:
         cv2.createTrackbar('highV', 'HSV', hsv['V'][1], 255, self.callback)
 
     @staticmethod
-    def get_hsv():
+    def get_hsv() -> dict:
         """
         Gets HSV values from trackbars.
         :return: HSV values
