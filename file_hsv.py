@@ -10,15 +10,15 @@ class FileHSV:
         :param name: Target name
         """
         self.file = File(name, {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}, 'hsv', 'json')
-        self.hsv = self.file.load_file()
+        self.hsv_values = self.file.load_file()
 
     def reload(self):
         """Reload the values from file."""
-        self.hsv = self.file.load_file()
+        self.hsv_values = self.file.load_file()
 
     def get_hsv(self) -> dict:
         """
         Get current HSV.
         :return: Cached HSV values
         """
-        return self.hsv
+        return self.hsv_values
