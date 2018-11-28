@@ -7,7 +7,7 @@ class FileHSV:
     def __init__(self, name):
         """
         Instantiate a HSV value handler.
-        :param name: File name the HSV values are stored in
+        :param name: Target name
         """
         self.file = File(name, {'H': (0, 255), 'S': (0, 255), 'V': (0, 255)}, 'hsv', 'json')
         self.hsv = self.file.load_file()
