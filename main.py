@@ -1,5 +1,4 @@
 import argparse
-import os
 import time
 from importlib import import_module
 
@@ -42,6 +41,9 @@ class Main:
     def __init__(self):
         self.results = get_args()
         self.name = self.results.target
+        # Check if requested target exists
+        if not utils.is_target(self.name):
+            return
         self.display = Display(self.results.port)
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
@@ -59,8 +61,7 @@ class Main:
         Changes the name and starts a new loop.
         :param name:
         """
-        if not os.path.isfile(f'targets/{name}.py'):
-            print(colored('Target doesn\'t exist', 'red'))
+        if not utils.is_target(name):
             return
         print(f'Changing target to {name}')
         self.name = name
@@ -69,6 +70,9 @@ class Main:
         self.stop = True
 
     def loop(self):
+        # Check if requested target exists
+        if not utils.is_target(self.name, False):
+            return
         print(colored(f'Starting loop with target {self.name}', 'green'))
         self.stop = False
         # We dynamically load classes in order to provide a modular base
