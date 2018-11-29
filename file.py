@@ -4,7 +4,7 @@ from typing import Callable
 
 
 class File:
-    """Handles reading and writing files."""
+    """Handles reading and writing JSON files."""
 
     def __init__(self, name: str, default, folder: str, extension):
         """
