@@ -31,9 +31,29 @@ def hsv_mask(frame, hsv):
 
 
 def morphology(mask, kernel):
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask = open(mask, kernel, kernel)
+    mask = close(mask, kernel, kernel)
     return mask
+
+
+def open(mask, kernel_e, kernel_d, itr=1):
+    mask = cv2.erode(mask ,kernel_e, iterations=itr)
+    mask = cv2.dilate(mask, kernel_d, iterations=itr)
+    return mask
+
+
+def close(mask, kernel_d, kernel_e, itr=1):
+    mask = dilate(mask, kernel_d, itr)
+    mask = erode(mask, kernel_e, itr)
+    return mask
+
+
+def dilate(mask, kernel, itr=1):
+    return cv2.dilate(mask, kernel, iterations=itr)
+
+
+def erode(mask, kernel, itr=1):
+    return cv2.erode(mask, kernel, iterations=itr)
 
 
 def bitwise_and(frame, mask):
@@ -51,9 +71,9 @@ def binary_thresh(frame, thresh):
 
 
 def edge_detection(frame):
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    img = cv2.blur(gray, (5, 5))
-    return cv2.Laplacian(img, cv2.CV_64F)
+    src = cv2.GaussianBlur(frame, (3, 3), 0)
+    gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+    return cv2.Canny(gray, 100, 225)
 
 
 def contour_in_area(cnt1, cnt2):

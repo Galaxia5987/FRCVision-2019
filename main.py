@@ -59,8 +59,8 @@ class Main:
 
             # Target functions
             mask = target.create_mask(frame, self.trackbars.get_hsv())
-            edge = target.edge_detection(frame, mask)
-            contours = target.find_contours(mask, edge)
+            mask = target.edge_detection(frame, mask)
+            contours = target.find_contours(mask)
             filtered_contours = target.filter_contours(contours)
 
             # Show FPS
@@ -70,7 +70,6 @@ class Main:
             # Display
             cut_mask = utils.bitwise_and(original, mask)
             self.display.show_frame(cut_mask, 'mask')
-            self.display.show_frame(edge, 'edgy')
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             self.web.set_frame(contour_image)
