@@ -25,6 +25,8 @@ class Main:
         self.stop = False
         atexit.register(self.nt.save_values)
 
+        self.counter = 0
+
     def change_name(self, name):
         """
         Changes the name and starts a new loop.
@@ -40,6 +42,7 @@ class Main:
         self.stop = True
 
     def loop(self):
+
         print(colored(f'\nStarting loop with target {self.name}', 'green'))
         self.stop = False
         # We dynamically load classes in order to provide a modular base
@@ -48,42 +51,46 @@ class Main:
         timer = time.time()
         avg = 0
         while True:
-            frame = self.display.get_frame()
-            if frame is None:
-                print(colored("Couldn't read from webcam", 'red'))
-                break
+            if self.counter != 3:
+                self.counter += 1
+            else:
+                self.counter = 0
+                frame = self.display.get_frame()
+                if frame is None:
+                    print(colored("Couldn't read from webcam", 'red'))
+                    break
 
-            # Separate frames for display purposes
-            original = frame.copy()
-            contour_image = frame.copy()
+                # Separate frames for display purposes
+                original = frame.copy()
+                contour_image = frame.copy()
 
-            # Target functions
-            mask = target.create_mask(frame, self.trackbars.get_hsv())
-            mask = target.edge_detection(frame, mask)
-            contours = target.find_contours(mask)
-            filtered_contours = target.filter_contours(contours)
+                # Target functions
+                mask = target.create_mask(frame, self.trackbars.get_hsv())
+                mask = target.edge_detection(frame, mask)
+                contours = target.find_contours(mask)
+                filtered_contours = target.filter_contours(contours)
 
-            # Show FPS
-            avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
-            timer = time.time()
+                # Show FPS
+                avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
+                timer = time.time()
 
-            # Display
-            cut_mask = utils.bitwise_and(original, mask)
-            self.display.show_frame(cut_mask, 'mask')
-            # Draw contours
-            target.draw_contours(filtered_contours, contour_image)
-            self.web.set_frame(contour_image)
-            self.display.show_frame(contour_image, 'image')
+                # Display
+                cut_mask = utils.bitwise_and(original, mask)
+                self.display.show_frame(cut_mask, 'mask')
+                # Draw contours
+                target.draw_contours(filtered_contours, contour_image)
+                self.web.set_frame(contour_image)
+                self.display.show_frame(contour_image, 'image')
 
-            k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
-            if self.stop:
-                # If stop signal was sent we call loop again to start with new name
-                print(colored('Restarting...', 'yellow'))
-                self.loop()
-                break
-            if k in (27, 113):
-                print(colored('Q pressed, stopping...', 'red'))
-                break
+                k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
+                if self.stop:
+                    # If stop signal was sent we call loop again to start with new name
+                    print(colored('Restarting...', 'yellow'))
+                    self.loop()
+                    break
+                if k in (27, 113):
+                    print(colored('Q pressed, stopping...', 'red'))
+                    break
 
 
 if __name__ == '__main__':
