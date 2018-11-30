@@ -11,11 +11,6 @@ def aspect_ratio(cnt):
     return w / h
 
 
-def reversed_aspect_ratio(cnt):
-    x, y, w, h = cv2.boundingRect(cnt)
-    return h / w
-
-
 def circle_area(radius):
     return radius ** 2 * math.pi
 
