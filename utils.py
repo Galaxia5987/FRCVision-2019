@@ -2,7 +2,7 @@ import math
 import socket
 
 import cv2
-#import netifaces as ni
+
 import numpy as np
 
 
@@ -100,7 +100,13 @@ def rectangularity(cnt) -> float:
     area = cv2.contourArea(cnt)
     min_rect_area = cv2.contourArea(min_rect)
     return float(area) / min_rect_area
+    
+
+def distance(focal, object_width, object_width_pixels):
+    return (focal * object_width) / object_width_pixels
+
 
 
 def get_ip():
     return socket.gethostbyname(socket.gethostname())
+
