@@ -95,5 +95,12 @@ def solidity(cnt) -> float:
     return float(area) / hull_area
 
 
+def rectangularity(cnt) -> float:
+    min_rect = cv2.minAreaRect(cnt)
+    area = cv2.contourArea(cnt)
+    min_rect_area = cv2.contourArea(min_rect)
+    return float(area) / min_rect_area
+
+
 def get_ip():
     return socket.gethostbyname(socket.gethostname())

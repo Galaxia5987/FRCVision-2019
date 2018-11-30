@@ -36,6 +36,13 @@ class Target:
 
     @staticmethod
     def filter_contours(contours):
+        for cnt in contours:
+            if utils.rectangularity(cnt) > 0.85:
+                ratio = utils.aspect_ratio(cnt)
+
+
+
+
         return contours
 
     @staticmethod
