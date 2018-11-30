@@ -6,7 +6,7 @@ class Display:
         self.camera = cv2.VideoCapture(port)
         self.camera.set(11, 7)
         self.camera.set(15, -6)
-        self.camera.set(5, 10)
+        self.camera.set(5, 17)
         print('Contrast: '+str(self.camera.get(11))+'\tExposure: '+str(self.camera.get(15))+'\tFPS: '+str(self.camera.get(5)))
 
 

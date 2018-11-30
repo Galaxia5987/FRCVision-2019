@@ -67,8 +67,8 @@ class Main:
                 # Target functions
                 mask = target.create_mask(frame, self.trackbars.get_hsv())
                 mask = target.edge_detection(frame, mask)
-                contours = target.find_contours(mask)
-                filtered_contours = target.filter_contours(contours)
+                contours = target.find_contours(frame, mask)
+                filtered_contours = target.filter_contours(contours, mask)
 
                 # Show FPS
                 avg = utils.calculate_fps(contour_image, time.time(), timer, avg)

@@ -30,20 +30,12 @@ class Target:
         mask = utils.close(mask, kernel_d=self.kernel_m, kernel_e=self.kernel_m)
         return mask
 
+    @staticmethod
     def find_contours(self, mask):
         img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
-
-    @staticmethod
-    def filter_contours(contours):
-        for cnt in contours:
-            if utils.rectangularity(cnt) > 0.85:
-                ratio = utils.aspect_ratio(cnt)
-
-
-
 
         return contours
+
 
     @staticmethod
     def draw_contours(filtered_contours, original):
@@ -53,4 +45,19 @@ class Target:
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
                 cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
+
+
+
+    @staticmethod
+    def filter_contours(contours, mask):
+
+        new_contours = []
+        for cnt in contours:
+            if utils.rectangularity(cnt) > 0.85:
+                ratio = utils.reversed_aspect_ratio(cnt)
+                cubes = round(ratio * 0.825)
+                cv2.putText(mask,cubes, (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2,
+                cv2.LINE_AA)
+
+        return contours
 
