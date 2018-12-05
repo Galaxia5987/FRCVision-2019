@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 import utils
+import constants
 from targets.target_base import TargetBase
 
 
@@ -40,7 +41,32 @@ class Target(TargetBase):
         if contours is None:
             return []
         return [cnt for cnt in contours if
-                len(cnt) > 2 and cv2.contourArea(cnt) > 150 and 0.5 < utils.aspect_ratio(cnt) < 1.25 and 4 < len(utils.points(cnt)) < 6]
+                len(cnt) > 2 and cv2.contourArea(cnt) > 750 and 0.5 < utils.rotated_aspect_ratio(cnt) < 1.6 and 4 <= len(utils.points(cnt)) <= 6]
+
+    @staticmethod
+    def find_distance(points):
+        if points is None:
+            return None
+
+        real_heights = constants.GAME_PIECE_SIZE['power_cube']
+        avg_real_heights = (real_heights['width'] + real_heights['length'] + real_heights['height']) / 3
+
+        heights = []
+        for i in range(len(points)):
+            x = points[i][0] - points[i - 1][0]
+            y = points[i][1] - points[i - 1][1]
+            height = utils.pythagoras_c(x, y)
+            heights.append(height)
+
+        if len(points) == 5:
+            max_height = max(heights)
+            half_height = max_height / 2
+            heights.remove(max_height)
+            heights.append(half_height)
+            heights.append(half_height)
+
+        avg_heights = sum(heights) / len(heights)
+        return (avg_real_heights * constants.FOCAL['lifecam']) / avg_heights
 
     @staticmethod
     def draw_contours(filtered_contours, original):
@@ -58,3 +84,5 @@ class Target(TargetBase):
             for p in points:
                 cv2.circle(original, p, 5, (0, 255, 0), -1)
                 cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
+
+            cv2.putText(original, str(Target.find_distance(points)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))

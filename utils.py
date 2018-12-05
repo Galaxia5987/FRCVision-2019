@@ -7,6 +7,10 @@ import numpy as np
 from termcolor import colored
 
 
+def pythagoras_c(a, b):
+    return math.sqrt(a ** 2 + b ** 2)
+
+
 def aspect_ratio(cnt):
     """
     Calculate aspect ratio of given contour.
@@ -15,6 +19,25 @@ def aspect_ratio(cnt):
     """
     x, y, w, h = cv2.boundingRect(cnt)
     return w / h
+
+
+def rotated_aspect_ratio(cnt):
+    points = box(cnt)
+    x1, y1 = points[0]
+    x2, y2 = points[1]
+    x3, y3 = points[2]
+
+    w = pythagoras_c(abs(x1 - x2), abs(y1 - y2))
+    h = pythagoras_c(abs(x2 - x3), abs(y2 - y3))
+    print('w: '+str(w)+' h: '+str(h))
+
+    return w / h
+
+
+def box(cnt):
+    rect = cv2.minAreaRect(cnt)
+    box = cv2.boxPoints(rect)
+    return np.int0(box)
 
 
 def circle_area(radius):
@@ -36,6 +59,11 @@ def circle_ratio(cnt):
     hull = cv2.convexHull(cnt)
     hull_area = cv2.contourArea(hull)
     return hull_area / float(circle_area(radius))
+
+
+def center(cnt):
+    (x, y), radius = cv2.minEnclosingCircle(cnt)
+    return int(x), int(y)
 
 
 def hsv_mask(frame, hsv):
