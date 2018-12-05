@@ -22,7 +22,7 @@ class Target:
 
     def edge_detection(self, frame, mask):
         edge = utils.bitwise_and(frame, mask)
-        edge = utils.edge_detection(edge)
+        edge = utils.canny_edge_detection(edge)
         edge = utils.binary_thresh(edge, 20)
         edge = np.array(edge, dtype=np.uint8)
         edge = utils.open(edge, kernel_e=self.kernel_s, kernel_d=self.kernel_s)

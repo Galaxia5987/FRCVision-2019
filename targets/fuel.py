@@ -18,7 +18,7 @@ class Target(TargetBase):
                 if len(cnt) < 50:
                     continue
                 x, y, w, h = cv2.boundingRect(cnt)
-                ratio = utils.aspect_ratio(w, h)
+                ratio = w / h
                 area_circle_from_rect = math.pi * ((w / 2) ** 2)
                 _, radius = cv2.minEnclosingCircle(cnt)
 
