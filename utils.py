@@ -227,3 +227,11 @@ def distance(focal, object_width, object_width_pixels):
     :return:
     """
     return (focal * object_width) / object_width_pixels
+
+
+def array8(arr):
+    """
+    Turns array into a uint8 array.
+    :return:
+    """
+    np.array(arr, dtype=np.uint8)
