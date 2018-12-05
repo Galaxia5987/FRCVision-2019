@@ -76,7 +76,7 @@ class Main:
         print(colored(f'Starting loop with target {self.name}', 'green'))
         self.stop = False
         # We dynamically load classes in order to provide a modular base
-        target = import_module(f'targets.{self.name}').Target(self.name)
+        target = import_module(f'targets.{self.name}').Target()
         # Timer for FPS counter
         timer = time.time()
         avg = 0
