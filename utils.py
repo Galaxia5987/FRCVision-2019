@@ -258,7 +258,7 @@ def points(cnt):
     hullpoints = list(cv2.convexHull(approx(cnt), returnPoints=True))
 
     def index(point):
-        return point[0][1]
+        return point[0][0]
 
     hullpoints.sort(key=index)
 

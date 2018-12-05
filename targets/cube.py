@@ -40,7 +40,7 @@ class Target(TargetBase):
         if contours is None:
             return []
         return [cnt for cnt in contours if
-                len(cnt) > 2 and cv2.contourArea(cnt) > 750 and utils.aspect_ratio(cnt) < 1.25]
+                len(cnt) > 2 and cv2.contourArea(cnt) > 150 and 0.5 < utils.aspect_ratio(cnt) < 1.25 and 4 < len(utils.points(cnt)) < 6]
 
     @staticmethod
     def draw_contours(filtered_contours, original):
