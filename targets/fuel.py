@@ -5,6 +5,8 @@ import numpy as np
 import utils
 from targets.target_base import TargetBase
 
+import constants
+
 
 class Target(TargetBase):
     """The Fuel ball from FIRST Steamworks."""
@@ -59,12 +61,14 @@ class Target(TargetBase):
 
         return correct_contours
 
-
     @staticmethod
     def draw_contours(filtered_contours, original):
         for cnt in filtered_contours:
             (a, b), radius = cv2.minEnclosingCircle(cnt)
             center = (int(a), int(b))
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)
+            distance = utils.distance(constants.FOCAL['lifecam'],constants.GAME_PIECE_SIZE['fuel']['diameter'], radius*2)
+            cv2.putText(original, str(int(distance*100)), (int(a), int(b + 2 * radius)), cv2.FONT_HERSHEY_SIMPLEX, 2,
+                        (0, 0, 0), 3)
 
 
