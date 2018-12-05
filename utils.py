@@ -136,6 +136,17 @@ def bitwise_not(frame, mask):
     return cv2.bitwise_not(frame, frame, mask=mask)
 
 
+def bitwise_xor(frame, mask):
+    """
+    Generates bitwise xor for a frame and mask.
+    :param frame:
+    :param mask:
+    :return:
+    """
+    frame = frame.copy()
+    return cv2.bitwise_xor(frame, frame, mask=mask)
+
+
 def binary_thresh(frame, thresh):
     """
     Creates binary threshold from given value to 255.
@@ -234,4 +245,4 @@ def array8(arr):
     Turns array into a uint8 array.
     :return:
     """
-    np.array(arr, dtype=np.uint8)
+    return np.array(arr, dtype=np.uint8)
