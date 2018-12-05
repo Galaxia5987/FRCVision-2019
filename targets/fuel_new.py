@@ -8,23 +8,13 @@ class Target(TargetBase):
     """A better version of recognition of the Fuel ball from FIRST Steamworks."""
 
     @staticmethod
-    def is_circle(cnt, minimum):
-        """
-        Checks the circle ratio and returns true if it meets the minimum
-        :param cnt:
-        :param minimum:
-        :return:
-        """
-        ratio = utils.circle_ratio(cnt)
-        return minimum <= ratio <= 1
-
-    def first_pass(self, contours):
+    def first_pass(contours):
         """
         First pass detection.
         :param contours:
         :return:
         """
-        return [cnt for cnt in contours if cv2.contourArea(cnt) > 3_000 and self.is_circle(cnt, 0.8)]
+        return [cnt for cnt in contours if cv2.contourArea(cnt) > 3_000 and utils.is_circle(cnt, 0.8)]
 
     def filter_contours(self, contours, hierarchy):
         filtered_circles = self.first_pass(contours)
@@ -33,7 +23,7 @@ class Target(TargetBase):
         for cnt in filtered_circles:
             children = utils.get_children(cnt, contours, hierarchy)
             for c in children:
-                if cv2.contourArea(c) > 300 and self.is_circle(c, 0.5):
+                if cv2.contourArea(c) > 300 and utils.is_circle(c, 0.5):
                     circle_radius = cv2.minEnclosingCircle(c)[1]
                     filtered_radius = cv2.minEnclosingCircle(cnt)[1]
                     ratio = utils.circle_area(circle_radius) / utils.circle_area(filtered_radius)

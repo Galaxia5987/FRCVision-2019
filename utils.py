@@ -246,3 +246,14 @@ def array8(arr):
     :return:
     """
     return np.array(arr, dtype=np.uint8)
+
+
+def is_circle(cnt, minimum):
+    """
+    Checks the circle ratio and returns true if it meets the minimum.
+    :param cnt:
+    :param minimum:
+    :return:
+    """
+    ratio = circle_ratio(cnt)
+    return minimum <= ratio <= 1
