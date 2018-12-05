@@ -40,7 +40,7 @@ class Target(TargetBase):
         if contours is None:
             return []
         return [cnt for cnt in contours if
-                len(cnt) > 2 and cv2.contourArea(cnt) > 750 and utils.aspect_ratio(cnt) < 2.5]
+                len(cnt) > 2 and cv2.contourArea(cnt) > 750 and utils.aspect_ratio(cnt) < 1.25]
 
     @staticmethod
     def draw_contours(filtered_contours, original):
@@ -48,4 +48,13 @@ class Target(TargetBase):
             rect = cv2.minAreaRect(cnt)
             box = cv2.boxPoints(rect)
             box = np.int0(box)
+
+            approx = utils.approx(cnt)
+            cv2.drawContours(original, [approx], 0, (255, 0, 0), 2)
+
             cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
+
+            points = utils.points(cnt)
+            for p in points:
+                cv2.circle(original, p, 5, (0, 255, 0), -1)
+                cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))

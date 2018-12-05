@@ -246,3 +246,26 @@ def array8(arr):
     :return:
     """
     return np.array(arr, dtype=np.uint8)
+
+
+def approx(cnt):
+    hull = cv2.convexHull(cnt)
+    epsilon = 0.015 * cv2.arcLength(hull, True)
+    return cv2.approxPolyDP(hull, epsilon, True)
+
+
+def points(cnt):
+    hullpoints = list(cv2.convexHull(approx(cnt), returnPoints=True))
+
+    def index(point):
+        return point[0][1]
+
+    hullpoints.sort(key=index)
+
+    points = []
+
+    for p in hullpoints:
+        new_p = (p[0][0], p[0][1])
+        points.append(new_p)
+
+    return points
