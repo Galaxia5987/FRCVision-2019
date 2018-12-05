@@ -1,6 +1,6 @@
 # Focal length dictionary
 FOCAL = {'note8': 538.5826,
-         'lifecam': 333.82}
+         'lifecam': 638.6086956521739}
 
 # Target sizes dictionary
 TARGET_SIZE = {'2015': {'width': 0.425, 'height': 0.177},
