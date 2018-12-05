@@ -45,7 +45,7 @@ class Target:
     def filter_contours(self, contours, hierarchy):
         filtered_circles = self.first_pass(contours)
         final_contours = []
-        children = []
+        filtered_children = []
         for cnt in filtered_circles:
             children = utils.get_children(cnt, contours, hierarchy)
             for c in children:
@@ -55,8 +55,8 @@ class Target:
                     ratio = utils.circle_area(circle_radius) / utils.circle_area(filtered_radius)
                     if ratio >= 0.01:
                         final_contours.append(cnt)
-                        children.append(c)
-        return [final_contours, children]
+                        filtered_children.append(c)
+        return [final_contours, filtered_children]
 
     @staticmethod
     def draw_contours(filtered_contours, original):
