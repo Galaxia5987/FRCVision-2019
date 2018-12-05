@@ -203,7 +203,7 @@ def get_children(contour, contours, hierarchy):
     :return: List of children contours
     """
     hierarchy = hierarchy[0]
-    index = contours.index(contour)
+    index = numpy_index(contour, contours)
     return [child for child, h in zip(contours, hierarchy) if h[3] == index]
 
 
@@ -257,3 +257,13 @@ def is_circle(cnt, minimum):
     """
     ratio = circle_ratio(cnt)
     return minimum <= ratio <= 1
+
+
+def is_triangle(cnt):
+    peri = cv2.arcLength(cnt, True)
+    approx = cv2.approxPolyDP(cnt, 0.07 * peri, True)
+    return len(approx) == 3
+
+
+def numpy_index(element, l):
+    return [np.array_equal(element, x) for x in l].index(True)
