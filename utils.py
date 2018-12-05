@@ -231,11 +231,11 @@ def is_target(name: str, message: bool = True) -> bool:
 
 def distance(focal, object_width, object_width_pixels):
     """
-    Calculates distance from given object.
+    Calculates distance, works for most objects.
     :param focal:
     :param object_width:
     :param object_width_pixels:
-    :return:
+    :return: distance in meters
     """
     return (focal * object_width) / object_width_pixels
 
@@ -267,3 +267,15 @@ def is_triangle(cnt):
 
 def numpy_index(element, l):
     return [np.array_equal(element, x) for x in l].index(True)
+
+
+def angle(focal, xtarget, frame):
+    """
+    Calculates angle, works for most targets.
+    :param focal: Focal length of desired camera
+    :param xtarget: a of min enclosing circle
+    :param frame: video frame
+    :return: angle in degrees
+    """
+    xframe = frame.shape[1] / 2
+    return math.atan2((xtarget - xframe), focal) * (180 / math.pi)
