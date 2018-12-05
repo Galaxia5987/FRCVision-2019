@@ -63,6 +63,8 @@ class Target(TargetBase):
         for cnt in filtered_contours:
             (a, b), radius = cv2.minEnclosingCircle(cnt)
             distance = utils.distance(constants.FOCAL['lifecam'], constants.GAME_PIECE_SIZE['gear']['diameter'], radius * 2) * 100
+            angle = utils.angle(constants.FOCAL['lifecam'], a, original)
             print(f'Distance: {distance}')
+            print(f'Angle: {angle}')
             center = (int(a), int(b))
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)
