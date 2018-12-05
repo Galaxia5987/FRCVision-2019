@@ -33,10 +33,12 @@ class Target(TargetBase):
 
     def find_contours(self, mask):
         img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
+        return contours, hierarchy
 
     @staticmethod
-    def filter_contours(hierarchy, contours):
+    def filter_contours(contours, hierarchy):
+        if contours is None:
+            return []
         return [cnt for cnt in contours if
                 len(cnt) > 2 and cv2.contourArea(cnt) > 750 and utils.aspect_ratio(cnt) < 2.5]
 
