@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 import utils
+import constants
 from targets.target_base import TargetBase
 
 
@@ -30,7 +31,6 @@ class Target(TargetBase):
                     solidity = utils.solidity(cnt)
                     if 0.15 < solidity < 0.45:
                         correct_contours.append(cnt)
-                        print(utils.solidity(cnt))
 
         return correct_contours
 
@@ -43,3 +43,9 @@ class Target(TargetBase):
             box = cv2.boxPoints(rect)
             box = np.int0(box)
             cv2.drawContours(original, [box], 0, (255, 0, 255), 7)
+            (a, b), radius = cv2.minEnclosingCircle(box)
+            center = int(a), int(b)
+            cv2.circle(original, center, int(radius), (0, 0, 255), 5)
+            distance = utils.distance(constants.FOCAL['lifecam'], constants.TARGET_SIZE['2012']['closing_circle_radius'],radius )*100
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(original, str(int(distance)), (int(a), int(b+radius)), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
