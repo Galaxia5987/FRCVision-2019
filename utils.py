@@ -2,13 +2,34 @@ import math
 import os
 import socket
 
+import constants
+
 import cv2
 import numpy as np
 from termcolor import colored
 
 
+power_cube = constants.GAME_PIECE_SIZE['power_cube']
+
+
 def pythagoras_c(a, b):
     return math.sqrt(a ** 2 + b ** 2)
+
+
+def index0(x):
+    return x[0]
+
+
+def index1(x):
+    return x[1]
+
+
+def index00(x):
+    return x[0][0]
+
+
+def index01(x):
+    return x[0][1]
 
 
 def aspect_ratio(cnt):
@@ -22,16 +43,37 @@ def aspect_ratio(cnt):
 
 
 def rotated_aspect_ratio(cnt):
-    points = box(cnt)
+    return width(cnt)[0] / height(cnt)[0]
+
+
+def reversed_rotated_aspect_ratio(cnt):
+    return height(cnt)[0] / width(cnt)[0]
+
+
+def height(cnt):
+    points = []
+    for p in box(cnt):
+        points.append(p)
+
+    points.sort(key=index0)
+
     x1, y1 = points[0]
     x2, y2 = points[1]
-    x3, y3 = points[2]
 
-    w = pythagoras_c(abs(x1 - x2), abs(y1 - y2))
-    h = pythagoras_c(abs(x2 - x3), abs(y2 - y3))
-    print('w: '+str(w)+' h: '+str(h))
+    return pythagoras_c(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
 
-    return w / h
+
+def width(cnt):
+    points = []
+    for p in box(cnt):
+        points.append(p)
+
+    points.sort(key=index1)
+
+    x1, y1 = points[0]
+    x2, y2 = points[1]
+
+    return pythagoras_c(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
 
 
 def box(cnt):
@@ -185,7 +227,7 @@ def binary_thresh(frame, thresh):
     return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
 
 
-def canny_edge_detection(frame):
+def canny_edge_detection(frame, min_val=100, max_val=255):
     """
     Runs canny edge detection on a frame.
     :param frame:
@@ -193,7 +235,7 @@ def canny_edge_detection(frame):
     """
     src = cv2.GaussianBlur(frame, (3, 3), 0)
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    return cv2.Canny(gray, 100, 225)
+    return cv2.Canny(gray, min_val, max_val)
 
 
 def calculate_fps(frame, current_time, last_time, avg):
@@ -284,11 +326,7 @@ def approx(cnt):
 
 def points(cnt):
     hullpoints = list(cv2.convexHull(approx(cnt), returnPoints=True))
-
-    def index(point):
-        return point[0][0]
-
-    hullpoints.sort(key=index)
+    hullpoints.sort(key=index00)
 
     points = []
 
