@@ -17,13 +17,14 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
-            children = utils.get_children(cnt, contours, hierarchy)
-            for c in children:
-                area = cv2.contourArea(cnt)
-                children_area = cv2.contourArea(c)
-                ratio = children_area/area
-                if 0.6 < ratio < 0.7:
-                    correct_contours.append(cnt)
+            if cv2.contourArea(cnt) > 1000:
+                children = utils.get_children(cnt, contours, hierarchy)
+                for c in children:
+                    area = cv2.contourArea(cnt)
+                    children_area = cv2.contourArea(c)
+                    ratio = children_area/area
+                    if 0.6 < ratio < 0.7:
+                        correct_contours.append(cnt)
 
         return correct_contours
 
