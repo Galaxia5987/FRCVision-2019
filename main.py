@@ -102,7 +102,7 @@ class Main:
                 self.web.set_frame(contour_image)
             if self.results.local:
                 self.display.show_frame(contour_image)
-                self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
+                self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))

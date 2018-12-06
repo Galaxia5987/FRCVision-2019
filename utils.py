@@ -7,14 +7,14 @@ import numpy as np
 from termcolor import colored
 
 
-def aspect_ratio(width, height):
+def aspect_ratio(cnt):
     """
-    Calculate aspect ratio.
-    :param width:
-    :param height:
+    Calculate aspect ratio of given contour.
+    :param cnt:
     :return: Aspect ratio
     """
-    return width / height
+    x, y, w, h = cv2.boundingRect(cnt)
+    return w / h
 
 
 def circle_area(radius):
@@ -59,12 +59,62 @@ def morphology(mask, kernel):
     :param kernel:
     :return: Mask after morphology
     """
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask = opening_morphology(mask, kernel, kernel)
+    mask = closing_morphology(mask, kernel, kernel)
     return mask
 
 
-def bitwise_mask(frame, mask):
+def opening_morphology(mask, kernel_e, kernel_d, itr=1):
+    """
+    Runs opening morphology on given mask.
+    :param mask:
+    :param kernel_e:
+    :param kernel_d:
+    :param itr:
+    :return:
+    """
+    mask = cv2.erode(mask, kernel_e, iterations=itr)
+    mask = cv2.dilate(mask, kernel_d, iterations=itr)
+    return mask
+
+
+def closing_morphology(mask, kernel_d, kernel_e, itr=1):
+    """
+    Runs closing morphology on given mask.
+    :param mask:
+    :param kernel_d:
+    :param kernel_e:
+    :param itr:
+    :return:
+    """
+    mask = dilate(mask, kernel_d, itr)
+    mask = erode(mask, kernel_e, itr)
+    return mask
+
+
+def dilate(mask, kernel, itr=1):
+    """
+    Run dilation on given mask.
+    :param mask:
+    :param kernel:
+    :param itr:
+    :return:
+    """
+    return cv2.dilate(mask, kernel, iterations=itr)
+
+
+def erode(mask, kernel, itr=1):
+    """
+    Run erotion on given mask.
+    :param mask:
+    :param kernel:
+    :param itr:
+    :return:
+    """
+    return cv2.erode(mask, kernel, iterations=itr)
+
+
+def bitwise_and(frame, mask):
     """
     Generates bitwise and for a frame and mask.
     :param frame:
@@ -73,6 +123,49 @@ def bitwise_mask(frame, mask):
     """
     frame = frame.copy()
     return cv2.bitwise_and(frame, frame, mask=mask)
+
+
+def bitwise_not(frame, mask):
+    """
+    Generates bitwise not for a frame and mask.
+    :param frame:
+    :param mask:
+    :return:
+    """
+    frame = frame.copy()
+    return cv2.bitwise_not(frame, frame, mask=mask)
+
+
+def bitwise_xor(frame, mask):
+    """
+    Generates bitwise xor for a frame and mask.
+    :param frame:
+    :param mask:
+    :return:
+    """
+    frame = frame.copy()
+    return cv2.bitwise_xor(frame, frame, mask=mask)
+
+
+def binary_thresh(frame, thresh):
+    """
+    Creates binary threshold from given value to 255.
+    :param frame:
+    :param thresh:
+    :return:
+    """
+    return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
+
+
+def canny_edge_detection(frame):
+    """
+    Runs canny edge detection on a frame.
+    :param frame:
+    :return:
+    """
+    src = cv2.GaussianBlur(frame, (3, 3), 0)
+    gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+    return cv2.Canny(gray, 100, 225)
 
 
 def calculate_fps(frame, current_time, last_time, avg):
@@ -110,7 +203,7 @@ def get_children(contour, contours, hierarchy):
     :return: List of children contours
     """
     hierarchy = hierarchy[0]
-    index = contours.index(contour)
+    index = numpy_index(contour, contours)
     return [child for child, h in zip(contours, hierarchy) if h[3] == index]
 
 
@@ -134,3 +227,55 @@ def is_target(name: str, message: bool = True) -> bool:
             print(colored('Target doesn\'t exist', 'red'))
         return False
     return True
+
+
+def distance(focal, object_width, object_width_pixels):
+    """
+    Calculates distance, works for most objects.
+    :param focal:
+    :param object_width:
+    :param object_width_pixels:
+    :return: distance in meters
+    """
+    return (focal * object_width) / object_width_pixels
+
+
+def array8(arr):
+    """
+    Turns array into a uint8 array.
+    :return:
+    """
+    return np.array(arr, dtype=np.uint8)
+
+
+def is_circle(cnt, minimum):
+    """
+    Checks the circle ratio and returns true if it meets the minimum.
+    :param cnt:
+    :param minimum:
+    :return:
+    """
+    ratio = circle_ratio(cnt)
+    return minimum <= ratio <= 1
+
+
+def is_triangle(cnt):
+    peri = cv2.arcLength(cnt, True)
+    approx = cv2.approxPolyDP(cnt, 0.07 * peri, True)
+    return len(approx) == 3
+
+
+def numpy_index(element, l):
+    return [np.array_equal(element, x) for x in l].index(True)
+
+
+def angle(focal, xtarget, frame):
+    """
+    Calculates angle, works for most targets.
+    :param focal: Focal length of desired camera
+    :param xtarget: a of min enclosing circle
+    :param frame: video frame
+    :return: angle in degrees
+    """
+    xframe = frame.shape[1] / 2
+    return math.atan2((xtarget - xframe), focal) * (180 / math.pi)
