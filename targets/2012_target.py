@@ -13,17 +13,16 @@ class Target(TargetBase):
                                   [1, 1, 1],
                                   [0, 1, 0]], dtype=np.uint8)
 
-    def find_contours(self, mask):
-        img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE)
-        return contours, hierarchy
-
     @staticmethod
     def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
-            solidity = utils.solidity(cnt)
-            if 0.8 < solidity < 1:
-                if cv2.contourArea(cnt) > 500:
+            children = utils.get_children(cnt, contours, hierarchy)
+            for c in children:
+                area = cv2.contourArea(cnt)
+                children_area = cv2.contourArea(c)
+                ratio = children_area/area
+                if 0.6 < ratio < 0.7:
                     correct_contours.append(cnt)
 
         return correct_contours
@@ -33,7 +32,6 @@ class Target(TargetBase):
         if not filtered_contours:
             return
         for cnt in filtered_contours:
-            print(utils.solidity(cnt))
             rect = cv2.minAreaRect(cnt)
             box = cv2.boxPoints(rect)
             box = np.int0(box)

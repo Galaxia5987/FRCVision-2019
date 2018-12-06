@@ -95,7 +95,7 @@ def solidity(cnt) -> float:
     :param cnt:
     :return: Solidity ratio
     """
-    hull = cv2.convexHull(cnt)
+    hull = cv2.convexHull(cnt, False)
     area = cv2.contourArea(cnt)
     hull_area = cv2.contourArea(hull)
     return float(area) / hull_area
