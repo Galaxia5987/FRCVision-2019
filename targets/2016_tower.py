@@ -12,7 +12,7 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
-            solidity = utils.solidity(cnt)
+            solidity = utils.aspect_ratio(cnt)
             if 0.3 < solidity < 0.36:
                 correct_contours.append(cnt)
 
