@@ -8,20 +8,21 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
+    """Power cube from the 2018 mission."""
     def __init__(self):
         super().__init__()
-        self.kernel_s = np.array([1], dtype=np.uint8)
-        self.kernel_m = np.array([[1, 1],
-                                  [1, 1]], dtype=np.uint8)
-        self.kernel_b = np.array([[0, 1, 0],
-                                  [1, 1, 1],
-                                  [0, 1, 0]], dtype=np.uint8)
+        self.kernel_small = np.array([1], dtype=np.uint8)
+        self.kernel_medium = np.array([[1, 1],
+                                       [1, 1]], dtype=np.uint8)
+        self.kernel_big = np.array([[0, 1, 0],
+                                    [1, 1, 1],
+                                    [0, 1, 0]], dtype=np.uint8)
 
         self.correction = 25
 
     def create_mask(self, frame, hsv):
         mask = utils.hsv_mask(frame, hsv)
-        mask = utils.morphology(mask, self.kernel_b)
+        mask = utils.morphology(mask, self.kernel_big)
         mask = utils.binary_thresh(mask, 127)
         mask = self.edge_detection(frame, mask)
         mask = self.separate_cubes(mask)
@@ -33,11 +34,11 @@ class Target(TargetBase):
         edge = utils.canny_edge_detection(edge, min_val=100, max_val=125)
         edge = utils.binary_thresh(edge, 127)
         edge = utils.array8(edge)
-        edge = utils.dilate(edge, self.kernel_s, itr=3)
-        edge = utils.opening_morphology(edge, kernel_e=self.kernel_s, kernel_d=self.kernel_s, itr=3)
+        edge = utils.dilate(edge, self.kernel_small, itr=3)
+        edge = utils.opening_morphology(edge, kernel_e=self.kernel_small, kernel_d=self.kernel_small, itr=3)
         mask = utils.bitwise_not(mask, edge)
-        mask = utils.erode(mask, self.kernel_m, itr=3)
-        mask = utils.closing_morphology(mask, kernel_d=self.kernel_m, kernel_e=self.kernel_m, itr=3)
+        mask = utils.erode(mask, self.kernel_medium, itr=3)
+        mask = utils.closing_morphology(mask, kernel_d=self.kernel_medium, kernel_e=self.kernel_medium, itr=3)
 
         return mask
 
@@ -117,7 +118,7 @@ class Target(TargetBase):
 
         avg_heights = sum(heights) / len(heights)
 
-        return (avg_real_heights * constants.FOCAL['lifecam']) / avg_heights
+        return (avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights
 
     @staticmethod
     def draw_contours(filtered_contours, original):
@@ -135,6 +136,6 @@ class Target(TargetBase):
                 points = utils.points(cnt)
                 for point in points:
                     cv2.circle(original, p, 5, (0, 255, 0), -1)
-                    cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
+                    cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
 
                 cv2.putText(original, str(Target.find_distance(cnt)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))

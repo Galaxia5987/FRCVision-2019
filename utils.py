@@ -11,7 +11,7 @@ from termcolor import colored
 
 
 # A list of the real measurements of the cube in meters.
-power_cube = constants.GAME_PIECE_SIZE['power_cube']
+power_cube = constants.GAME_PIECE_SIZES['power_cube']
 
 
 def index0(x):

@@ -2,21 +2,23 @@ import math
 
 import cv2
 import numpy as np
-import utils
-from targets.target_base import TargetBase
 
 import constants
+import utils
+from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
     """The Fuel ball from FIRST Steamworks."""
+
     def __init__(self):
+        super().__init__()
         self.kernel_s = np.array([1], dtype=np.uint8)
         self.kernel_m = np.array([[1, 1],
-                                [1, 1]], dtype=np.uint8)
+                                  [1, 1]], dtype=np.uint8)
         self.kernel_b = np.array([[0, 1, 0],
-                                [1, 1, 1],
-                                [0, 1, 0]], dtype=np.uint8)
+                                  [1, 1, 1],
+                                  [0, 1, 0]], dtype=np.uint8)
 
     def create_mask(self, frame, hsv):
         mask = utils.hsv_mask(frame, hsv)
@@ -67,8 +69,7 @@ class Target(TargetBase):
             (a, b), radius = cv2.minEnclosingCircle(cnt)
             center = (int(a), int(b))
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)
-            distance = utils.distance(constants.FOCAL['lifecam'],constants.GAME_PIECE_SIZE['fuel']['diameter'], radius*2)
-            cv2.putText(original, str(int(distance*100)), (int(a), int(b + 2 * radius)), cv2.FONT_HERSHEY_SIMPLEX, 2,
+            distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'], constants.GAME_PIECE_SIZES['fuel']['diameter'],
+                                      radius * 2)
+            cv2.putText(original, str(int(distance * 100)), (int(a), int(b + 2 * radius)), cv2.FONT_HERSHEY_SIMPLEX, 2,
                         (0, 0, 0), 3)
-
-
