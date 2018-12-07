@@ -203,7 +203,7 @@ def get_children(contour, contours, hierarchy):
     :return: List of children contours
     """
     hierarchy = hierarchy[0]
-    index = contours.index(contour)
+    index = numpy_index(contour, contours)
     return [child for child, h in zip(contours, hierarchy) if h[3] == index]
 
 
@@ -246,6 +246,39 @@ def array8(arr):
     :return:
     """
     return np.array(arr, dtype=np.uint8)
+
+
+def is_circle(cnt, minimum):
+    """
+    Checks the circle ratio and returns true if it meets the minimum.
+    :param cnt:
+    :param minimum:
+    :return:
+    """
+    ratio = circle_ratio(cnt)
+    return minimum <= ratio <= 1
+
+
+def is_triangle(cnt, ratio=0.07):
+    """
+    Returns if contour is approximately a triangle.
+    :param ratio: Approx ratio
+    :param cnt:
+    :return:
+    """
+    peri = cv2.arcLength(cnt, True)
+    approx = cv2.approxPolyDP(cnt, ratio * peri, True)
+    return len(approx) == 3
+
+
+def numpy_index(element, arrays: list):
+    """
+    Gets index of numpy array in a list.
+    :param element:
+    :param arrays:
+    :return:
+    """
+    return [np.array_equal(element, x) for x in arrays].index(True)
 
 
 def angle(focal, xtarget, frame):
