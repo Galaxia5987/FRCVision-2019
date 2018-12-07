@@ -52,8 +52,8 @@ class Target(TargetBase):
                 if utils.is_triangle(child):
                     triangles.append(child)
             if len(triangles) > 3 and circles:
-                for tr in triangles:
-                    if cv2.contourArea(tr) / cv2.contourArea(cnt) >= 0.04:
+                for triangle in triangles:
+                    if cv2.contourArea(triangle) / cv2.contourArea(cnt) >= 0.04:
                         filtered_contours.append(cnt)
         return filtered_contours
 
@@ -63,9 +63,9 @@ class Target(TargetBase):
             return
         for cnt in filtered_contours:
             (a, b), radius = cv2.minEnclosingCircle(cnt)
-            distance = utils.distance(constants.FOCAL['lifecam'], constants.GAME_PIECE_SIZE['gear']['diameter'],
+            distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'], constants.GAME_PIECE_SIZE['gear']['diameter'],
                                       radius * 2) * 100
-            angle = utils.angle(constants.FOCAL['lifecam'], a, original)
+            angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], a, original)
             print(f'Distance: {distance}')
             print(f'Angle: {angle}')
             center = (int(a), int(b))
