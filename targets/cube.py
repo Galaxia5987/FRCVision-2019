@@ -94,7 +94,8 @@ class Target(TargetBase):
         return filtered_contours
 
     @staticmethod
-    def find_distance(points):
+    def find_distance(cnt):
+        points = utils.box(cnt)
         if points is None:
             return None
 
@@ -136,4 +137,4 @@ class Target(TargetBase):
                     cv2.circle(original, p, 5, (0, 255, 0), -1)
                     cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
 
-                cv2.putText(original, str(Target.find_distance(points)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))
+                cv2.putText(original, str(Target.find_distance(cnt)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))
