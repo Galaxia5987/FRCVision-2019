@@ -24,7 +24,7 @@ class Target(TargetBase):
         mask = utils.morphology(mask, self.kernel_b)
         mask = utils.binary_thresh(mask, 127)
         mask = self.edge_detection(frame, mask)
-        # mask = self.separate_cubes(mask)
+        mask = self.separate_cubes(mask)
 
         return mask
 
@@ -33,11 +33,11 @@ class Target(TargetBase):
         edge = utils.canny_edge_detection(edge, min_val=100, max_val=125)
         edge = utils.binary_thresh(edge, 127)
         edge = utils.array8(edge)
-        # edge = utils.opening_morphology(edge, kernel_e=self.kernel_s, kernel_d=self.kernel_s, itr=3)
-        # edge = utils.dilate(edge, self.kernel_s, itr=3)
+        edge = utils.dilate(edge, self.kernel_s, itr=3)
+        edge = utils.opening_morphology(edge, kernel_e=self.kernel_s, kernel_d=self.kernel_s, itr=3)
         mask = utils.bitwise_not(mask, edge)
-        # mask = utils.closing_morphology(mask, kernel_d=self.kernel_m, kernel_e=self.kernel_m, itr=3)
-        # mask = utils.erode(mask, self.kernel_m, itr=3)
+        mask = utils.erode(mask, self.kernel_m, itr=3)
+        mask = utils.closing_morphology(mask, kernel_d=self.kernel_m, kernel_e=self.kernel_m, itr=3)
 
         return mask
 
