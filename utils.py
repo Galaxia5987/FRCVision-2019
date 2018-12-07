@@ -1,6 +1,7 @@
 import math
 import os
 import socket
+from typing import List
 
 import cv2
 import numpy as np
@@ -259,10 +260,14 @@ def is_circle(cnt, minimum):
     return minimum <= ratio <= 1
 
 
-def is_triangle(cnt):
+def approx_vertices(cnt, ratio=0.07):
     peri = cv2.arcLength(cnt, True)
-    approx = cv2.approxPolyDP(cnt, 0.07 * peri, True)
-    return len(approx) == 3
+    approx = cv2.approxPolyDP(cnt, ratio * peri, True)
+    return len(approx)
+
+
+def is_triangle(cnt):
+    return approx_vertices(cnt) == 3
 
 
 def numpy_index(element, l):
@@ -279,3 +284,13 @@ def angle(focal, xtarget, frame):
     """
     xframe = frame.shape[1] / 2
     return math.atan2((xtarget - xframe), focal) * (180 / math.pi)
+
+
+def np_array_in_list(np_array: np.array, list_arrays: List[np.array]) -> bool:
+    """
+    Return whether a NumPy array is in a list of NumPy arrays.
+    :param np_array: array to check
+    :param list_arrays: list of arrays to check
+    :return: whether a NumPy array is in a list of NumPy arrays
+    """
+    return next((True for elem in list_arrays if elem is np_array), False)

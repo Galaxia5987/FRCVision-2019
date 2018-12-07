@@ -7,6 +7,7 @@ from targets.target_base import TargetBase
 
 class Target(TargetBase):
     def __init__(self):
+        super().__init__()
         self.kernel_s = np.array([1], dtype=np.uint8)
         self.kernel_m = np.array([[1, 1],
                                   [1, 1]], dtype=np.uint8)
