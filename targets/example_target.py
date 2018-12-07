@@ -19,4 +19,6 @@ class Target(TargetBase):
 
     @staticmethod
     def draw_contours(filtered_contours, original):
+        if not filtered_contours:
+            return
         cv2.drawContours(original, filtered_contours, -1, (255, 255, 0), 3)

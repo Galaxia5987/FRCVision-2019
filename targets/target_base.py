@@ -9,6 +9,9 @@ import utils
 class TargetBase(ABC):
     """An abstract class representing a base target."""
 
+    def __init__(self):
+        self.exposure = -6
+
     @staticmethod
     def create_mask(frame, hsv):
         """

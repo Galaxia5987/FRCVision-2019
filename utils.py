@@ -1,7 +1,7 @@
 import math
 import os
 import socket
-from typing import Union
+from typing import Union, List
 
 import constants
 
@@ -307,7 +307,7 @@ def get_children(contour, contours, hierarchy):
     :return: List of children contours
     """
     hierarchy = hierarchy[0]
-    index = contours.index(contour)
+    index = numpy_index(contour, contours)
     return [child for child, h in zip(contours, hierarchy) if h[3] == index]
 
 
@@ -339,7 +339,7 @@ def distance(focal, object_width, object_width_pixels):
     :param focal:
     :param object_width:
     :param object_width_pixels:
-    :return:
+    :return: distance in meters
     """
     return (focal * object_width) / object_width_pixels
 
@@ -379,3 +379,62 @@ def points(cnt) -> list:
         points.append(new_p)
 
     return points
+  
+  
+def is_circle(cnt, minimum):
+    """
+    Checks the circle ratio and returns true if it meets the minimum.
+    :param cnt:
+    :param minimum:
+    :return:
+    """
+    ratio = circle_ratio(cnt)
+    return minimum <= ratio <= 1
+
+
+def approx_vertices(cnt, ratio=0.07):
+    peri = cv2.arcLength(cnt, True)
+    approx = cv2.approxPolyDP(cnt, ratio * peri, True)
+    return len(approx)
+
+
+def is_triangle(cnt, ratio=0.07):
+    """
+    Returns if contour is approximately a triangle.
+    :param ratio: Approx ratio
+    :param cnt:
+    :return:
+    """
+    return approx_vertices(cnt, ratio) == 3
+
+
+def numpy_index(element, arrays: list):
+    """
+    Gets index of numpy array in a list.
+    :param element:
+    :param arrays:
+    :return:
+    """
+    return [np.array_equal(element, x) for x in arrays].index(True)
+
+
+def angle(focal, xtarget, frame):
+    """
+    Calculates angle, works for most targets.
+    :param focal: Focal length of desired camera
+    :param xtarget: a of min enclosing circle
+    :param frame: video frame
+    :return: angle in degrees
+    """
+    xframe = frame.shape[1] / 2
+    return math.atan2((xtarget - xframe), focal) * (180 / math.pi)
+
+
+def np_array_in_list(np_array: np.array, list_arrays: List[np.array]) -> bool:
+    """
+    Return whether a NumPy array is in a list of NumPy arrays.
+    :param np_array: array to check
+    :param list_arrays: list of arrays to check
+    :return: whether a NumPy array is in a list of NumPy arrays
+    """
+    return next((True for elem in list_arrays if elem is np_array), False)
