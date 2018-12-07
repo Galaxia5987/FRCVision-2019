@@ -259,14 +259,26 @@ def is_circle(cnt, minimum):
     return minimum <= ratio <= 1
 
 
-def is_triangle(cnt):
+def is_triangle(cnt, ratio=0.07):
+    """
+    Returns if contour is approximately a triangle.
+    :param ratio: Approx ratio
+    :param cnt:
+    :return:
+    """
     peri = cv2.arcLength(cnt, True)
-    approx = cv2.approxPolyDP(cnt, 0.07 * peri, True)
+    approx = cv2.approxPolyDP(cnt, ratio * peri, True)
     return len(approx) == 3
 
 
-def numpy_index(element, l):
-    return [np.array_equal(element, x) for x in l].index(True)
+def numpy_index(element, arrays: list):
+    """
+    Gets index of numpy array in a list.
+    :param element:
+    :param arrays:
+    :return:
+    """
+    return [np.array_equal(element, x) for x in arrays].index(True)
 
 
 def angle(focal, xtarget, frame):
