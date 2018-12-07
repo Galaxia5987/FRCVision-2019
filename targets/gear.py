@@ -7,7 +7,7 @@ from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
-    """An example target."""
+    """The Gear from FIRST Steamworks."""
 
     def __init__(self):
         self.kernel_s = np.array([1], dtype=np.uint8)
