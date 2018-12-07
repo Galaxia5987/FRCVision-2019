@@ -136,6 +136,6 @@ class Target(TargetBase):
                 points = utils.points(cnt)
                 for point in points:
                     cv2.circle(original, p, 5, (0, 255, 0), -1)
-                    cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
+                    cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
 
                 cv2.putText(original, str(Target.find_distance(cnt)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))
