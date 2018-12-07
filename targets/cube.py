@@ -95,30 +95,40 @@ class Target(TargetBase):
         return filtered_contours
 
     @staticmethod
-    def find_distance(cnt):
-        points = utils.box(cnt)
-        if points is None:
-            return None
+    def find_measurements(original, contours):
+        if contours == []:
+            return None, None
+        distances = []
+        for cnt in contours:
+            points = utils.box(cnt)
+            if points is None:
+                return None, None
 
-        avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
+            avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
 
-        heights = []
-        for i in range(len(points)):
-            x = points[i][0] - points[i - 1][0]
-            y = points[i][1] - points[i - 1][1]
-            height = math.hypot(x, y)
-            heights.append(height)
+            heights = []
+            for i in range(len(points)):
+                x = points[i][0] - points[i - 1][0]
+                y = points[i][1] - points[i - 1][1]
+                height = math.hypot(x, y)
+                heights.append(height)
 
-        if len(points) == 5:
-            max_height = max(heights)
-            half_height = max_height / 2
-            heights.remove(max_height)
-            heights.append(half_height)
-            heights.append(half_height)
+            if len(points) == 5:
+                max_height = max(heights)
+                half_height = max_height / 2
+                heights.remove(max_height)
+                heights.append(half_height)
+                heights.append(half_height)
 
-        avg_heights = sum(heights) / len(heights)
+            avg_heights = sum(heights) / len(heights)
 
-        return (avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights
+            distances.append((avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights)
+
+        distance = min(distances)
+        chosen_one = contours[distances.index(distance)]
+        angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], utils.center(chosen_one)[0], original)
+
+        return distance, angle
 
     @staticmethod
     def draw_contours(filtered_contours, original):
@@ -135,7 +145,5 @@ class Target(TargetBase):
 
                 points = utils.points(cnt)
                 for point in points:
-                    cv2.circle(original, p, 5, (0, 255, 0), -1)
+                    cv2.circle(original, point, 5, (0, 255, 0), -1)
                     cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
-
-                cv2.putText(original, str(Target.find_distance(cnt)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))
