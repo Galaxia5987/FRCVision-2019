@@ -133,7 +133,7 @@ class Target(TargetBase):
                 cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
 
                 points = utils.points(cnt)
-                for p in points:
+                for point in points:
                     cv2.circle(original, p, 5, (0, 255, 0), -1)
                     cv2.putText(original, str(points.index(p)), (p[0] + 5, p[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
 
