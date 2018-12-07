@@ -352,7 +352,7 @@ def array8(arr) -> np.array:
     return np.array(arr, dtype=np.uint8)
 
 
-def approx(cnt):
+def approx_hull(cnt):
     """
     Lower the amount of points in a contour
     :param cnt:
@@ -369,7 +369,7 @@ def points(cnt) -> list:
     :param cnt:
     :return: Approximated points
     """
-    hullpoints = list(cv2.convexHull(approx(cnt), returnPoints=True))
+    hullpoints = list(cv2.convexHull(approx_hull(cnt), returnPoints=True))
     hullpoints.sort(key=index00)
 
     points = []

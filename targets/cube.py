@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 import utils
 import constants
@@ -44,7 +45,7 @@ class Target(TargetBase):
         total_areas = []
 
         for cnt in contours:
-            cnt = utils.approx(cnt)
+            cnt = utils.approx_hull(cnt)
             area = cv2.contourArea(cnt)
             total_areas.append(area)
             avg_area = sum(total_areas) / len(total_areas)
@@ -102,7 +103,7 @@ class Target(TargetBase):
         for i in range(len(points)):
             x = points[i][0] - points[i - 1][0]
             y = points[i][1] - points[i - 1][1]
-            height = utils.pythagoras_c(x, y)
+            height = math.hypot(x, y)
             heights.append(height)
 
         if len(points) == 5:
@@ -124,7 +125,7 @@ class Target(TargetBase):
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
 
-                approx = utils.approx(cnt)
+                approx = utils.approx_hull(cnt)
                 cv2.drawContours(original, [approx], 0, (255, 0, 0), 2)
 
                 cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
