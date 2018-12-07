@@ -65,7 +65,7 @@ class Target(TargetBase):
             cv2.circle(original, center, int(radius), (0, 0, 255), 5)
             rect = cv2.minAreaRect(cnt)
             distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'],
-                                      constants.TARGET_SIZE['2012']['width'], max(rect[1][0], rect[1][1])) * 100 * 1.05
+                                      constants.TARGET_SIZES['2012']['width'], max(rect[1][0], rect[1][1])) * 100 * 1.05
             angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], int(a), original)
             font = cv2.FONT_HERSHEY_SIMPLEX
             cv2.putText(original, str(int(distance)), (int(a), int(b + radius)), font, 2, (255, 255, 255), 2,

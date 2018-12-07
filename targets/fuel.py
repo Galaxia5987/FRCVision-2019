@@ -69,7 +69,7 @@ class Target(TargetBase):
             (a, b), radius = cv2.minEnclosingCircle(cnt)
             center = (int(a), int(b))
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)
-            distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'], constants.GAME_PIECE_SIZE['fuel']['diameter'],
+            distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'], constants.GAME_PIECE_SIZES['fuel']['diameter'],
                                       radius * 2)
             cv2.putText(original, str(int(distance * 100)), (int(a), int(b + 2 * radius)), cv2.FONT_HERSHEY_SIMPLEX, 2,
                         (0, 0, 0), 3)
