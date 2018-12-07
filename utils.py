@@ -1,6 +1,7 @@
 import math
 import os
 import socket
+from typing import Union
 
 import constants
 
@@ -9,48 +10,64 @@ import numpy as np
 from termcolor import colored
 
 
+# A list of the real measurements of the cube in meters.
 power_cube = constants.GAME_PIECE_SIZE['power_cube']
 
 
-def pythagoras_c(a, b):
-    return math.sqrt(a ** 2 + b ** 2)
-
-
 def index0(x):
+    # An index function for sorting based on the first variable.
     return x[0]
 
 
-def index1(x):
-    return x[1]
-
-
 def index00(x):
+    # An index function for sorting based on the first variable of the first variable.
     return x[0][0]
 
 
+def index1(x):
+    # An index function for sorting based on the second variable.
+    return x[1]
+
+
 def index01(x):
+    # An index function for sorting based on the second variable of the first variable.
     return x[0][1]
 
 
-def aspect_ratio(cnt):
+def aspect_ratio(cnt) -> float:
     """
     Calculate aspect ratio of given contour.
-    :param cnt:
+    :param cnt: A contour
     :return: Aspect ratio
     """
     x, y, w, h = cv2.boundingRect(cnt)
     return w / h
 
 
-def rotated_aspect_ratio(cnt):
+def rotated_aspect_ratio(cnt) -> float:
+    """
+    Calculate aspect ratio of given contour, based on a rotated rectangle instead of an upright one.
+    :param cnt: A contour
+    :return: Width / Height
+    """
     return width(cnt)[0] / height(cnt)[0]
 
 
-def reversed_rotated_aspect_ratio(cnt):
+def reversed_rotated_aspect_ratio(cnt) -> float:
+    """
+    Calculate aspect ratio of given contour, based on a rotated rectangle instead of an upright one.
+    :param cnt: A contour
+    :return: Height / Width
+    """
     return height(cnt)[0] / width(cnt)[0]
 
 
-def height(cnt):
+def height(cnt) -> (float, tuple, tuple):
+    """
+    Find the height of the box bounding the contour.
+    :param cnt: A contour
+    :return: Min area rectangle height
+    """
     points = []
     for p in box(cnt):
         points.append(p)
@@ -60,10 +77,15 @@ def height(cnt):
     x1, y1 = points[0]
     x2, y2 = points[1]
 
-    return pythagoras_c(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
+    return math.hypot(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
 
 
-def width(cnt):
+def width(cnt) -> (float, tuple, tuple):
+    """
+    Find the weight of the box bounding the contour.
+    :param cnt: A contour
+    :return: Min area rectangle weight
+    """
     points = []
     for p in box(cnt):
         points.append(p)
@@ -73,16 +95,21 @@ def width(cnt):
     x1, y1 = points[0]
     x2, y2 = points[1]
 
-    return pythagoras_c(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
+    return math.hypot(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
 
 
-def box(cnt):
+def box(cnt) -> np.array:
+    """
+    Return a list of the points of the minimum area rectangle bounding the contour.
+    :param cnt: A contour
+    :return: List of 4 points in an [x, y] format
+    """
     rect = cv2.minAreaRect(cnt)
     box = cv2.boxPoints(rect)
     return np.int0(box)
 
 
-def circle_area(radius):
+def circle_area(radius: Union[float, int]) -> float:
     """
     Circle area calculation.
     :param radius:
@@ -91,10 +118,10 @@ def circle_area(radius):
     return radius ** 2 * math.pi
 
 
-def circle_ratio(cnt):
+def circle_ratio(cnt) -> float:
     """
-    Calculates ratio between a convex hull and a circle area.
-    :param cnt:
+    Calculate ratio between a convex hull and a circle area.
+    :param cnt: A contour
     :return: Circle ratio
     """
     _, radius = cv2.minEnclosingCircle(cnt)
@@ -103,14 +130,19 @@ def circle_ratio(cnt):
     return hull_area / float(circle_area(radius))
 
 
-def center(cnt):
+def center(cnt) -> (int, int):
+    """
+    Find the center point of the contour.
+    :param cnt: A contour
+    :return: The center of the minimum enclosing circle
+    """
     (x, y), radius = cv2.minEnclosingCircle(cnt)
     return int(x), int(y)
 
 
-def hsv_mask(frame, hsv):
+def hsv_mask(frame: np.array, hsv: np.array) -> np.array:
     """
-    Generates HSV mask.
+    Generate HSV mask.
     :param frame:
     :param hsv:
     :return: HSV mask
@@ -122,7 +154,7 @@ def hsv_mask(frame, hsv):
     return mask
 
 
-def morphology(mask, kernel):
+def morphology(mask: np.array, kernel: np.array) -> np.array:
     """
     Most common morphology use.
     :param mask:
@@ -134,13 +166,13 @@ def morphology(mask, kernel):
     return mask
 
 
-def opening_morphology(mask, kernel_e, kernel_d, itr=1):
+def opening_morphology(mask: np.array, kernel_e: np.array, kernel_d: np.array, itr=1) -> np.array:
     """
-    Runs opening morphology on given mask.
+    Run opening morphology on given mask.
     :param mask:
-    :param kernel_e:
-    :param kernel_d:
-    :param itr:
+    :param kernel_e: Kernel for eroding
+    :param kernel_d: Kernel for dilating
+    :param itr: Number of iterations
     :return:
     """
     mask = cv2.erode(mask, kernel_e, iterations=itr)
@@ -148,13 +180,13 @@ def opening_morphology(mask, kernel_e, kernel_d, itr=1):
     return mask
 
 
-def closing_morphology(mask, kernel_d, kernel_e, itr=1):
+def closing_morphology(mask: np.array, kernel_d: np.array, kernel_e: np.array, itr=1) -> np.array:
     """
     Runs closing morphology on given mask.
     :param mask:
-    :param kernel_d:
-    :param kernel_e:
-    :param itr:
+    :param kernel_e: Kernel for eroding
+    :param kernel_d: Kernel for dilating
+    :param itr: Number of iterations
     :return:
     """
     mask = dilate(mask, kernel_d, itr)
@@ -162,29 +194,29 @@ def closing_morphology(mask, kernel_d, kernel_e, itr=1):
     return mask
 
 
-def dilate(mask, kernel, itr=1):
+def dilate(mask: np.array, kernel: np.array, itr=1):
     """
     Run dilation on given mask.
     :param mask:
     :param kernel:
-    :param itr:
+    :param itr: Number of iterations
     :return:
     """
     return cv2.dilate(mask, kernel, iterations=itr)
 
 
-def erode(mask, kernel, itr=1):
+def erode(mask: np.array, kernel: np.array, itr=1):
     """
     Run erotion on given mask.
     :param mask:
     :param kernel:
-    :param itr:
+    :param itr: Number of iterations
     :return:
     """
     return cv2.erode(mask, kernel, iterations=itr)
 
 
-def bitwise_and(frame, mask):
+def bitwise_and(frame: np.array, mask: np.array):
     """
     Generates bitwise and for a frame and mask.
     :param frame:
@@ -195,7 +227,7 @@ def bitwise_and(frame, mask):
     return cv2.bitwise_and(frame, frame, mask=mask)
 
 
-def bitwise_not(frame, mask):
+def bitwise_not(frame: np.array, mask: np.array):
     """
     Generates bitwise not for a frame and mask.
     :param frame:
@@ -206,7 +238,7 @@ def bitwise_not(frame, mask):
     return cv2.bitwise_not(frame, frame, mask=mask)
 
 
-def bitwise_xor(frame, mask):
+def bitwise_xor(frame: np.array, mask: np.array):
     """
     Generates bitwise xor for a frame and mask.
     :param frame:
@@ -217,20 +249,22 @@ def bitwise_xor(frame, mask):
     return cv2.bitwise_xor(frame, frame, mask=mask)
 
 
-def binary_thresh(frame, thresh):
+def binary_thresh(frame: np.array, thresh: int):
     """
     Creates binary threshold from given value to 255.
     :param frame:
-    :param thresh:
+    :param thresh: The lower limit of he binary threshold
     :return:
     """
     return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
 
 
-def canny_edge_detection(frame, min_val=100, max_val=255):
+def canny_edge_detection(frame: np.array, min_val=100, max_val=255):
     """
     Runs canny edge detection on a frame.
     :param frame:
+    :param min_val: The minimum value above which edges will be ignores
+    :param max_val: The maximum value below which edges will be ignored
     :return:
     """
     src = cv2.GaussianBlur(frame, (3, 3), 0)
@@ -238,7 +272,7 @@ def canny_edge_detection(frame, min_val=100, max_val=255):
     return cv2.Canny(gray, min_val, max_val)
 
 
-def calculate_fps(frame, current_time, last_time, avg):
+def calculate_fps(frame: np.array, current_time: float, last_time: float, avg: float) -> float:
     """
     Calculates current FPS.
     :param frame:
@@ -301,7 +335,7 @@ def is_target(name: str, message: bool = True) -> bool:
 
 def distance(focal, object_width, object_width_pixels):
     """
-    Calculates distance from given object.
+    Calculate distance from given object.
     :param focal:
     :param object_width:
     :param object_width_pixels:
@@ -310,21 +344,31 @@ def distance(focal, object_width, object_width_pixels):
     return (focal * object_width) / object_width_pixels
 
 
-def array8(arr):
+def array8(arr) -> np.array:
     """
-    Turns array into a uint8 array.
-    :return:
+    Turn array into a uint8 array.
+    :return: A uint8 numpy array
     """
     return np.array(arr, dtype=np.uint8)
 
 
 def approx(cnt):
+    """
+    Lower the amount of points in a contour
+    :param cnt:
+    :return: A contours with less points
+    """
     hull = cv2.convexHull(cnt)
     epsilon = 0.015 * cv2.arcLength(hull, True)
     return cv2.approxPolyDP(hull, epsilon, True)
 
 
-def points(cnt):
+def points(cnt) -> list:
+    """
+    Create a list of the approximated points in an [x, y] format
+    :param cnt:
+    :return: Approximated points
+    """
     hullpoints = list(cv2.convexHull(approx(cnt), returnPoints=True))
     hullpoints.sort(key=index00)
 
