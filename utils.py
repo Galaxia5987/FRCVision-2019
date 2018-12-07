@@ -266,12 +266,24 @@ def approx_vertices(cnt, ratio=0.07):
     return len(approx)
 
 
-def is_triangle(cnt):
-    return approx_vertices(cnt) == 3
+def is_triangle(cnt, ratio=0.07):
+    """
+    Returns if contour is approximately a triangle.
+    :param ratio: Approx ratio
+    :param cnt:
+    :return:
+    """
+    return approx_vertices(cnt, ratio) == 3
 
 
-def numpy_index(element, l):
-    return [np.array_equal(element, x) for x in l].index(True)
+def numpy_index(element, arrays: list):
+    """
+    Gets index of numpy array in a list.
+    :param element:
+    :param arrays:
+    :return:
+    """
+    return [np.array_equal(element, x) for x in arrays].index(True)
 
 
 def angle(focal, xtarget, frame):
