@@ -10,6 +10,7 @@ class Target(TargetBase):
     """The Gear from FIRST Steamworks."""
 
     def __init__(self):
+        super().__init__()
         self.kernel_s = np.array([1], dtype=np.uint8)
 
         self.kernel_m = np.array([[1, 1],
@@ -62,7 +63,8 @@ class Target(TargetBase):
             return
         for cnt in filtered_contours:
             (a, b), radius = cv2.minEnclosingCircle(cnt)
-            distance = utils.distance(constants.FOCAL['lifecam'], constants.GAME_PIECE_SIZE['gear']['diameter'], radius * 2) * 100
+            distance = utils.distance(constants.FOCAL['lifecam'], constants.GAME_PIECE_SIZE['gear']['diameter'],
+                                      radius * 2) * 100
             angle = utils.angle(constants.FOCAL['lifecam'], a, original)
             print(f'Distance: {distance}')
             print(f'Angle: {angle}')
