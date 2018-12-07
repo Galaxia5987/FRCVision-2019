@@ -96,7 +96,7 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle = target.find_measurements(original, filtered_contours)
+            distance, angle = target.measurements(original, filtered_contours)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
@@ -107,9 +107,9 @@ class Main:
                 self.display.show_frame(contour_image)
                 self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
             if self.results.networktables:
-                if distance is not None:
+                if distance:
                     self.nt.set_item('cube_distance', distance)
-                if angle is not None:
+                if angle:
                     self.nt.set_item('cube_angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name

@@ -95,7 +95,7 @@ class Target(TargetBase):
         return filtered_contours
 
     @staticmethod
-    def find_measurements(original, contours):
+    def measurements(original, contours):
         if contours == []:
             return None, None
         distances = []

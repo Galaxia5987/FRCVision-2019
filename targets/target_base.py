@@ -37,7 +37,7 @@ class TargetBase(ABC):
         return contours, hierarchy
 
     @staticmethod
-    def find_measurements(frame, cnt) -> (float, float):
+    def measurements(frame, cnt) -> (float, float):
         return None, None
 
     @staticmethod
