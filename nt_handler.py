@@ -49,7 +49,7 @@ class NT:
         :param key: The name the value will be stored under and displayed.
         :param value: The information the key will hold.
         """
-        self.table.setDefaultValue(key, value)
+        self.table.putValue(key, value)
 
     def get_item(self, key, default_value):
         """
