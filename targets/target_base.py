@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 import cv2
 import numpy as np
@@ -37,7 +38,7 @@ class TargetBase(ABC):
         return contours, hierarchy
 
     @staticmethod
-    def measurements(frame, cnt) -> (float, float):
+    def measurements(frame, cnt) -> Tuple[float, float]:
         return None, None
 
     @staticmethod

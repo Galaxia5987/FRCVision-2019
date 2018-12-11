@@ -1,7 +1,7 @@
 import math
 import os
 import socket
-from typing import Union, List
+from typing import Union, List, Tuple
 
 import constants
 
@@ -62,7 +62,7 @@ def reversed_rotated_aspect_ratio(cnt) -> float:
     return height(cnt)[0] / width(cnt)[0]
 
 
-def height(cnt) -> (float, tuple, tuple):
+def height(cnt) -> Tuple[float, Tuple[int, int], Tuple[int, int]]:
     """
     Find the height of the box bounding the contour.
     :param cnt: A contour
@@ -80,7 +80,7 @@ def height(cnt) -> (float, tuple, tuple):
     return math.hypot(abs(x1 - x2), abs(y1 - y2)), (x1, y1), (x2, y2)
 
 
-def width(cnt) -> (float, tuple, tuple):
+def width(cnt) -> Tuple[float, Tuple[int, int], Tuple[int, int]]:
     """
     Find the weight of the box bounding the contour.
     :param cnt: A contour
@@ -130,7 +130,7 @@ def circle_ratio(cnt) -> float:
     return hull_area / float(circle_area(radius))
 
 
-def center(cnt) -> (int, int):
+def center(cnt) -> Tuple[int, int]:
     """
     Find the center point of the contour.
     :param cnt: A contour
