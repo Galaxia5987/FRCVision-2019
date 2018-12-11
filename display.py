@@ -1,5 +1,4 @@
 import cv2
-import datetime
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter('output.avi', fourcc, 30.0, (640, 480))
@@ -14,5 +13,5 @@ class Display:
     @staticmethod
     def show_frame(frame, title='image'):
         cv2.imshow(title, frame)
-        if title is not 'mask':
+        if title == 'contour image':
             out.write(frame)
