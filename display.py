@@ -9,10 +9,10 @@ class Display:
         self.camera = cv2.VideoCapture(port)
 
     def get_frame(self):
-        ret, frame = self.camera.read()
-        out.write(frame)
-        return frame
+        return self.camera.read()[1]
 
     @staticmethod
     def show_frame(frame, title='image'):
         cv2.imshow(title, frame)
+        if title is not 'mask':
+            out.write(frame)
