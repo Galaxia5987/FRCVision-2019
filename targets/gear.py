@@ -68,5 +68,5 @@ class Target(TargetBase):
             angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], a, original)
             print(f'Distance: {distance}')
             print(f'Angle: {angle}')
-            center = (int(a), int(b))
+            center = int(a), int(b)
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)

@@ -11,9 +11,6 @@ class Target(TargetBase):
 
     def __init__(self):
         super().__init__()
-        self.kernel_b = np.array([[0, 1, 0],
-                                  [1, 1, 1],
-                                  [0, 1, 0]], dtype=np.uint8)
         self.exposure = -10
 
     @staticmethod

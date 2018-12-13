@@ -11,13 +11,6 @@ class Target(TargetBase):
     """Power cube from the 2018 mission."""
     def __init__(self):
         super().__init__()
-        self.kernel_small = np.array([1], dtype=np.uint8)
-        self.kernel_medium = np.array([[1, 1],
-                                       [1, 1]], dtype=np.uint8)
-        self.kernel_big = np.array([[0, 1, 0],
-                                    [1, 1, 1],
-                                    [0, 1, 0]], dtype=np.uint8)
-
         self.correction = 25
 
     def create_mask(self, frame, hsv):
@@ -55,8 +48,8 @@ class Target(TargetBase):
                 aspect_ratio = utils.rotated_aspect_ratio(cnt)
                 reversed_aspect_ratio = utils.reversed_rotated_aspect_ratio(cnt)
                 if 3 > reversed_aspect_ratio >= 0.7 or 3 > aspect_ratio >= 0.7:
-                    side, _, _ = max(utils.width(cnt), utils.height(cnt), key=utils.index0)
-                    _, (x1, y1), (x2, y2) = min(utils.width(cnt), utils.height(cnt), key=utils.index0)
+                    side = max(utils.width(cnt), utils.height(cnt), key=utils.index0)[0]
+                    (x1, y1), (x2, y2) = min(utils.width(cnt), utils.height(cnt), key=utils.index0)[1:]
                     cubes = round(max(aspect_ratio / (utils.power_cube['width'] / utils.power_cube['height']),
                                       reversed_aspect_ratio) / (utils.power_cube['height'] / utils.power_cube['width']))
                     single_cube = side / cubes
@@ -73,11 +66,6 @@ class Target(TargetBase):
                                  (0, 0, 0), thickness=15)
 
         return mask
-
-    def find_contours(self, mask):
-        img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-        return contours, hierarchy
 
     @staticmethod
     def filter_contours(contours, hierarchy):
@@ -104,7 +92,7 @@ class Target(TargetBase):
             if not points.any():
                 return None, None
 
-            avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
+            avg_real_heights = sum(utils.power_cube.values()) / len(utils.power_cube)
 
             heights = []
             for i, point in enumerate(points):
@@ -117,8 +105,7 @@ class Target(TargetBase):
                 max_height = max(heights)
                 half_height = max_height / 2
                 heights.remove(max_height)
-                heights.append(half_height)
-                heights.append(half_height)
+                heights.extend([half_height] * 2)
 
             avg_heights = sum(heights) / len(heights)
 

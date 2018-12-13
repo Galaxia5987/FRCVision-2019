@@ -11,10 +11,15 @@ class TargetBase(ABC):
     """An abstract class representing a base target."""
 
     def __init__(self):
+        self.kernel_small = np.array([1], dtype=np.uint8)
+        self.kernel_medium = np.array([[1, 1],
+                                       [1, 1]], dtype=np.uint8)
+        self.kernel_big = np.array([[0, 1, 0],
+                                    [1, 1, 1],
+                                    [0, 1, 0]], dtype=np.uint8)
         self.exposure = -6
 
-    @staticmethod
-    def create_mask(frame, hsv):
+    def create_mask(self, frame, hsv):
         """
         :param frame: the frame to process
         :param hsv: JSON file
@@ -22,9 +27,7 @@ class TargetBase(ABC):
         """
         mask = utils.hsv_mask(frame, hsv)
         # create a cross kernel
-        mask = utils.morphology(mask, np.array([[0, 1, 0],
-                                                [1, 1, 1],
-                                                [0, 1, 0]], dtype=np.uint8))
+        mask = utils.morphology(mask, self.kernel_big)
         mask = cv2.threshold(mask, 127, 255, 0)[1]
         return mask
 
