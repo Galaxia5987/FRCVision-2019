@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-import utils
 import constants
+import utils
 from targets.target_base import TargetBase
 
 
@@ -11,9 +11,6 @@ class Target(TargetBase):
 
     def __init__(self):
         super().__init__()
-        self.kernel_b = np.array([[0, 1, 0],
-                                  [1, 1, 1],
-                                  [0, 1, 0]], dtype=np.uint8)
         self.exposure = -10
 
     @staticmethod

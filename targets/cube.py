@@ -1,23 +1,18 @@
-import cv2
-import numpy as np
 import math
 
-import utils
+import cv2
+import numpy as np
+
 import constants
+import utils
 from targets.target_base import TargetBase
 
 
 class Target(TargetBase):
     """Power cube from the 2018 mission."""
+
     def __init__(self):
         super().__init__()
-        self.kernel_small = np.array([1], dtype=np.uint8)
-        self.kernel_medium = np.array([[1, 1],
-                                       [1, 1]], dtype=np.uint8)
-        self.kernel_big = np.array([[0, 1, 0],
-                                    [1, 1, 1],
-                                    [0, 1, 0]], dtype=np.uint8)
-
         self.correction = 25
 
     def create_mask(self, frame, hsv):
@@ -55,8 +50,8 @@ class Target(TargetBase):
                 aspect_ratio = utils.rotated_aspect_ratio(cnt)
                 reversed_aspect_ratio = utils.reversed_rotated_aspect_ratio(cnt)
                 if 3 > reversed_aspect_ratio >= 0.7 or 3 > aspect_ratio >= 0.7:
-                    side, _, _ = max(utils.width(cnt), utils.height(cnt), key=utils.index0)
-                    _, (x1, y1), (x2, y2) = min(utils.width(cnt), utils.height(cnt), key=utils.index0)
+                    side = max(utils.width(cnt), utils.height(cnt), key=utils.index0)[0]
+                    (x1, y1), (x2, y2) = min(utils.width(cnt), utils.height(cnt), key=utils.index0)[1:]
                     cubes = round(max(aspect_ratio / (utils.power_cube['width'] / utils.power_cube['height']),
                                       reversed_aspect_ratio) / (utils.power_cube['height'] / utils.power_cube['width']))
                     single_cube = side / cubes
@@ -74,11 +69,6 @@ class Target(TargetBase):
 
         return mask
 
-    def find_contours(self, mask):
-        img, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-        return contours, hierarchy
-
     @staticmethod
     def filter_contours(contours, hierarchy):
         filtered_contours = []
@@ -89,7 +79,8 @@ class Target(TargetBase):
                 area = cv2.contourArea(cnt)
                 total_areas.append(area)
                 avg_area = sum(total_areas) / len(total_areas)
-                if len(cnt) > 2 and area > 750 and 0.2 < utils.rotated_aspect_ratio(cnt) and 4 <= len(utils.points(cnt)) <= 6 and area / avg_area >= 1.25:
+                if len(cnt) > 2 and area > 750 and 0.2 < utils.rotated_aspect_ratio(cnt) and 4 <= len(
+                        utils.points(cnt)) <= 6 and area / avg_area >= 1.25:
                     filtered_contours.append(cnt)
 
         return filtered_contours
@@ -104,7 +95,7 @@ class Target(TargetBase):
             if not points.any():
                 return None, None
 
-            avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
+            avg_real_heights = sum(utils.power_cube.values()) / len(utils.power_cube)
 
             heights = []
             for i, point in enumerate(points):
@@ -117,8 +108,7 @@ class Target(TargetBase):
                 max_height = max(heights)
                 half_height = max_height / 2
                 heights.remove(max_height)
-                heights.append(half_height)
-                heights.append(half_height)
+                heights.extend([half_height] * 2)
 
             avg_heights = sum(heights) / len(heights)
 
@@ -146,4 +136,5 @@ class Target(TargetBase):
                 points = utils.points(cnt)
                 for point in points:
                     cv2.circle(original, point, 5, (0, 255, 0), -1)
-                    cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
+                    cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX,
+                                1, (0, 0, 0))
