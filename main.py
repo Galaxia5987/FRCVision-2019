@@ -77,6 +77,7 @@ class Main:
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target()
+        self.display.change_exposure(target.exposure)
         # Timer for FPS counter
         timer = time.time()
         avg = 0
@@ -94,6 +95,8 @@ class Main:
             filtered_contours = target.filter_contours(contours, hierarchy)
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
+            # Find distance and angle
+            distance, angle = target.measurements(original, filtered_contours)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
@@ -102,7 +105,12 @@ class Main:
                 self.web.set_frame(contour_image)
             if self.results.local:
                 self.display.show_frame(contour_image)
-                self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
+                self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
+            if self.results.networktables:
+                if distance:
+                    self.nt.set_item('cube_distance', distance)
+                if angle:
+                    self.nt.set_item('cube_angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))
