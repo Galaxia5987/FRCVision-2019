@@ -83,7 +83,7 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         filtered_contours = []
 
-        if contours is not None:
+        if contours:
             total_areas = []
             for cnt in contours:
                 area = cv2.contourArea(cnt)
@@ -95,34 +95,44 @@ class Target(TargetBase):
         return filtered_contours
 
     @staticmethod
-    def find_distance(cnt):
-        points = utils.box(cnt)
-        if points is None:
-            return None
+    def measurements(original, contours):
+        if not contours:
+            return None, None
+        distances = []
+        for cnt in contours:
+            points = utils.box(cnt)
+            if not points.any():
+                return None, None
 
-        avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
+            avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
 
-        heights = []
-        for i in range(len(points)):
-            x = points[i][0] - points[i - 1][0]
-            y = points[i][1] - points[i - 1][1]
-            height = math.hypot(x, y)
-            heights.append(height)
+            heights = []
+            for i, point in enumerate(points):
+                x = point[0] - points[i - 1][0]
+                y = point[1] - points[i - 1][1]
+                height = math.hypot(x, y)
+                heights.append(height)
 
-        if len(points) == 5:
-            max_height = max(heights)
-            half_height = max_height / 2
-            heights.remove(max_height)
-            heights.append(half_height)
-            heights.append(half_height)
+            if len(points) == 5:
+                max_height = max(heights)
+                half_height = max_height / 2
+                heights.remove(max_height)
+                heights.append(half_height)
+                heights.append(half_height)
 
-        avg_heights = sum(heights) / len(heights)
+            avg_heights = sum(heights) / len(heights)
 
-        return (avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights
+            distances.append((avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights)
+
+        min_distance = min(distances)
+        chosen_one = contours[distances.index(min_distance)]
+        angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], utils.center(chosen_one)[0], original)
+
+        return min_distance, angle
 
     @staticmethod
     def draw_contours(filtered_contours, original):
-        if filtered_contours is not None:
+        if filtered_contours:
             for cnt in filtered_contours:
                 rect = cv2.minAreaRect(cnt)
                 box = cv2.boxPoints(rect)
@@ -135,7 +145,5 @@ class Target(TargetBase):
 
                 points = utils.points(cnt)
                 for point in points:
-                    cv2.circle(original, p, 5, (0, 255, 0), -1)
+                    cv2.circle(original, point, 5, (0, 255, 0), -1)
                     cv2.putText(original, str(points.index(point)), (point[0] + 5, point[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
-
-                cv2.putText(original, str(Target.find_distance(cnt)), utils.center(cnt), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))

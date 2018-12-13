@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 import cv2
 import numpy as np
@@ -35,6 +36,17 @@ class TargetBase(ABC):
         """
         _, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours, hierarchy
+
+    @staticmethod
+    def measurements(frame, cnt) -> Tuple[float, float]:
+        """
+        Return the angle and distance from a single target.
+        :param frame: The frame, used for angle measurement
+        :param cnt: The contour of the target
+        :return: The distance and angle from the target, None by default
+        """
+
+        return None, None
 
     @staticmethod
     @abstractmethod
