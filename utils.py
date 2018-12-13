@@ -3,34 +3,44 @@ import os
 import socket
 from typing import Union, List, Tuple
 
-import constants
-
 import cv2
 import numpy as np
 from termcolor import colored
 
 
-# A list of the real measurements of the cube in meters.
-power_cube = constants.GAME_PIECE_SIZES['power_cube']
-
-
 def index0(x):
-    # An index function for sorting based on the first variable.
+    """
+    An index function for sorting based on the first variable.
+    :param x:
+    :return:
+    """
     return x[0]
 
 
 def index00(x):
-    # An index function for sorting based on the first variable of the first variable.
+    """
+    An index function for sorting based on the first variable of the first variable.
+    :param x:
+    :return:
+    """
     return x[0][0]
 
 
 def index1(x):
-    # An index function for sorting based on the second variable.
+    """
+    An index function for sorting based on the second variable.
+    :param x:
+    :return:
+    """
     return x[1]
 
 
 def index01(x):
-    # An index function for sorting based on the second variable of the first variable.
+    """
+    An index function for sorting based on the second variable.
+    :param x:
+    :return:
+    """
     return x[0][1]
 
 
@@ -379,8 +389,8 @@ def points(cnt) -> list:
         points.append(new_p)
 
     return points
-  
-  
+
+
 def is_circle(cnt, minimum):
     """
     Checks the circle ratio and returns true if it meets the minimum.
