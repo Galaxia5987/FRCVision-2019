@@ -83,7 +83,7 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         filtered_contours = []
 
-        if contours is not None:
+        if contours:
             total_areas = []
             for cnt in contours:
                 area = cv2.contourArea(cnt)
@@ -96,12 +96,12 @@ class Target(TargetBase):
 
     @staticmethod
     def measurements(original, contours):
-        if contours == []:
+        if not contours:
             return None, None
         distances = []
         for cnt in contours:
             points = utils.box(cnt)
-            if points is None:
+            if not points.any():
                 return None, None
 
             avg_real_heights = (utils.power_cube['width'] + utils.power_cube['length'] + utils.power_cube['height']) / 3
@@ -124,15 +124,15 @@ class Target(TargetBase):
 
             distances.append((avg_real_heights * constants.FOCAL_LENGTHS['lifecam']) / avg_heights)
 
-        distance = min(distances)
-        chosen_one = contours[distances.index(distance)]
+        min_distance = min(distances)
+        chosen_one = contours[distances.index(min_distance)]
         angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], utils.center(chosen_one)[0], original)
 
-        return distance, angle
+        return min_distance, angle
 
     @staticmethod
     def draw_contours(filtered_contours, original):
-        if filtered_contours is not None:
+        if filtered_contours:
             for cnt in filtered_contours:
                 rect = cv2.minAreaRect(cnt)
                 box = cv2.boxPoints(rect)
