@@ -30,6 +30,10 @@ def get_args():
     parser.add_argument('-local', action='store_true', default=False,
                         dest='local',
                         help='Launch local UI')
+    # Add raspberry pi argument
+    parser.add_argument('-pi', action='store_true', default=False,
+                        dest='pi',
+                        help='Use PI Camera')
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
@@ -44,7 +48,7 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name):
             return
-        self.display = Display(self.results.port)
+        self.display = Display(self.results.port, provider="pi" if self.results.pi else "cv")
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
         else:
@@ -119,6 +123,7 @@ class Main:
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if k in (27, 113):
                 print(colored('Q pressed, stopping...', 'red'))
+                self.display.release()
                 break
 
 

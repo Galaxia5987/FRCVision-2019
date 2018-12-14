@@ -2,3 +2,4 @@ numpy
 flask
 pynetworktables
 termcolor
+picamera

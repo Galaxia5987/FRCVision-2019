@@ -1,20 +1,25 @@
 import cv2
 
-import constants
+from cv_camera import CVCamera
+from pi_camera import PICamera
 
 
 class Display:
-    def __init__(self, exposure=-6, port=0):
-        self.camera = cv2.VideoCapture(port)
-        self.camera.set(constants.CAMERA_CONTRAST, 7)
-        self.camera.set(constants.CAMERA_EXPOSURE, exposure)
-        print(f'Contrast: {self.camera.get(constants.CAMERA_CONTRAST)} Exposure: {self.camera.get(constants.CAMERA_EXPOSURE)} FPS: {self.camera.get(constants.CAMERA_FPS)}')
+    def __init__(self, exposure=-6, port=0, provider="cv"):
+        if provider == "pi":
+            self.camera_provider = PICamera(exposure)
+        else:
+            self.camera_provider = CVCamera(port, exposure)
 
     def get_frame(self):
-        return self.camera.read()[1]
+        return self.camera_provider.frame
 
     def change_exposure(self, new_exposure):
-        self.camera.set(constants.CAMERA_EXPOSURE, new_exposure)
+        self.camera_provider.set_exposure(new_exposure)
+
+    def release(self):
+        self.camera_provider.release()
+        cv2.destroyAllWindows()
 
     @staticmethod
     def show_frame(frame, title='image'):
