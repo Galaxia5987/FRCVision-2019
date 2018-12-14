@@ -4,8 +4,6 @@ from threading import Thread
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 
-import constants
-
 
 class PICamera:
     def __init__(self, exposure, contrast=7, framerate=32):
@@ -17,8 +15,7 @@ class PICamera:
         self.rawCapture = PiRGBArray(self.camera, size=(480, 368))
         self.exit = False
         self.frame = None
-        print(
-            f'Contrast: {contrast} Exposure: {self.camera.get(constants.CAMERA_EXPOSURE)} FPS: {self.camera.get(constants.CAMERA_FPS)}')
+        print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
         time.sleep(0.1)
         Thread(target=self.loop).start()
 

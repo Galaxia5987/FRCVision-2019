@@ -12,8 +12,7 @@ class CVCamera:
         self.camera.set(constants.CAMERA_EXPOSURE, exposure)
         self.exit = False
         self.frame = None
-        print(
-            f'Contrast: {contrast} Exposure: {self.camera.get(constants.CAMERA_EXPOSURE)} FPS: {self.camera.get(constants.CAMERA_FPS)}')
+        print(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
         Thread(target=self.loop).start()
 
     def loop(self):
