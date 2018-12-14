@@ -8,8 +8,19 @@
         }
 
         /*https://www.w3schools.com/css/css3_buttons.asp*/
-        button {
+        .green_button {
             background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .red_button {
+            background-color: red;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -44,9 +55,19 @@
     }
 
     function record() {
+        var endpoint = "/record"
+        if (document.getElementById("record").innerHTML === "Record") {
+            document.getElementById("record").setAttribute("class", "red_button")
+            document.getElementById("record").innerHTML = "Stop recording"
+        } else {
+            document.getElementById("record").setAttribute("class", "green_button")
+            document.getElementById("record").innerHTML = "Record"
+            endpoint = "/stopRecording"
+        }
+
         var http = new XMLHttpRequest();
-        http.open('POST', window.location.origin + "/record", true);
-        http.send();
+        http.open('POST', window.location.origin + endpoint, true);
+        http.send(document.getElementById("filename").value);
     }
 
 </script>
@@ -56,9 +77,10 @@
 <br>
 <h1>Controls</h1>
 Target: <input type="text" id="target">
+File name: <input type="text" id="filename">
 <br><br>
-<button onclick="save()">Save</button>
-<button onclick="update()">Update</button>
-<button onclick="record()">Record</button>
+<button class="green_button" onclick="save()">Save</button>
+<button class="green_button" onclick="update()">Update</button>
+<button class="green_button" id="record" onclick="record()">Record</button>
 </body>
 </html>

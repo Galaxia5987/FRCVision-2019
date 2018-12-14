@@ -112,7 +112,7 @@ class Main:
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if k in (27, 113):
                 print(colored('Q pressed, stopping...', 'red'))
-                display.out.release()
+                self.display.release()
                 break
 
 
