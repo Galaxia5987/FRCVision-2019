@@ -37,8 +37,11 @@ class TargetBase(ABC):
         :param mask: mask of the target
         :return: list of contours in the mask
         """
-        _, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours, hierarchy
+        obj = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if len(obj) == 2:
+            return obj[0], obj[1]
+        else:
+            return obj[1], obj[2]
 
     @staticmethod
     def measurements(frame, cnt) -> Tuple[float, float]:

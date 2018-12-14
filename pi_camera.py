@@ -1,12 +1,11 @@
 import time
 from threading import Thread
 
-from picamera import PiCamera
-from picamera.array import PiRGBArray
-
 
 class PICamera:
     def __init__(self, exposure, contrast=7, framerate=32):
+        from picamera import PiCamera
+        from picamera.array import PiRGBArray
         self.camera = PiCamera()
         self.camera.resolution = (480, 368)
         self.camera.framerate = framerate
