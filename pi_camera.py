@@ -30,4 +30,4 @@ class PICamera:
         self.exit = True
 
     def set_exposure(self, exposure):
-        self.camera.exposure = exposure
+        self.camera.exposure_compensation = exposure
