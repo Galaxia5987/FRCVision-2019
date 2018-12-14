@@ -43,6 +43,12 @@
         http.send(document.getElementById("target").value);
     }
 
+    function record() {
+        var http = new XMLHttpRequest();
+        http.open('POST', window.location.origin + "/record", true);
+        http.send();
+    }
+
 </script>
 <h1>Video Stream</h1>
 <img src="{{ url_for('video_feed') }}">
@@ -53,5 +59,6 @@ Target: <input type="text" id="target">
 <br><br>
 <button onclick="save()">Save</button>
 <button onclick="update()">Update</button>
+<button onclick="record()">Record</button>
 </body>
 </html>

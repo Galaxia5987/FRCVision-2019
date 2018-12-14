@@ -1,7 +1,8 @@
 import cv2
 
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('output.avi', fourcc, 30.0, (640, 480))
+fourcc = 0
+out = 0
+record = False
 
 class Display:
     def __init__(self, port=0):
@@ -13,5 +14,5 @@ class Display:
     @staticmethod
     def show_frame(frame, title='image'):
         cv2.imshow(title, frame)
-        if title == 'contour image':
+        if title == 'contour image' and record:
             out.write(frame)

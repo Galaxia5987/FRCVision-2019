@@ -4,7 +4,7 @@ import cv2
 from flask import Flask, render_template, Response, request
 
 import utils
-
+import display
 
 class Web:
     """This class handles the web server we use for streaming & control."""
@@ -36,6 +36,14 @@ class Web:
             """Post route to change target."""
             target = request.data.decode('utf-8')
             self.main.change_name(target)
+            return '', 204
+
+        @self.app.route('/record', methods=['POST'])
+        def record():
+            """Start recording."""
+            display.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            display.out = cv2.VideoWriter('output.avi', display.fourcc, 30.0, (640, 480))
+            display.record = True
             return '', 204
 
     def stream_frame(self):
