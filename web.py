@@ -4,6 +4,7 @@ import cv2
 from flask import Flask, render_template, Response, request
 
 import utils
+from nt_handler import NT
 
 
 class Web:
@@ -13,11 +14,13 @@ class Web:
         self.main = main
         self.last_frame = None  # Keep last frame for streaming
         self.app = Flask('Web')  # Flask app for web
+        self.match_data_table = NT('match-data')
 
         # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
-            return render_template('index.html')
+            match_number = self.match_data_table.get_item('match number', 'Enter file name')
+            return render_template('index.html', initial_filename=match_number)
 
         # Video feed endpoint
         @self.app.route('/stream.mjpg')
