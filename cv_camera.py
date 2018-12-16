@@ -13,7 +13,7 @@ class CVCamera:
         self.exit = False
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
-        Thread(target=self.loop).start()
+        Thread(target=self.loop, daemon=True).start()
 
     def loop(self):
         while True:

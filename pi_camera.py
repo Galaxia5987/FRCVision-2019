@@ -16,7 +16,7 @@ class PICamera:
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
         time.sleep(0.1)
-        Thread(target=self.loop).start()
+        Thread(target=self.loop, daemon=True).start()
 
     def loop(self):
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
