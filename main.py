@@ -105,8 +105,6 @@ class Main:
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            if self.results.web:
-                self.web.set_frame(contour_image)
             if self.results.local:
                 self.display.show_frame(contour_image)
                 self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
