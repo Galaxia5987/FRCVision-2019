@@ -38,6 +38,7 @@ class TargetBase(ABC):
         :return: list of contours in the mask
         """
         obj = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # Hacky fix the difference opencv 4 and 3 until we can update everywhere
         if len(obj) == 2:
             return obj[0], obj[1]
         else:
