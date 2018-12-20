@@ -9,7 +9,7 @@ class CVCamera(Thread):
     def __init__(self, port, exposure, contrast=7):
         self.camera = cv2.VideoCapture(port)
         self.camera.set(constants.CAMERA_CONTRAST, contrast)
-        self.camera.set(constants.CAMERA_EXPOSURE, exposure)
+        self.set_exposure(exposure)
         self.exit = False
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
