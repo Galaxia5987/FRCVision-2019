@@ -5,7 +5,7 @@ import cv2
 import constants
 
 
-class CVCamera:
+class CVCamera(Thread):
     def __init__(self, port, exposure, contrast=7):
         self.camera = cv2.VideoCapture(port)
         self.camera.set(constants.CAMERA_CONTRAST, contrast)
@@ -13,9 +13,9 @@ class CVCamera:
         self.exit = False
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
-        Thread(target=self.loop, daemon=True).start()
+        super().__init__(daemon=True)
 
-    def loop(self):
+    def run(self):
         while True:
             if self.exit:
                 break

@@ -10,6 +10,7 @@ class Display:
             self.camera_provider = PICamera(exposure)
         else:
             self.camera_provider = CVCamera(port, exposure)
+        self.camera_provider.start()
 
     def get_frame(self):
         """

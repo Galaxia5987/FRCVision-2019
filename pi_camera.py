@@ -2,7 +2,7 @@ import time
 from threading import Thread
 
 
-class PICamera:
+class PICamera(Thread):
     def __init__(self, exposure, contrast=7, framerate=32):
         from picamera import PiCamera
         from picamera.array import PiRGBArray
@@ -16,9 +16,9 @@ class PICamera:
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
         time.sleep(0.1)
-        Thread(target=self.loop, daemon=True).start()
+        super().__init__(daemon=True)
 
-    def loop(self):
+    def run(self):
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.exit:
                 break
