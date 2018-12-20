@@ -11,7 +11,7 @@ class Target(TargetBase):
 
     def __init__(self):
         super().__init__()
-        self.exposure = -10
+        self.exposure = -20
 
     @staticmethod
     def create_mask(frame, hsv):
