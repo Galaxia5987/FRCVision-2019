@@ -6,7 +6,7 @@ import constants
 
 
 class CVCamera(Thread):
-    def __init__(self, port, exposure, contrast=7):
+    def __init__(self, port, exposure=0, contrast=7):
         self.camera = cv2.VideoCapture(port)
         self.camera.set(constants.CAMERA_CONTRAST, contrast)
         self.set_exposure(exposure)

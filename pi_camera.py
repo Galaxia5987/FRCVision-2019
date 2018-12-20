@@ -3,7 +3,7 @@ from threading import Thread
 
 
 class PICamera(Thread):
-    def __init__(self, exposure, contrast=7, framerate=32):
+    def __init__(self, exposure=0, contrast=7, framerate=32):
         from picamera import PiCamera
         from picamera.array import PiRGBArray
         self.camera = PiCamera()

@@ -1,15 +1,9 @@
 import cv2
 
-from cv_camera import CVCamera
-from pi_camera import PICamera
-
 
 class Display:
-    def __init__(self, exposure=-6, port=0, provider="cv"):
-        if provider == "pi":
-            self.camera_provider = PICamera(exposure)
-        else:
-            self.camera_provider = CVCamera(port, exposure)
+    def __init__(self, provider):
+        self.camera_provider = provider
         self.camera_provider.start()
 
     def get_frame(self):

@@ -7,8 +7,10 @@ from termcolor import colored
 
 import nt_handler
 import utils
+from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
+from pi_camera import PICamera
 from trackbars import Trackbars
 from web import Web
 
@@ -48,7 +50,11 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name):
             return
-        self.display = Display(self.results.port, provider="pi" if self.results.pi else "cv")
+        if self.results.pi:
+            camera_provider = PICamera()
+        else:
+            camera_provider = CVCamera(self.results.port)
+        self.display = Display(provider=camera_provider)
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
         else:
