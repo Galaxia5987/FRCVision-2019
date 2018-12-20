@@ -3,15 +3,15 @@ from threading import Thread
 
 
 class PICamera(Thread):
-    def __init__(self, exposure=0, contrast=7, framerate=32):
+    def __init__(self, exposure=0, contrast=7, framerate=32, resolution=(480, 368)):
         from picamera import PiCamera
         from picamera.array import PiRGBArray
         self.camera = PiCamera()
-        self.camera.resolution = (480, 368)
+        self.camera.resolution = resolution
         self.camera.framerate = framerate
         self.camera.exposure_compensation = exposure
         self.camera.contrast = contrast
-        self.rawCapture = PiRGBArray(self.camera, size=(480, 368))
+        self.rawCapture = PiRGBArray(self.camera, size=resolution)
         self.exit = False
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
