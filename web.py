@@ -11,7 +11,6 @@ class Web:
 
     def __init__(self, main):
         self.main = main
-        self.last_frame = None  # Keep last frame for streaming
         self.app = Flask('Web')  # Flask app for web
 
         # Index html file
@@ -44,9 +43,10 @@ class Web:
         :return: JPEG encoded frame
         """
         while True:
-            if self.last_frame is None:
+            frame = self.main.display.get_frame()
+            if frame is None:
                 continue
-            jpg = cv2.imencode('.jpg', self.last_frame)[1].tostring()
+            jpg = cv2.imencode('.jpg', frame)[1].tostring()
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpg + b'\r\n')
 
     def serve(self):
@@ -59,11 +59,3 @@ class Web:
     def start_thread(self):
         """Run web server in a thread - daemon so it lets the program exit."""
         Thread(target=self.serve, daemon=True).start()
-
-    def set_frame(self, frame):
-        """
-        Save the last frame.
-
-        This method is called from Main.
-        """
-        self.last_frame = frame

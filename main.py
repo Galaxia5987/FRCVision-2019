@@ -7,8 +7,10 @@ from termcolor import colored
 
 import nt_handler
 import utils
+from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
+from pi_camera import PICamera
 from trackbars import Trackbars
 from web import Web
 
@@ -30,6 +32,10 @@ def get_args():
     parser.add_argument('-local', action='store_true', default=False,
                         dest='local',
                         help='Launch local UI')
+    # Add raspberry pi argument
+    parser.add_argument('-pi', action='store_true', default=False,
+                        dest='pi',
+                        help='Use PI Camera')
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
@@ -44,7 +50,11 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name):
             return
-        self.display = Display(self.results.port)
+        if self.results.pi:
+            camera_provider = PICamera()
+        else:
+            camera_provider = CVCamera(self.results.port)
+        self.display = Display(provider=camera_provider)
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
         else:
@@ -101,16 +111,14 @@ class Main:
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            if self.results.web:
-                self.web.set_frame(contour_image)
             if self.results.local:
                 self.display.show_frame(contour_image)
                 self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
             if self.results.networktables:
                 if distance:
-                    self.nt.set_item('cube_distance', distance)
+                    self.nt.set_item('distance', distance)
                 if angle:
-                    self.nt.set_item('cube_angle', angle)
+                    self.nt.set_item('angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))
@@ -119,6 +127,7 @@ class Main:
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if k in (27, 113):
                 print(colored('Q pressed, stopping...', 'red'))
+                self.display.release()
                 break
 
 
