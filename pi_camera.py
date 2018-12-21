@@ -4,8 +4,10 @@ from threading import Thread
 
 class PICamera(Thread):
     def __init__(self, exposure=0, contrast=7, framerate=32, resolution=(480, 368)):
+        # Hacky fix picamera only being able to be installed on a raspberry pi
         from picamera import PiCamera
         from picamera.array import PiRGBArray
+        # Initiate camera
         self.camera = PiCamera()
         self.camera.resolution = resolution
         self.camera.framerate = framerate
@@ -15,10 +17,15 @@ class PICamera(Thread):
         self.exit = False
         self.frame = None
         print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
-        time.sleep(0.1)
+        time.sleep(0.1)  # Sleep to let the camera warm up
         super().__init__(daemon=True)
 
     def run(self):
+        """
+        Implementation of Thread run method, stores frames in a class variable.
+        :return:
+        """
+        # picamera iterator
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.exit:
                 break
@@ -26,7 +33,16 @@ class PICamera(Thread):
             self.rawCapture.truncate(0)
 
     def release(self):
+        """
+        Releases camera by exiting the loop.
+        :return:
+        """
         self.exit = True
 
     def set_exposure(self, exposure):
+        """
+        Sets the camera exposure compensation.
+        :param exposure:
+        :return:
+        """
         self.camera.exposure_compensation = exposure
