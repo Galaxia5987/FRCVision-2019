@@ -116,9 +116,9 @@ class Main:
                 self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
             if self.results.networktables:
                 if distance:
-                    self.nt.set_item('cube_distance', distance)
+                    self.nt.set_item('distance', distance)
                 if angle:
-                    self.nt.set_item('cube_angle', angle)
+                    self.nt.set_item('angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))
