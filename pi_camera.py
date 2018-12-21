@@ -21,10 +21,7 @@ class PICamera(Thread):
         super().__init__(daemon=True)
 
     def run(self):
-        """
-        Implementation of Thread run method, stores frames in a class variable.
-        :return:
-        """
+        """Implementation of Thread run method, stores frames in a class variable."""
         # picamera iterator
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.exit:
@@ -33,16 +30,12 @@ class PICamera(Thread):
             self.rawCapture.truncate(0)
 
     def release(self):
-        """
-        Releases camera by exiting the loop.
-        :return:
-        """
+        """Release camera by exiting the loop."""
         self.exit = True
 
-    def set_exposure(self, exposure):
+    def set_exposure(self, exposure: int):
         """
-        Sets the camera exposure compensation.
+        Set the camera exposure compensation.
         :param exposure:
-        :return:
         """
         self.camera.exposure_compensation = exposure

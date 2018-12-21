@@ -17,27 +17,20 @@ class CVCamera(Thread):
         super().__init__(daemon=True)  # Init thread
 
     def run(self):
-        """
-        Implementation of Thread run method, stores frames in a class variable.
-        :return:
-        """
+        """Implementation of Thread run method, stores frames in a class variable."""
         while True:
             if self.exit:
                 break
             self.frame = self.camera.read()[1]
 
     def release(self):
-        """
-        Releases the camera and loop.
-        :return:
-        """
+        """Release the camera and loop."""
         self.exit = True
         self.camera.release()
 
-    def set_exposure(self, exposure):
+    def set_exposure(self, exposure: int):
         """
-        Sets the camera exposure.
-        :param exposure:
-        :return:
+        Set the camera exposure.
+        :param exposure: OpenCV camera exposure value
         """
         self.camera.set(constants.CAMERA_EXPOSURE, exposure)
