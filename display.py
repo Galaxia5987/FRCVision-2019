@@ -32,5 +32,5 @@ class Display:
 
     def show_frame(self, frame, title='image'):
         cv2.imshow(title, frame)
-        if title == 'contour image' and self.record and self.out:
+        if self.record and title == 'contour image' and self.out:
             self.out.write(frame)

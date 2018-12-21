@@ -47,6 +47,8 @@ class Web:
             filename = request.data.decode('utf-8')
             if filename:
                 self.main.display.start_recording(filename)
+            else:
+                print('File name not present')
             return '', 204
 
         @self.app.route('/stopRecording', methods=['POST'])
