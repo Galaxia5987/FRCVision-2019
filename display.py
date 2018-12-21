@@ -8,14 +8,14 @@ class Display:
 
     def get_frame(self):
         """
-        Returns the most current frame from the camera provider.
+        Return the most current frame from the camera provider.
         :return:
         """
         return self.camera_provider.frame
 
     def change_exposure(self, new_exposure):
         """
-        Changes the exposure through the camera provider.
+        Change the exposure through the camera provider.
         :param new_exposure:
         :return:
         """
@@ -23,7 +23,7 @@ class Display:
 
     def release(self):
         """
-        Releases the camera and destroys windows.
+        Release the camera and destroys windows.
         :return:
         """
         self.camera_provider.release()
@@ -32,7 +32,7 @@ class Display:
     @staticmethod
     def show_frame(frame, title='image'):
         """
-        Shows frame to screen.
+        Show frame to screen.
         :param frame:
         :param title:
         :return:
