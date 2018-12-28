@@ -3,7 +3,7 @@ from threading import Thread
 
 
 class PICamera(Thread):
-    def __init__(self, exposure=0, contrast=7, framerate=32, resolution=(480, 368)):
+    def __init__(self, exposure=0, contrast=7, framerate=32, resolution=(320, 240)):
         # Hacky fix picamera only being able to be installed on a raspberry pi
         from picamera import PiCamera
         from picamera.array import PiRGBArray
