@@ -4,20 +4,32 @@ import cv2
 
 
 class Display:
-    def __init__(self, port=0):
+    def __init__(self, provider):
         self.codec = cv2.VideoWriter_fourcc(*'XVID')
         self.record = False
         self.out = None
-        self.camera = cv2.VideoCapture(port)
+        self.camera_provider = provider
+        self.camera_provider.start()
 
     def get_frame(self):
-        return self.camera.read()[1]
+        """
+        Return the most current frame from the camera provider.
+        :return: Latest frame
+        """
+        return self.camera_provider.frame
+
+    def change_exposure(self, new_exposure: int):
+        """
+        Change the exposure through the camera provider.
+        :param new_exposure: New exposure to set
+        """
+        self.camera_provider.set_exposure(new_exposure)
 
     def release(self):
+        """Release the camera and destroys windows."""
         if self.out:
             self.out.release()
-        if self.camera:
-            self.camera.release()
+        self.camera_provider.release()
         cv2.destroyAllWindows()
 
     def start_recording(self, title):
@@ -31,6 +43,12 @@ class Display:
             self.out.release()
 
     def show_frame(self, frame, title='image'):
+        """
+        Show frame to screen.
+        :param frame: OpenCV frame
+        :param title: Window title
+        """
+
         cv2.imshow(title, frame)
         if self.record and title == 'contour image' and self.out:
             self.out.write(frame)

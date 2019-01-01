@@ -7,8 +7,10 @@ from termcolor import colored
 
 import nt_handler
 import utils
+from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
+from pi_camera import PICamera
 from trackbars import Trackbars
 from web import Web
 import display
@@ -31,6 +33,10 @@ def get_args():
     parser.add_argument('-local', action='store_true', default=False,
                         dest='local',
                         help='Launch local UI')
+    # Add raspberry pi argument
+    parser.add_argument('-pi', action='store_true', default=False,
+                        dest='pi',
+                        help='Use PI Camera')
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
@@ -45,7 +51,11 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name):
             return
-        self.display = Display(self.results.port)
+        if self.results.pi:
+            camera_provider = PICamera()
+        else:
+            camera_provider = CVCamera(self.results.port)
+        self.display = Display(provider=camera_provider)
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
         else:
@@ -78,6 +88,7 @@ class Main:
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target()
+        self.display.change_exposure(target.exposure)
         # Timer for FPS counter
         timer = time.time()
         avg = 0
@@ -95,15 +106,20 @@ class Main:
             filtered_contours = target.filter_contours(contours, hierarchy)
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
+            # Find distance and angle
+            distance, angle = target.measurements(original, filtered_contours)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            if self.results.web:
-                self.web.set_frame(contour_image)
             if self.results.local:
                 self.display.show_frame(contour_image, title='contour image')
                 self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
+            if self.results.networktables:
+                if distance:
+                    self.nt.set_item('distance', distance)
+                if angle:
+                    self.nt.set_item('angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 print(colored('Restarting...', 'yellow'))

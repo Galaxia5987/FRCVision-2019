@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 import cv2
 import numpy as np
@@ -9,8 +10,16 @@ import utils
 class TargetBase(ABC):
     """An abstract class representing a base target."""
 
-    @staticmethod
-    def create_mask(frame, hsv):
+    def __init__(self):
+        self.kernel_small = np.array([1], dtype=np.uint8)
+        self.kernel_medium = np.array([[1, 1],
+                                       [1, 1]], dtype=np.uint8)
+        self.kernel_big = np.array([[0, 1, 0],
+                                    [1, 1, 1],
+                                    [0, 1, 0]], dtype=np.uint8)
+        self.exposure = -6
+
+    def create_mask(self, frame, hsv):
         """
         :param frame: the frame to process
         :param hsv: JSON file
@@ -18,9 +27,7 @@ class TargetBase(ABC):
         """
         mask = utils.hsv_mask(frame, hsv)
         # create a cross kernel
-        mask = utils.morphology(mask, np.array([[0, 1, 0],
-                                                [1, 1, 1],
-                                                [0, 1, 0]], dtype=np.uint8))
+        mask = utils.morphology(mask, self.kernel_big)
         mask = cv2.threshold(mask, 127, 255, 0)[1]
         return mask
 
@@ -30,8 +37,23 @@ class TargetBase(ABC):
         :param mask: mask of the target
         :return: list of contours in the mask
         """
-        _, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return contours, hierarchy
+        obj = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # Hacky fix the difference opencv 4 and 3 until we can update everywhere
+        if len(obj) == 2:
+            return obj[0], obj[1]
+        else:
+            return obj[1], obj[2]
+
+    @staticmethod
+    def measurements(frame, cnt) -> Tuple[float, float]:
+        """
+        Return the angle and distance from a single target.
+        :param frame: The frame, used for angle measurement
+        :param cnt: The contour of the target
+        :return: The distance and angle from the target, None by default
+        """
+
+        return None, None
 
     @staticmethod
     @abstractmethod
