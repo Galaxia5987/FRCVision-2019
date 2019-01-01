@@ -111,9 +111,8 @@ class Main:
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
             # Display
-            if self.results.local:
-                self.display.show_frame(contour_image, title='contour image')
-                self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
+            self.display.process_frame(contour_image, 'contour image', self.results.local)
+            self.display.process_frame(utils.bitwise_and(original, mask), 'mask', self.results.local)
             if self.results.networktables:
                 if distance:
                     self.nt.set_item('distance', distance)

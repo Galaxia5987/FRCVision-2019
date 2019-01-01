@@ -34,3 +34,6 @@ class CVCamera(Thread):
         :param exposure: OpenCV camera exposure value
         """
         self.camera.set(constants.CAMERA_EXPOSURE, exposure)
+
+    def get_resolution(self):
+        return int(self.camera.get(3)), int(self.camera.get(4))
