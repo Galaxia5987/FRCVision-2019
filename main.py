@@ -13,7 +13,6 @@ from file_hsv import FileHSV
 from pi_camera import PICamera
 from trackbars import Trackbars
 from web import Web
-import display
 
 
 def get_args():
@@ -114,7 +113,7 @@ class Main:
             # Display
             if self.results.local:
                 self.display.show_frame(contour_image, title='contour image')
-                self.display.show_frame(utils.bitwise_mask(original, mask), title='mask')
+                self.display.show_frame(utils.bitwise_and(original, mask), title='mask')
             if self.results.networktables:
                 if distance:
                     self.nt.set_item('distance', distance)
