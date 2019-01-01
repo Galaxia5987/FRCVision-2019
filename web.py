@@ -5,7 +5,6 @@ from flask import Flask, render_template, Response, request
 import time
 
 import utils
-from nt_handler import NT
 
 
 class Web:
@@ -15,14 +14,12 @@ class Web:
         self.main = main
         self.last_frame = None  # Keep last frame for streaming
         self.app = Flask('Web')  # Flask app for web
-        if self.main.results.networktables:
-            self.match_data_table = NT('match-data')
 
         # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
             if self.main.results.networktables:
-                filename = self.match_data_table.get_item('match number', 'Enter file name')
+                filename = self.main.nt.get_item('match-data', 'Enter file name')
             else:
                 filename = time.strftime("%d-%m-%Y-%H-%M-%S")
             return render_template('index.html', initial_filename=filename)
