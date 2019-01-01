@@ -1,6 +1,7 @@
 import os
 
 import cv2
+from termcolor import colored
 
 
 class Display:
@@ -33,13 +34,14 @@ class Display:
         cv2.destroyAllWindows()
 
     def start_recording(self, title):
-        if not os.path.isdir("recordings"):
-            os.makedirs("recordings")
+        if not os.path.isdir('recordings'):
+            os.makedirs('recordings')
         self.record = True
         self.out = cv2.VideoWriter(f'recordings/{title}.avi', self.codec, 30.0, (640, 480))
 
     def stop_recording(self):
         if self.out:
+            colored('Releasing video recorder', 'green')
             self.out.release()
 
     def show_frame(self, frame, title='image'):
