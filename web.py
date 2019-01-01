@@ -2,6 +2,7 @@ from threading import Thread
 
 import cv2
 from flask import Flask, render_template, Response, request
+import time
 
 import utils
 from nt_handler import NT
@@ -14,13 +15,17 @@ class Web:
         self.main = main
         self.last_frame = None  # Keep last frame for streaming
         self.app = Flask('Web')  # Flask app for web
-        self.match_data_table = NT('match-data')
+        if self.main.results.networktables:
+            self.match_data_table = NT('match-data')
 
         # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
-            match_number = self.match_data_table.get_item('match number', 'Enter file name')
-            return render_template('index.html', initial_filename=match_number)
+            if self.main.results.networktables:
+                filename = self.match_data_table.get_item('match number', 'Enter file name')
+            else:
+                filename = time.strftime("%d-%m-%Y-%H-%M-%S")
+            return render_template('index.html', initial_filename=filename)
 
         # Video feed endpoint
         @self.app.route('/stream.mjpg')
