@@ -36,4 +36,4 @@ class CVCamera(Thread):
         self.camera.set(constants.CAMERA_EXPOSURE, exposure)
 
     def get_resolution(self):
-        return int(self.camera.get(3)), int(self.camera.get(4))
+        return int(self.camera.get(constants.CAMERA_WIDTH)), int(self.camera.get(constants.CAMERA_HEIGHT))
