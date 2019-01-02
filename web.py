@@ -2,6 +2,7 @@ from threading import Thread
 
 import cv2
 from flask import Flask, render_template, Response, request
+import time
 
 import utils
 
@@ -16,7 +17,11 @@ class Web:
         # Index html file
         @self.app.route('/')
         def index():  # Returns the HTML template
-            return render_template('index.html')
+            if self.main.results.networktables:
+                filename = self.main.nt.get_item('match data', 'Enter file name')
+            else:
+                filename = time.strftime("%d-%m-%Y-%H-%M-%S")
+            return render_template('index.html', initial_filename=filename)
 
         # Video feed endpoint
         @self.app.route('/stream.mjpg')
@@ -35,6 +40,22 @@ class Web:
             """Post route to change target."""
             target = request.data.decode('utf-8')
             self.main.change_name(target)
+            return '', 204
+
+        @self.app.route('/record', methods=['POST'])
+        def record():
+            """Start recording."""
+            filename = request.data.decode('utf-8')
+            if filename:
+                self.main.display.start_recording(filename)
+            else:
+                print('File name not present')
+            return '', 204
+
+        @self.app.route('/stopRecording', methods=['POST'])
+        def stop_recording():
+            """Stop recording."""
+            self.main.display.stop_recording()
             return '', 204
 
     def stream_frame(self):

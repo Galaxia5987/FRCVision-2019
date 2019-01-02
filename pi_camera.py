@@ -39,3 +39,6 @@ class PICamera(Thread):
         :param exposure:
         """
         self.camera.exposure_compensation = exposure
+
+    def get_resolution(self):
+        return self.camera.resolution
