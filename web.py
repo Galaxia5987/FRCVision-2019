@@ -18,7 +18,7 @@ class Web:
         @self.app.route('/')
         def index():  # Returns the HTML template
             if self.main.results.networktables:
-                filename = self.main.nt.get_item('match-data', 'Enter file name')
+                filename = self.main.nt.get_item('match data', 'Enter file name')
             else:
                 filename = time.strftime("%d-%m-%Y-%H-%M-%S")
             return render_template('index.html', initial_filename=filename)
