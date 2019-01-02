@@ -7,7 +7,7 @@ from termcolor import colored
 class Display:
     def __init__(self, provider):
         self.codec = cv2.VideoWriter_fourcc(*'XVID')
-        self.record = False
+        self.is_recording = False
         self.out = None
         self.camera_provider = provider
         self.camera_provider.start()
@@ -37,7 +37,7 @@ class Display:
         print(colored(f'Starting recording with title {title}', 'green'))
         if not os.path.isdir('recordings'):
             os.makedirs('recordings')
-        self.record = True
+        self.is_recording = True
         self.out = cv2.VideoWriter(f'recordings/{title}.avi', self.codec, 30.0, self.camera_provider.get_resolution())
 
     def stop_recording(self):
@@ -47,7 +47,7 @@ class Display:
 
     def process_frame(self, frame, title: str, show: bool):
         """
-        Shows and or records frame.
+        Show and or record frame.
         :param frame: OpenCV frame
         :param title: Window title
         :param show: Show or don't show to display
@@ -55,5 +55,5 @@ class Display:
         """
         if show:
             cv2.imshow(title, frame)
-        if self.record and title == 'contour image' and self.out:
+        if self.is_recording and title == 'contour image' and self.out:
             self.out.write(frame)
