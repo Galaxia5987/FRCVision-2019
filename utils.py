@@ -402,7 +402,7 @@ def is_circle(cnt, minimum):
     return minimum <= ratio <= 1
 
 
-def approx_vertices(cnt, ratio=0.07):
+def approx_poly(cnt, ratio=0.07):
     peri = cv2.arcLength(cnt, True)
     approx = cv2.approxPolyDP(cnt, ratio * peri, True)
     return len(approx)
@@ -415,7 +415,7 @@ def is_triangle(cnt, ratio=0.07):
     :param cnt:
     :return:
     """
-    return approx_vertices(cnt, ratio) == 3
+    return approx_poly(cnt, ratio) == 3
 
 
 def numpy_index(element, arrays: list):

@@ -43,7 +43,7 @@ class Target(TargetBase):
                 elif 0.15 < utils.solidity(cnt) < 0.45:
                     correct_contours.append(cnt)
                 else:
-                    approx = utils.approx_vertices(cnt)
+                    approx = utils.approx_poly(cnt)
                     if approx > 1:
                         correct_contours.append(cnt)
         return correct_contours
