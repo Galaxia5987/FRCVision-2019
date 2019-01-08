@@ -23,7 +23,6 @@ class Target(TargetBase):
             ratio = min(size[0], size[1]) / max(size[0], size[1])
             if 0.2 < ratio < 0.5:
                 correct_contours.append(cnt)
-            print(cv2.contourArea(cnt))
         return correct_contours
 
     @staticmethod
