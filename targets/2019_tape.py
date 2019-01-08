@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 import utils
 from targets.target_base import TargetBase
@@ -22,6 +23,11 @@ class Target(TargetBase):
             center, size, angle = cv2.minAreaRect(cnt)
             ratio = min(size[0], size[1]) / max(size[0], size[1])
             if 0.2 < ratio < 0.5:
+                if size[0] < size[1]:
+                    print(angle)
+                else:
+                    print(angle + 90)
+
                 correct_contours.append(cnt)
         return correct_contours
 
@@ -29,4 +35,8 @@ class Target(TargetBase):
     def draw_contours(filtered_contours, original):
         if not filtered_contours:
             return
-        cv2.drawContours(original, filtered_contours, -1, (0, 255, 0), 3)
+        for cnt in filtered_contours:
+            rect = cv2.minAreaRect(cnt)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+            cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
