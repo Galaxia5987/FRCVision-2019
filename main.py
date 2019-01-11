@@ -11,6 +11,7 @@ from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
 from pi_camera import PICamera
+from realsense import Realsense
 from trackbars import Trackbars
 from web import Web
 
@@ -36,6 +37,10 @@ def get_args():
     parser.add_argument('-pi', action='store_true', default=False,
                         dest='pi',
                         help='Use PI Camera')
+    # Add realsense argument
+    parser.add_argument('-realsense', action='store_true', default=False,
+                        dest='realsense',
+                        help='Use realsense Camera')
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
@@ -52,6 +57,8 @@ class Main:
             return
         if self.results.pi:
             camera_provider = PICamera()
+        elif self.results.realsense:
+            camera_provider = Realsense()
         else:
             camera_provider = CVCamera(self.results.port)
         self.display = Display(provider=camera_provider)
@@ -87,14 +94,15 @@ class Main:
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target()
-        self.display.change_exposure(target.exposure)
+        if not self.results.realsense:
+            self.display.change_exposure(target.exposure)
         # Timer for FPS counter
         timer = time.time()
         avg = 0
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                print(colored("Couldn't read from camera", 'red'))
+                print(colored("couldn't read from camera", 'red'))
                 break
             # Separate frames for display purposes
             original = frame.copy()
@@ -106,7 +114,13 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle = target.measurements(original, filtered_contours)
+            distance, angle, cnt = target.measurements(original, filtered_contours)
+            # Get distance from realsense if applicable
+            if self.results.realsense:
+                x, y = utils.get_center(cnt)
+                if x:
+                    distance = self.display.camera_provider.get_distance(x, y)
+                pass
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()

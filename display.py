@@ -57,3 +57,5 @@ class Display:
             cv2.imshow(title, frame)
         if self.is_recording and title == 'contour image' and self.out:
             self.out.write(frame)
+
+

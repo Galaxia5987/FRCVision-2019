@@ -118,7 +118,7 @@ class Target(TargetBase):
         chosen_one = contours[distances.index(min_distance)]
         angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], utils.center(chosen_one)[0], original)
 
-        return min_distance, angle
+        return min_distance, angle, chosen_one
 
     @staticmethod
     def draw_contours(filtered_contours, original):
