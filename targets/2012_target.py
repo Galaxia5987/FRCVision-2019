@@ -11,7 +11,7 @@ class Target(TargetBase):
 
     def __init__(self):
         super().__init__()
-        self.exposure = -20
+        self.exposure = 100
 
     @staticmethod
     def create_mask(frame, hsv):
@@ -22,6 +22,10 @@ class Target(TargetBase):
                                                 [0, 1, 0]], dtype=np.uint8))
         mask = cv2.threshold(mask, 250, 255, 0)[1]
         return mask
+
+    @staticmethod
+    def measurements(frame, contours):
+        return None, None, contours[0] if contours else None
 
     @staticmethod
     def filter_contours(contours, hierarchy):

@@ -94,8 +94,7 @@ class Main:
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target()
-        if not self.results.realsense:
-            self.display.change_exposure(target.exposure)
+        self.display.change_exposure(target.exposure)
         # Timer for FPS counter
         timer = time.time()
         avg = 0
@@ -120,6 +119,7 @@ class Main:
                 x, y = utils.get_center(cnt)
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
+                    print(f'Distance: {distance}')
                 pass
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)

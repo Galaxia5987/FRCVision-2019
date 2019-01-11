@@ -32,7 +32,20 @@ class Realsense():
         self.pipeline.stop()
 
     def get_resolution(self):
-        return 640, 480
+        return 1280, 720
+
+    def set_exposure(self, exposure: int):
+        """
+        Set the camera exposure
+        :param exposure:
+        """
+        #TODO: make exopsure work
+        ctx = rs.context()
+        sensor = ctx.sensors[0]
+        sensor.set_option(rs.option.enable_auto_exposure, 0)
+        sensor.set_option(rs.option.exposure, float(exposure))
+
+        #self.pipeline.set_option(rs.option.exposure, float(exposure))
 
     def get_distance(self, width, height):
-        return self.depth_frame(width, height)
+        return self.depth_frame.get_distance(width, height)
