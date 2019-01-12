@@ -16,19 +16,13 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
-            if cv2.contourArea(cnt) < 100:
-                continue
-            if utils.approx_poly(cnt, ratio=0.08) != 4:
-                continue
-            center, size, angle = cv2.minAreaRect(cnt)
-            ratio = min(size[0], size[1]) / max(size[0], size[1])
-            if 0.2 < ratio < 0.5:
-                if size[0] < size[1]:
-                    print(angle)
-                else:
-                    print(angle + 90)
-
+            if cv2.contourArea(cnt) < 100: continue
+            if 0.15 < utils.solidity(cnt) < 0.45:
                 correct_contours.append(cnt)
+            else:
+                approx = utils.approx_poly(cnt)
+                if approx > 1:
+                    correct_contours.append(cnt)
         return correct_contours
 
     @staticmethod
