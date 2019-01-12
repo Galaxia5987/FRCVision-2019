@@ -448,16 +448,3 @@ def np_array_in_list(np_array: np.array, list_arrays: List[np.array]) -> bool:
     :return: whether a NumPy array is in a list of NumPy arrays
     """
     return next((True for elem in list_arrays if elem is np_array), False)
-
-def real_angle(angle, size):
-    """
-    Get real angle from min area rect.
-    :param angle: Angle from min area rect
-    :param size: Size from min area rect
-    :return:
-    """
-    # if size[0] < size[1]:
-    #     return angle + 180
-    # else:
-    #     return angle + 90
-    return abs(angle)

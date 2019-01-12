@@ -32,7 +32,7 @@ class Target(TargetBase):
         for cnt in filtered_contours:
             rect = cv2.minAreaRect(cnt)
             x,y,w,h = cv2.boundingRect(cnt)
-            cv2.putText(original, str(int(rect[2])), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2,
+            cv2.putText(original, str(int(rect[2])), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                         cv2.LINE_AA)
             box = cv2.boxPoints(rect)
             box = np.int0(box)
@@ -45,10 +45,8 @@ class Target(TargetBase):
             if utils.np_array_in_list(cnt, paired):
                 continue
             center, size, angle = cv2.minAreaRect(cnt)
-            angle = utils.real_angle(angle, size)
             if last_contour is not None:
                 center2, size2, angle2 = cv2.minAreaRect(last_contour)
-                angle2 = utils.real_angle(angle2, size)
                 if angle2 < angle:
                     paired.extend([cnt, last_contour])
                     pairs.append((cnt, last_contour))
