@@ -40,7 +40,7 @@ def get_args():
     # Add realsense argument
     parser.add_argument('-realsense', action='store_true', default=False,
                         dest='realsense',
-                        help='Use realsense Camera')
+                        help='Use RealSense Camera')
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
