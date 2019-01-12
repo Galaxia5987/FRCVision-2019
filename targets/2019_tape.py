@@ -47,7 +47,8 @@ class Target(TargetBase):
             center, size, angle = cv2.minAreaRect(cnt)
             if last_contour is not None:
                 center2, size2, angle2 = cv2.minAreaRect(last_contour)
-                if angle2 < angle:
+                delta = abs(angle2 - angle)
+                if angle2 < angle and delta > 30:
                     paired.extend([cnt, last_contour])
                     pairs.append((cnt, last_contour))
             last_contour = cnt
