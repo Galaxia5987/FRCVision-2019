@@ -69,5 +69,5 @@ class Target(TargetBase):
                                       constants.TARGET_SIZES['2012']['width'], max(rect[1][0], rect[1][1])) * 100 * 1.05
             angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], int(a), original)
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(original, str(int(distance)), (int(a), int(b + radius)), font, 2, (255, 255, 255), 2,
+            cv2.putText(original, str(int(angle)), (int(a), int(b + radius)), font, 2, (255, 255, 255), 2,
                         cv2.LINE_AA)
