@@ -25,7 +25,10 @@ class Target(TargetBase):
 
     @staticmethod
     def measurements(frame, contours):
-        return None, None, contours[0] if contours else None
+        if contours:
+            center, size, angle = cv2.minAreaRect(contours[0])
+            return None, None, int(center[0]), int(center[1])
+        return None, None, None, None
 
     @staticmethod
     def filter_contours(contours, hierarchy):
@@ -65,9 +68,9 @@ class Target(TargetBase):
             center = int(a), int(b)
             cv2.circle(original, center, int(radius), (0, 0, 255), 5)
             rect = cv2.minAreaRect(cnt)
-            distance = utils.distance(constants.FOCAL_LENGTHS['lifecam'],
-                                      constants.TARGET_SIZES['2012']['width'], max(rect[1][0], rect[1][1])) * 100 * 1.05
+            distance = utils.distance(constants.FOCAL_LENGTHS['realsense'],
+                                      constants.TARGET_SIZES['2012']['width'], max(rect[1][0], rect[1][1])) * 100
             angle = utils.angle(constants.FOCAL_LENGTHS['realsense'], int(a), original)
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(original, str(int(angle)), (int(a), int(b + radius)), font, 2, (255, 255, 255), 2,
+            cv2.putText(original, str(int(distance)), (int(a), int(b + radius)), font, 2, (255, 255, 255), 2,
                         cv2.LINE_AA)

@@ -113,10 +113,9 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle, cnt = target.measurements(original, filtered_contours)
+            distance, angle, x, y = target.measurements(original, filtered_contours)
             # Get distance from realsense if applicable
             if self.results.realsense:
-                x, y = utils.get_center(cnt)
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
             # Show FPS

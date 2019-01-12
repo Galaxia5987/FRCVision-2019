@@ -45,7 +45,7 @@ class TargetBase(ABC):
             return obj[1], obj[2]
 
     @staticmethod
-    def measurements(frame, cnt) -> Tuple[float, float, np.array]:
+    def measurements(frame, cnt) -> Tuple[float, float, int, int]:
         """
         Return the angle and distance from a single target.
         :param frame: The frame, used for angle measurement
@@ -53,7 +53,7 @@ class TargetBase(ABC):
         :return: The distance and angle from the target, None by default
         """
 
-        return None, None, None
+        return None, None, None, None
 
     @staticmethod
     @abstractmethod
