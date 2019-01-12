@@ -16,7 +16,8 @@ class Target(TargetBase):
     def filter_contours(contours, hierarchy):
         correct_contours = []
         for cnt in contours:
-            if cv2.contourArea(cnt) < 100: continue
+            if cv2.contourArea(cnt) < 100:
+                continue
             if 0.15 < utils.solidity(cnt) < 0.45:
                 correct_contours.append(cnt)
             else:
@@ -31,7 +32,7 @@ class Target(TargetBase):
             return
         for cnt in filtered_contours:
             rect = cv2.minAreaRect(cnt)
-            x,y,w,h = cv2.boundingRect(cnt)
+            x, y, w, h = cv2.boundingRect(cnt)
             cv2.putText(original, str(int(rect[2])), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                         cv2.LINE_AA)
             box = cv2.boxPoints(rect)
@@ -39,21 +40,21 @@ class Target(TargetBase):
             cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
         sorted_contours = sorted(filtered_contours, key=lambda cnt: cv2.boundingRect(cnt)[0])
         last_contour = None
-        paired = []
+        already_paired = []
         pairs = []
         for cnt in sorted_contours:
-            if utils.np_array_in_list(cnt, paired):
+            if utils.np_array_in_list(cnt, already_paired):
                 continue
             center, size, angle = cv2.minAreaRect(cnt)
             if last_contour is not None:
                 center2, size2, angle2 = cv2.minAreaRect(last_contour)
                 delta = abs(angle2 - angle)
                 if angle2 < angle and delta > 30:
-                    paired.extend([cnt, last_contour])
+                    already_paired.extend([cnt, last_contour])
                     pairs.append((cnt, last_contour))
             last_contour = cnt
 
-        for pair in pairs:
-            x, y, w, h = cv2.boundingRect(pair[0])
-            x2, y2, w2, h2 = cv2.boundingRect(pair[1])
+        for first, second in pairs:
+            x, y, w, h = cv2.boundingRect(first)
+            x2, y2, w2, h2 = cv2.boundingRect(second)
             cv2.rectangle(original, (x + w, y + h), (x2, y2), (0, 255, 0), 3)

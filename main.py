@@ -97,7 +97,7 @@ class Main:
             if frame is None:
                 if not self.printed:
                     print(colored("Couldn't read from camera", 'red'))
-                self.printed = True
+                    self.printed = True
                 continue
             # Separate frames for display purposes
             original = frame.copy()
