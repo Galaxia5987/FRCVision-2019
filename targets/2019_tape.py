@@ -34,3 +34,27 @@ class Target(TargetBase):
             box = cv2.boxPoints(rect)
             box = np.int0(box)
             cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
+        sorted_contours = sorted(filtered_contours, key=lambda cnt: cv2.minAreaRect(cnt)[1][0])
+        last_angle = 0
+        last_contour = None
+        paired = []
+        pairs = []
+        for cnt in sorted_contours:
+            if utils.np_array_in_list(cnt, paired):
+                continue
+            center, size, angle = cv2.minAreaRect(cnt)
+            angle = utils.real_angle(angle, size)
+            if last_angle and last_contour is not None:
+                center2, size2, angle2 = cv2.minAreaRect(last_contour)
+                angle2 = utils.real_angle(angle2, size)
+                print(f'Angle: {angle}, Angle2: {angle2}')
+                if angle2 < angle:
+                    paired.extend([cnt, last_contour])
+                    pairs.append((cnt, last_contour))
+            last_angle = angle
+            last_contour = cnt
+
+        for pair in pairs:
+            x, y, w, h = cv2.boundingRect(pair[0])
+            x2, y2, w2, h2 = cv2.boundingRect(pair[1])
+            cv2.rectangle(original, (x, y), (x2 + w2, y2 + h2), (0, 255, 0), 3)
