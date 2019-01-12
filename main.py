@@ -11,7 +11,7 @@ from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
 from pi_camera import PICamera
-from realsense import Realsense
+from realsense import RealSense
 from trackbars import Trackbars
 from web import Web
 
@@ -58,7 +58,7 @@ class Main:
         if self.results.pi:
             camera_provider = PICamera()
         elif self.results.realsense:
-            camera_provider = Realsense()
+            camera_provider = RealSense()
         else:
             camera_provider = CVCamera(self.results.port)
         self.display = Display(provider=camera_provider)
@@ -101,7 +101,7 @@ class Main:
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                print(colored('couldn't read from camera', 'red'))
+                print(colored('Couldn\'t read from camera', 'red'))
                 break
             # Separate frames for display purposes
             original = frame.copy()
@@ -119,9 +119,6 @@ class Main:
                 x, y = utils.get_center(cnt)
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
-                    if distance != 0:
-                        print(f'Distance: {distance}')
-                pass
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
