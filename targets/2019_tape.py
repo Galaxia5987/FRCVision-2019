@@ -31,6 +31,9 @@ class Target(TargetBase):
             return
         for cnt in filtered_contours:
             rect = cv2.minAreaRect(cnt)
+            x,y,w,h = cv2.boundingRect(cnt)
+            cv2.putText(original, str(int(rect[2])), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2,
+                        cv2.LINE_AA)
             box = cv2.boxPoints(rect)
             box = np.int0(box)
             cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
@@ -49,7 +52,6 @@ class Target(TargetBase):
                 if angle2 < angle:
                     paired.extend([cnt, last_contour])
                     pairs.append((cnt, last_contour))
-            last_angle = angle
             last_contour = cnt
 
         for pair in pairs:
