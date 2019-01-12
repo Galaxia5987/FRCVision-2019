@@ -462,5 +462,5 @@ def get_center(cnt):
         x = int(moment["m10"] / moment["m00"])
         y = int(moment["m01"] / moment["m00"])
         return x, y
-    except:
+    except ZeroDivisionError:
         return None, None

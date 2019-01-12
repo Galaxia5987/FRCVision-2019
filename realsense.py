@@ -1,5 +1,3 @@
-from threading import Thread
-
 import numpy
 
 import pyrealsense2 as rs
