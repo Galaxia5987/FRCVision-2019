@@ -119,7 +119,8 @@ class Main:
                 x, y = utils.get_center(cnt)
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
-                    print(f'Distance: {distance}')
+                    if distance != 0:
+                        print(f'Distance: {distance}')
                 pass
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
