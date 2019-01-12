@@ -101,7 +101,7 @@ class Main:
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                print(colored("couldn't read from camera", 'red'))
+                print(colored('couldn't read from camera', 'red'))
                 break
             # Separate frames for display purposes
             original = frame.copy()
