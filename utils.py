@@ -452,7 +452,7 @@ def np_array_in_list(np_array: np.array, list_arrays: List[np.array]) -> bool:
 
 def get_center(cnt):
     """
-    Returns the center of the contour
+    Return the center of the contour.
     :param cnt: input contour
     :return:
     """
