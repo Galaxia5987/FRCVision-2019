@@ -46,6 +46,7 @@ def get_args():
 class Main:
     def __init__(self):
         self.results = get_args()
+        self.printed = False
         self.name = self.results.target
         # Check if requested target exists
         if not utils.is_target(self.name):
@@ -94,7 +95,9 @@ class Main:
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                print(colored("Couldn't read from camera", 'red'))
+                if not self.printed:
+                    print(colored("Couldn't read from camera", 'red'))
+                self.printed = True
                 continue
             # Separate frames for display purposes
             original = frame.copy()
