@@ -95,7 +95,7 @@ class Main:
             frame = self.display.get_frame()
             if frame is None:
                 print(colored("Couldn't read from camera", 'red'))
-                break
+                continue
             # Separate frames for display purposes
             original = frame.copy()
             contour_image = frame.copy()
