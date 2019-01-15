@@ -116,7 +116,7 @@ class Main:
             # Find distance and angle
             distance, angle, x, y = target.measurements(original, filtered_contours)
             # Get distance from realsense if applicable
-            if self.results.realsense:
+            if self.results.camera == 'realsense':
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
             # Show FPS
