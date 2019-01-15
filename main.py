@@ -46,7 +46,6 @@ def get_args():
 class Main:
     def __init__(self):
         self.results = get_args()
-        self.printed = False
         self.name = self.results.target
         # Check if requested target exists
         if not utils.is_target(self.name):
@@ -81,6 +80,7 @@ class Main:
         self.stop = True
 
     def loop(self):
+        printed = False
         # Check if requested target exists
         if not utils.is_target(self.name, False):
             return
@@ -95,10 +95,12 @@ class Main:
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                if not self.printed:
+                if not printed:
                     print(colored("Couldn't read from camera", 'red'))
-                    self.printed = True
+                    printed = True
                 continue
+            else:
+                printed = False
             # Separate frames for display purposes
             original = frame.copy()
             contour_image = frame.copy()
