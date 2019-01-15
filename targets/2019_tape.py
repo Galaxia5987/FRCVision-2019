@@ -39,10 +39,9 @@ class Target(TargetBase):
             box = np.int0(box)
             cv2.drawContours(original, [box], 0, (0, 0, 255), 2)
         sorted_contours = sorted(filtered_contours, key=lambda cnt: cv2.boundingRect(cnt)[0])
-        last_contour = sorted_contours[0]
         already_paired = []
         pairs = []
-        for cnt in sorted_contours[1:]:
+        for last_contour, cnt in zip(sorted_contours, sorted_contours[1:]):
             if utils.np_array_in_list(cnt, already_paired):
                 continue
             center, size, angle = cv2.minAreaRect(cnt)
@@ -51,7 +50,6 @@ class Target(TargetBase):
             if angle2 < angle and delta > 30:
                 already_paired.extend([cnt, last_contour])
                 pairs.append((cnt, last_contour))
-            last_contour = cnt
 
         for first, second in pairs:
             x, y, w, h = cv2.boundingRect(first)
