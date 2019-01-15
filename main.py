@@ -104,7 +104,7 @@ class Main:
             frame = self.display.get_frame()
             if frame is None:
                 if not printed:
-                    print(colored("Couldn't read from camera", 'red'))
+                    print(colored('Couldn\'t read from camera', 'red'))
                     printed = True
                 continue
             else:
