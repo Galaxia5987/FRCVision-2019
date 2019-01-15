@@ -13,7 +13,7 @@ class Target(TargetBase):
         self.exposure = -20
 
     @staticmethod
-    def is_correct(cnt):
+    def _is_correct(cnt):
         if cv2.contourArea(cnt) < 100:
             return False
         if 0.15 < utils.solidity(cnt) < 0.45:
@@ -22,7 +22,7 @@ class Target(TargetBase):
         return approx > 1
 
     def filter_contours(self, contours, hierarchy):
-        return [cnt for cnt in contours if self.is_correct(cnt)]
+        return [cnt for cnt in contours if self._is_correct(cnt)]
 
     @staticmethod
     def draw_contours(filtered_contours, original):
