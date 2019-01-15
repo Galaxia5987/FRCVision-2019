@@ -88,6 +88,7 @@ class Main:
         self.stop = True
 
     def loop(self):
+        printed = False
         # Check if requested target exists
         if not utils.is_target(self.name, False):
             return
@@ -102,8 +103,12 @@ class Main:
         while True:
             frame = self.display.get_frame()
             if frame is None:
-                print(colored('Couldn\'t read from camera', 'red'))
-                break
+                if not printed:
+                    print(colored('Couldn\'t read from camera', 'red'))
+                    printed = True
+                continue
+            else:
+                printed = False
             # Separate frames for display purposes
             original = frame.copy()
             contour_image = frame.copy()
