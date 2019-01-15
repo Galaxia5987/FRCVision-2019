@@ -13,18 +13,16 @@ class Target(TargetBase):
         self.exposure = -20
 
     @staticmethod
-    def filter_contours(contours, hierarchy):
-        correct_contours = []
-        for cnt in contours:
-            if cv2.contourArea(cnt) < 100:
-                continue
-            if 0.15 < utils.solidity(cnt) < 0.45:
-                correct_contours.append(cnt)
-            else:
-                approx = utils.approx_poly(cnt)
-                if approx > 1:
-                    correct_contours.append(cnt)
-        return correct_contours
+    def is_correct(cnt):
+        if cv2.contourArea(cnt) < 100:
+            return False
+        if 0.15 < utils.solidity(cnt) < 0.45:
+            return True
+        approx = utils.approx_poly(cnt)
+        return approx > 1
+
+    def filter_contours(self, contours, hierarchy):
+        return [cnt for cnt in contours if self.is_correct(cnt)]
 
     @staticmethod
     def draw_contours(filtered_contours, original):
