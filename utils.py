@@ -7,6 +7,8 @@ import cv2
 import numpy as np
 from termcolor import colored
 
+import imutils
+
 
 def index0(x):
     """
@@ -269,17 +271,15 @@ def binary_thresh(frame: np.array, thresh: int):
     return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
 
 
-def canny_edge_detection(frame: np.array, min_val=100, max_val=255):
+def canny_edge_detection(frame: np.array, sigma=0.33):
     """
     Runs canny edge detection on a frame.
     :param frame:
-    :param min_val: The minimum value above which edges will be ignores
-    :param max_val: The maximum value below which edges will be ignored
+    :param sigma:
     :return:
     """
-    src = cv2.GaussianBlur(frame, (3, 3), 0)
-    gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    return cv2.Canny(gray, min_val, max_val)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    return imutils.auto_canny(gray, sigma=sigma)
 
 
 def calculate_fps(frame: np.array, current_time: float, last_time: float, avg: float) -> float:
