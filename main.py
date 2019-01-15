@@ -1,4 +1,5 @@
 import argparse
+import sys
 import time
 from importlib import import_module
 
@@ -11,6 +12,7 @@ from cv_camera import CVCamera
 from display import Display
 from file_hsv import FileHSV
 from pi_camera import PICamera
+from realsense import RealSense
 from trackbars import Trackbars
 from web import Web
 
@@ -32,10 +34,8 @@ def get_args():
     parser.add_argument('-local', action='store_true', default=False,
                         dest='local',
                         help='Launch local UI')
-    # Add raspberry pi argument
-    parser.add_argument('-pi', action='store_true', default=False,
-                        dest='pi',
-                        help='Use PI Camera')
+    # Add camera provider argument
+    parser.add_argument('-camera', default='cv', help='Camera provider', type=str, choices=['cv', 'pi', 'realsense'])
     # Add camera port argument
     parser.add_argument('-port', default=0, dest='port', help='Camera port', type=int)
     # Add target argument
@@ -50,10 +50,18 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name):
             return
-        if self.results.pi:
+        if self.results.camera == 'pi':
             camera_provider = PICamera()
-        else:
+            print('Using PI Camera provider')
+        elif self.results.camera == 'realsense':
+            print('Using RealSense camera provider')
+            camera_provider = RealSense()
+        elif self.results.camera == 'cv':
             camera_provider = CVCamera(self.results.port)
+        else:
+            print('Invalid camera provider, this shouldn\'t happen')
+            sys.exit(1)
+
         self.display = Display(provider=camera_provider)
         if self.results.local:
             self.hsv_handler = Trackbars(self.name)
@@ -111,7 +119,11 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle = target.measurements(original, filtered_contours)
+            distance, angle, x, y = target.measurements(original, filtered_contours)
+            # Get distance from realsense if applicable
+            if self.results.camera == 'realsense':
+                if x:
+                    distance = self.display.camera_provider.get_distance(x, y)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
