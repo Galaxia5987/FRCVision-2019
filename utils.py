@@ -448,3 +448,19 @@ def np_array_in_list(np_array: np.array, list_arrays: List[np.array]) -> bool:
     :return: whether a NumPy array is in a list of NumPy arrays
     """
     return next((True for elem in list_arrays if elem is np_array), False)
+
+
+def get_center(cnt):
+    """
+    Return the center of the contour.
+    :param cnt: input contour
+    :return:
+    """
+    # Get center of the contour
+    moment = cv2.moments(cnt)
+    try:
+        x = int(moment["m10"] / moment["m00"])
+        y = int(moment["m01"] / moment["m00"])
+        return x, y
+    except ZeroDivisionError:
+        return None, None

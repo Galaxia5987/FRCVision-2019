@@ -2,6 +2,7 @@
 FOCAL_LENGTHS = {
     'note8': 538.5826,
     'lifecam': 638.6086956521739,
+    'realsense': 960,
     'rpi': 3.04
 }
 
