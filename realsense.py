@@ -3,7 +3,7 @@ import numpy
 import pyrealsense2 as rs
 
 
-class RealSense():
+class RealSense:
     def __init__(self):
         config = rs.config()
         config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
