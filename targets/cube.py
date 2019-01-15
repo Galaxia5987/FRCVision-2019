@@ -26,7 +26,7 @@ class Target(TargetBase):
 
     def edge_detection(self, frame, mask):
         edge = utils.bitwise_and(frame, mask)
-        edge = utils.canny_edge_detection(edge, min_val=100, max_val=125)
+        edge = utils.canny_edge_detection(edge)
         edge = utils.binary_thresh(edge, 127)
         edge = utils.array8(edge)
         edge = utils.dilate(edge, self.kernel_small, itr=3)
