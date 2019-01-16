@@ -42,7 +42,7 @@ class Display:
 
     def stop_recording(self):
         if self.out:
-            logging.info('Releasing video recorder', 'yellow')
+            logging.info('Releasing video recorder')
             self.out.release()
 
     def process_frame(self, frame, title: str, show: bool):
