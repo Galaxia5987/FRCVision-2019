@@ -1,7 +1,7 @@
+import logging
 import os
 
 import cv2
-from termcolor import colored
 
 
 class Display:
@@ -34,7 +34,7 @@ class Display:
         cv2.destroyAllWindows()
 
     def start_recording(self, title):
-        print(colored(f'Starting recording with title {title}', 'green'))
+        logging.info(f'Starting recording with title {title}')
         if not os.path.isdir('recordings'):
             os.makedirs('recordings')
         self.is_recording = True
@@ -42,7 +42,7 @@ class Display:
 
     def stop_recording(self):
         if self.out:
-            print(colored('Releasing video recorder', 'yellow'))
+            logging.info('Releasing video recorder', 'yellow')
             self.out.release()
 
     def process_frame(self, frame, title: str, show: bool):

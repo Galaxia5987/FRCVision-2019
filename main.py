@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 import time
 from importlib import import_module
@@ -15,6 +16,8 @@ from pi_camera import PICamera
 from realsense import RealSense
 from trackbars import Trackbars
 from web import Web
+
+logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
 
 
 def get_args():
@@ -52,14 +55,14 @@ class Main:
             return
         if self.results.camera == 'pi':
             camera_provider = PICamera()
-            print('Using PI Camera provider')
+            logging.info('Using PI Camera provider')
         elif self.results.camera == 'realsense':
-            print('Using RealSense camera provider')
+            logging.info('Using RealSense camera provider')
             camera_provider = RealSense()
         elif self.results.camera == 'cv':
             camera_provider = CVCamera(self.results.port)
         else:
-            print('Invalid camera provider, this shouldn\'t happen')
+            logging.error('Invalid camera provider, this shouldn\'t happen')
             sys.exit(1)
 
         self.display = Display(provider=camera_provider)
@@ -81,7 +84,7 @@ class Main:
         """
         if not utils.is_target(name):
             return
-        print(f'Changing target to {name}')
+        logging.info(f'Changing target to {name}')
         self.name = name
         self.hsv_handler.name = name
         self.hsv_handler.reload()
@@ -92,7 +95,7 @@ class Main:
         # Check if requested target exists
         if not utils.is_target(self.name, False):
             return
-        print(colored(f'Starting loop with target {self.name}', 'green'))
+        logging.info(f'Starting loop with target {self.name}')
         self.stop = False
         # We dynamically load classes in order to provide a modular base
         target = import_module(f'targets.{self.name}').Target()
@@ -104,7 +107,7 @@ class Main:
             frame = self.display.get_frame()
             if frame is None:
                 if not printed:
-                    print(colored('Couldn\'t read from camera', 'red'))
+                    logging.warning('Couldn\'t read from camera')
                     printed = True
                 continue
             else:
@@ -137,12 +140,12 @@ class Main:
                     self.nt.set_item('angle', angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
-                print(colored('Restarting...', 'yellow'))
+                logging.warning('Restarting...')
                 self.loop()
                 break
             k = cv2.waitKey(1) & 0xFF  # large wait time to remove freezing
             if k in (27, 113):
-                print(colored('Q pressed, stopping...', 'red'))
+                logging.warning('Q pressed, stopping...')
                 self.display.release()
                 break
 

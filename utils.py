@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import socket
@@ -338,7 +339,7 @@ def is_target(name: str, message: bool = True) -> bool:
     """
     if not os.path.isfile(f'targets/{name}.py'):
         if message:
-            print(colored('Target doesn\'t exist', 'red'))
+            logging.error('Target doesn\'t exist')
         return False
     return True
 
