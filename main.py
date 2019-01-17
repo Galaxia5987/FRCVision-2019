@@ -5,7 +5,6 @@ import time
 from importlib import import_module
 
 import cv2
-from termcolor import colored
 
 import nt_handler
 import utils
@@ -17,7 +16,10 @@ from realsense import RealSense
 from trackbars import Trackbars
 from web import Web
 
-logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
+logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO, handlers=[
+    logging.FileHandler('vision.log', mode='w'),
+    logging.StreamHandler()
+])
 
 
 def get_args():

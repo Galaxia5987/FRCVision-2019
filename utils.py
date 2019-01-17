@@ -6,7 +6,6 @@ from typing import Union, List, Tuple
 
 import cv2
 import numpy as np
-from termcolor import colored
 
 
 def index0(x):
