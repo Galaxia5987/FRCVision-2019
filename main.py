@@ -124,6 +124,8 @@ class Main:
             if self.results.camera == 'realsense':
                 if x:
                     distance = self.display.camera_provider.get_distance(x, y)
+                    if distance:
+                        print(distance)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
