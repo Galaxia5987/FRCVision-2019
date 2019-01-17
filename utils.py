@@ -271,7 +271,7 @@ def binary_thresh(frame: np.array, thresh: int):
     return cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
 
 
-def canny_edge_detection(frame: np.array, sigma=0.33):
+def canny_edge_detection(frame: np.array, sigma=33):
     """
     Runs canny edge detection on a frame.
     :param frame:
