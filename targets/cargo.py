@@ -8,20 +8,24 @@ class Target(TargetBase):
     """The cargo in the 2019."""
 
     def create_mask(self, frame, hsv):
-        edge = self.edge_detection(frame)
         mask = utils.hsv_mask(frame, hsv)
         mask = utils.binary_thresh(mask, 127)
 
+        edge = self.edge_detection(frame, mask)
+
         mask = utils.bitwise_not(mask, edge)
-        mask = utils.closing_morphology(mask, kernel_d=self.kernel_medium, kernel_e=self.kernel_medium, itr=3)
+        mask = utils.erode(mask, self.kernel_big)
+        mask = utils.closing_morphology(mask, kernel_d=self.kernel_small, kernel_e=self.kernel_small, itr=3)
 
         return mask
 
-    def edge_detection(self, frame):
+    def edge_detection(self, frame, mask):
         edge = utils.canny_edge_detection(frame)
         edge = utils.binary_thresh(edge, 127)
         edge = utils.array8(edge)
+        edge = utils.dilate(edge, self.kernel_big)
         edge = utils.opening_morphology(edge, kernel_e=self.kernel_small, kernel_d=self.kernel_small, itr=3)
+        edge = utils.bitwise_and(edge, mask)
 
         return edge
 
@@ -33,7 +37,7 @@ class Target(TargetBase):
             for cnt in contours:
                 if cv2.contourArea(cnt) < 200:
                     continue
-                if utils.is_circle(cnt, 0.7):
+                if utils.is_circle(cnt, 0.75) and utils.solidity(cnt) > 0.9:
                     all_children.extend(utils.get_children(cnt, contours, hierarchy))
                     correct_contours.append(cnt)
         for cnt in all_children:
