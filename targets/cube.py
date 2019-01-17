@@ -11,8 +11,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """Power cube from the 2018 mission."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, main):
+        super().__init__(main)
         self.correction = 25
 
     def create_mask(self, frame, hsv):
@@ -117,8 +117,7 @@ class Target(TargetBase):
         min_distance = min(distances)
         chosen_one = contours[distances.index(min_distance)]
         angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], utils.center(chosen_one)[0], original)
-        center = utils.center(chosen_one)
-        return min_distance, angle, center[0], center[1]
+        return angle, min_distance
 
     @staticmethod
     def draw_contours(filtered_contours, original):

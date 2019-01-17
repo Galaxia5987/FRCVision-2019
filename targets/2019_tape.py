@@ -9,23 +9,31 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """The 2019 Slanted light reflection tape."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, main):
+        super().__init__(main)
         self.exposure = -20
 
     def measurements(self, original, contours):
         pairs = self.get_pairs(contours)
         if not pairs:
-            return None, None, None, None
+            return None, None
         pair = pairs[0]
         x, y, w, h = cv2.boundingRect(pair[0])
         x2, y2, w2, h2 = cv2.boundingRect(pair[1])
 
         center = ((x + w) + x2) / 2
         angle = utils.angle(constants.FOCAL_LENGTHS['realsense'], center, original)
+        distance = None
+        if self.main.results.camera == 'realsense':
+            distance1 = self.main.display.camera_provider.get_distance(x, y)
+            distance2 = self.main.display.camera_provider.get_distance(x2, y2)
+            distance = (distance1 + distance2) / 2
         cv2.putText(original, str(int(angle)), (x + w, y + h), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                     cv2.LINE_AA)
-        return None, angle, x, y
+        if distance:
+            cv2.putText(original, str(int(distance * 100)), (x2, y2), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
+                        cv2.LINE_AA)
+        return angle, distance
 
     @staticmethod
     def _is_correct(cnt):
