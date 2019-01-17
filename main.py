@@ -119,7 +119,7 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle, x, y = target.measurements(original, filtered_contours)
+            distance, angle, x, y = target.measurements(contour_image, filtered_contours)
             # Get distance from realsense if applicable
             if self.results.camera == 'realsense':
                 if x:
