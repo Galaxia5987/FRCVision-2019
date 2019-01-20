@@ -10,8 +10,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """The Gear from FIRST Steamworks."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, main):
+        super().__init__(main)
 
     def create_mask(self, frame, hsv):
         mask = utils.hsv_mask(frame, hsv)

@@ -100,7 +100,7 @@ class Main:
         logging.info(f'Starting loop with target {self.name}')
         self.stop = False
         # We dynamically load classes in order to provide a modular base
-        target = import_module(f'targets.{self.name}').Target()
+        target = import_module(f'targets.{self.name}').Target(self)
         self.display.change_exposure(target.exposure)
         # Timer for FPS counter
         timer = time.time()
@@ -124,11 +124,7 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            distance, angle, x, y = target.measurements(original, filtered_contours)
-            # Get distance from realsense if applicable
-            if self.results.camera == 'realsense':
-                if x:
-                    distance = self.display.camera_provider.get_distance(x, y)
+            angle, distance = target.measurements(contour_image, filtered_contours)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
