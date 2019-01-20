@@ -7,8 +7,6 @@ import cv2
 import numpy as np
 from termcolor import colored
 
-import imutils
-
 
 def index0(x):
     """
@@ -466,7 +464,3 @@ def get_center(cnt):
         return x, y
     except ZeroDivisionError:
         return None, None
-
-
-def resize(frame, width):
-    return imutils.resize(frame, width)

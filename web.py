@@ -1,8 +1,9 @@
+import time
 from threading import Thread
 
 import cv2
+import imutils
 from flask import Flask, render_template, Response, request
-import time
 
 import utils
 
@@ -65,7 +66,7 @@ class Web:
         """
         while True:
             frame = self.main.display.get_frame()
-            frame = utils.resize(frame, 640)
+            frame = imutils.resize(frame, 640)
             if frame is None:
                 continue
             jpg = cv2.imencode('.jpg', frame)[1].tostring()
