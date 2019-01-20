@@ -71,7 +71,6 @@
     }
 
 
-
 </script>
 <h1>Video Stream</h1>
 <img src="{{ url_for('video_feed') }}">
@@ -79,7 +78,7 @@
 <br>
 <h1>Controls</h1>
 Target: <input type="text" id="target">
-File name: <input type="text" id="filename" value="{{initial_filename}}">
+File name: <input type="text" id="filename" value="{{ initial_filename }}">
 <br><br>
 <button class="green_button" onclick="save()">Save</button>
 <button class="green_button" onclick="update()">Update</button>

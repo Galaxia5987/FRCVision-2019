@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import socket
@@ -5,7 +6,6 @@ from typing import Union, List, Tuple
 
 import cv2
 import numpy as np
-from termcolor import colored
 
 
 def index0(x):
@@ -338,7 +338,7 @@ def is_target(name: str, message: bool = True) -> bool:
     """
     if not os.path.isfile(f'targets/{name}.py'):
         if message:
-            print(colored('Target doesn\'t exist', 'red'))
+            logging.error('Target doesn\'t exist')
         return False
     return True
 

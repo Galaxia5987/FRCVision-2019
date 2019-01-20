@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 
 import cv2
@@ -13,7 +14,7 @@ class CVCamera(Thread):
         self.set_exposure(exposure)
         self.exit = False
         self.frame = None
-        print(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
+        logging.info(f'Contrast: {contrast} Exposure: {exposure} FPS: {self.camera.get(constants.CAMERA_FPS)}')
         super().__init__(daemon=True)  # Init thread
 
     def run(self):

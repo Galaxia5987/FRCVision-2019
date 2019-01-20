@@ -1,7 +1,7 @@
 import atexit
+import logging
 
 from networktables import NetworkTables
-from termcolor import colored
 
 from file import File
 
@@ -20,7 +20,7 @@ class NT:
                          'values', 'nt')
         # The values file for the target, with a default value for when no such file exists
         server = self.get_nt_server()
-        print(colored(f'Initiating network tables connection with {server}', 'blue'))
+        logging.info(f'Initiating network tables connection with {server}')
         NetworkTables.initialize(server=server)
         NetworkTables.addConnectionListener(self.connection_listener, immediateNotify=True)
         self.table = NetworkTables.getTable('vision')  # Create our own table instead of clogging SmartDashboard
@@ -37,10 +37,10 @@ class NT:
         :param info: Connection info
         """
         if connected:
-            print(f'Success: {info}')
+            logging.info(f'Success: {info}')
             self.load_values()
         else:
-            print(f'Fail: {info}')
+            logging.error(f'Fail: {info}')
 
     def set_item(self, key, value):
         """

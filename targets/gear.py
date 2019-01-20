@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 
 import constants
@@ -59,7 +61,7 @@ class Target(TargetBase):
                                       constants.GAME_PIECE_SIZES['gear']['diameter'],
                                       radius * 2) * 100
             angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], a, original)
-            print(f'Distance: {distance}')
-            print(f'Angle: {angle}')
+            logging.debug(f'Distance: {distance}')
+            logging.debug(f'Angle: {angle}')
             center = int(a), int(b)
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)

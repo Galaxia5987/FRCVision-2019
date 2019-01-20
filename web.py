@@ -1,3 +1,4 @@
+import logging
 import time
 from threading import Thread
 
@@ -50,7 +51,7 @@ class Web:
             if filename:
                 self.main.display.start_recording(filename)
             else:
-                print('File name not present')
+                logging.warning('File name not present')
             return '', 204
 
         @self.app.route('/stopRecording', methods=['POST'])
@@ -75,7 +76,7 @@ class Web:
     def serve(self):
         """Start the web server."""
         # Print out ip and port for ease of use
-        print(f'Web server: http://{utils.get_ip()}:5987')
+        logging.info(f'Web server: http://{utils.get_ip()}:5987')
         # Run flask and bind to all IPs
         self.app.run('0.0.0.0', 5987, threaded=True)
 
