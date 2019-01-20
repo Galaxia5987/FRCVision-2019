@@ -52,15 +52,15 @@ class Target(TargetBase):
         sorted_contours = sorted(filtered_contours, key=lambda cnt: cv2.boundingRect(cnt)[0])
         already_paired = []
         pairs = []
-        for last_contour, cnt in zip(sorted_contours, sorted_contours[1:]):
+        for last_cnt, cnt in zip(sorted_contours, sorted_contours[1:]):
             if utils.np_array_in_list(cnt, already_paired):
                 continue
             center, size, angle = cv2.minAreaRect(cnt)
-            center2, size2, angle2 = cv2.minAreaRect(last_contour)
+            center2, size2, angle2 = cv2.minAreaRect(last_cnt)
             delta = abs(angle2 - angle)
             if angle2 < angle and delta > 30:
-                already_paired.extend([cnt, last_contour])
-                pairs.append((cnt, last_contour))
+                already_paired.extend([cnt, last_cnt])
+                pairs.append((cnt, last_cnt))
         return pairs
 
     def draw_contours(self, filtered_contours, original):
