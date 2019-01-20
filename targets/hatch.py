@@ -19,18 +19,14 @@ class Target(TargetBase):
 
         if len(cnts) == 2:
             areas = []
-            papa = 0
-            for cnt in cnts:
-                children = utils.get_children(cnt, contours, hierarchy)
-                if children:
-                    papa = cnt
 
+            for cnt in cnts:
                 convex_area = cv2.contourArea(cv2.convexHull(cnt))
                 areas.append(convex_area)
 
             if len(areas) == 2:
                 if 0.5 < (min(areas)/max(areas)) < 0.7:
-                    return papa
+                    return contours
 
         elif len(cnts) == 1:
             area = cv2.contourArea(cnts[0])
