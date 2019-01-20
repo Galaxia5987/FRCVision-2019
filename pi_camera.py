@@ -1,3 +1,4 @@
+import logging
 import time
 from threading import Thread
 
@@ -16,7 +17,7 @@ class PICamera(Thread):
         self.rawCapture = PiRGBArray(self.camera, size=resolution)
         self.exit = False
         self.frame = None
-        print(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
+        logging.info(f'Contrast: {contrast} Exposure: {exposure} FPS: {framerate}')
         time.sleep(0.1)  # Sleep to let the camera warm up
         super().__init__(daemon=True)
 
