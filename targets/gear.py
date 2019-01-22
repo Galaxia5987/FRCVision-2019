@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 
 import constants
@@ -8,8 +10,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """The Gear from FIRST Steamworks."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, main):
+        super().__init__(main)
 
     def create_mask(self, frame, hsv):
         mask = utils.hsv_mask(frame, hsv)
@@ -59,7 +61,7 @@ class Target(TargetBase):
                                       constants.GAME_PIECE_SIZES['gear']['diameter'],
                                       radius * 2) * 100
             angle = utils.angle(constants.FOCAL_LENGTHS['lifecam'], a, original)
-            print(f'Distance: {distance}')
-            print(f'Angle: {angle}')
+            logging.debug(f'Distance: {distance}')
+            logging.debug(f'Angle: {angle}')
             center = int(a), int(b)
             cv2.circle(original, center, int(radius), (255, 255, 0), 5)

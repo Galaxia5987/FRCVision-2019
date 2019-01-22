@@ -9,8 +9,8 @@ from targets.target_base import TargetBase
 class Target(TargetBase):
     """The light reflectors target from FIRST Rebound Rumble."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, main):
+        super().__init__(main)
         self.exposure = -10
 
     @staticmethod
@@ -23,12 +23,13 @@ class Target(TargetBase):
         mask = cv2.threshold(mask, 250, 255, 0)[1]
         return mask
 
-    @staticmethod
-    def measurements(frame, contours):
+    def measurements(self, frame, contours):
         if contours:
             center, size, angle = cv2.minAreaRect(contours[0])
-            return None, None, int(center[0]), int(center[1])
-        return None, None, None, None
+            if self.main.results.camera == 'realsense':
+                distance = self.main.display.camera_provider.get_distance(int(center[0]), int(center[1]))
+                return None, distance
+        return None, None
 
     @staticmethod
     def filter_contours(contours, hierarchy):
@@ -50,7 +51,7 @@ class Target(TargetBase):
                 elif 0.15 < utils.solidity(cnt) < 0.45:
                     correct_contours.append(cnt)
                 else:
-                    approx = utils.approx_vertices(cnt)
+                    approx = utils.approx_poly(cnt)
                     if approx > 1:
                         correct_contours.append(cnt)
         return correct_contours

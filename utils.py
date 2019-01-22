@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import socket
@@ -5,7 +6,6 @@ from typing import Union, List, Tuple
 
 import cv2
 import numpy as np
-from termcolor import colored
 
 
 def index0(x):
@@ -338,7 +338,7 @@ def is_target(name: str, message: bool = True) -> bool:
     """
     if not os.path.isfile(f'targets/{name}.py'):
         if message:
-            print(colored('Target doesn\'t exist', 'red'))
+            logging.error('Target doesn\'t exist')
         return False
     return True
 
@@ -402,7 +402,7 @@ def is_circle(cnt, minimum):
     return minimum <= ratio <= 1
 
 
-def approx_vertices(cnt, ratio=0.07):
+def approx_poly(cnt, ratio=0.07):
     peri = cv2.arcLength(cnt, True)
     approx = cv2.approxPolyDP(cnt, ratio * peri, True)
     return len(approx)
@@ -415,7 +415,7 @@ def is_triangle(cnt, ratio=0.07):
     :param cnt:
     :return:
     """
-    return approx_vertices(cnt, ratio) == 3
+    return approx_poly(cnt, ratio) == 3
 
 
 def numpy_index(element, arrays: list):

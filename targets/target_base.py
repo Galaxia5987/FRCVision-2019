@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import Tuple, Optional
 
 import cv2
 import numpy as np
@@ -10,7 +10,7 @@ import utils
 class TargetBase(ABC):
     """An abstract class representing a base target."""
 
-    def __init__(self):
+    def __init__(self, main):
         self.kernel_small = np.array([1], dtype=np.uint8)
         self.kernel_medium = np.array([[1, 1],
                                        [1, 1]], dtype=np.uint8)
@@ -18,6 +18,7 @@ class TargetBase(ABC):
                                     [1, 1, 1],
                                     [0, 1, 0]], dtype=np.uint8)
         self.exposure = -6
+        self.main = main
 
     def create_mask(self, frame, hsv):
         """
@@ -45,15 +46,13 @@ class TargetBase(ABC):
             return obj[1], obj[2]
 
     @staticmethod
-    def measurements(frame, cnt) -> Tuple[float, float, int, int]:
+    def measurements(frame, cnt) -> Tuple[Optional[float], Optional[float]]:
         """
         Return the angle and distance from a single target.
         :param frame: The frame, used for angle measurement
         :param cnt: The contour of the target
-        :return: The distance and angle from the target, None by default
         """
-
-        return None, None, None, None
+        return None, None
 
     @staticmethod
     @abstractmethod
