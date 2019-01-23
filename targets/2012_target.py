@@ -28,8 +28,8 @@ class Target(TargetBase):
             center, size, angle = cv2.minAreaRect(contours[0])
             if self.main.results.camera == 'realsense':
                 distance = self.main.display.camera_provider.get_distance(int(center[0]), int(center[1]))
-                return None, distance
-        return None, None
+                return None, distance, None
+        return None, None, None
 
     @staticmethod
     def filter_contours(contours, hierarchy):

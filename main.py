@@ -124,7 +124,7 @@ class Main:
             # Draw contours
             target.draw_contours(filtered_contours, contour_image)
             # Find distance and angle
-            angle, distance = target.measurements(contour_image, filtered_contours)
+            angle, distance, field_angle = target.measurements(contour_image, filtered_contours)
             # Show FPS
             avg = utils.calculate_fps(contour_image, time.time(), timer, avg)
             timer = time.time()
@@ -136,6 +136,8 @@ class Main:
                     self.nt.set_item('distance', distance)
                 if angle:
                     self.nt.set_item('angle', angle)
+                if field_angle:
+                    self.nt.set_item('field angle', field_angle)
             if self.stop:
                 # If stop signal was sent we call loop again to start with new name
                 logging.warning('Restarting...')

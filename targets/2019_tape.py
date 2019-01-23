@@ -1,3 +1,5 @@
+import math
+
 import cv2
 import numpy as np
 
@@ -24,16 +26,31 @@ class Target(TargetBase):
         center = ((x + w) + x2) / 2
         angle = utils.angle(constants.FOCAL_LENGTHS['realsense'], center, original)
         distance = None
+        field_angle = None
+
         if self.main.results.camera == 'realsense':
             distance1 = self.main.display.camera_provider.get_distance(x, y)
             distance2 = self.main.display.camera_provider.get_distance(x2, y2)
             distance = (distance1 + distance2) / 2
+            close_distance = min(distance1, distance2)
+            tape_distance = constants.TARGET_SIZES['2019']['distance'] / 2
+
+            alpha = math.acos(
+                (distance ** 2 + tape_distance ** 2 - close_distance ** 2) / (2 * distance * tape_distance)) * (
+                            180 / math.pi)
+            field_angle = 90 - alpha
+
         cv2.putText(original, str(int(angle)), (x + w, y + h), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                     cv2.LINE_AA)
         if distance:
             cv2.putText(original, str(int(distance * 100)), (x2, y2), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                         cv2.LINE_AA)
-        return angle, distance
+
+        if field_angle:
+            cv2.putText(original, str(int(field_angle)), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
+                        cv2.LINE_AA)
+
+        return angle, distance, field_angle
 
     @staticmethod
     def _is_correct(cnt):
