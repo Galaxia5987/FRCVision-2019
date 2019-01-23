@@ -18,7 +18,7 @@ class Target(TargetBase):
     def measurements(self, original, contours):
         pairs = self.get_pairs(contours)
         if not pairs:
-            return None, None
+            return None, None, None
         pair = pairs[0]
         x, y, w, h = cv2.boundingRect(pair[0])
         x2, y2, w2, h2 = cv2.boundingRect(pair[1])
@@ -31,14 +31,17 @@ class Target(TargetBase):
         if self.main.results.camera == 'realsense':
             distance1 = self.main.display.camera_provider.get_distance(x, y)
             distance2 = self.main.display.camera_provider.get_distance(x2, y2)
-            distance = (distance1 + distance2) / 2
-            close_distance = min(distance1, distance2)
-            tape_distance = constants.TARGET_SIZES['2019']['distance'] / 2
+            if distance1 and distance2:
+                distance = (distance1 + distance2) / 2
+                close_distance = min(distance1, distance2)
+                tape_distance = constants.TARGET_SIZES['2019']['distance'] / 2
 
-            alpha = math.acos(
-                (distance ** 2 + tape_distance ** 2 - close_distance ** 2) / (2 * distance * tape_distance)) * (
-                            180 / math.pi)
-            field_angle = 90 - alpha
+                top = distance ** 2 + tape_distance ** 2 - close_distance ** 2
+                bottom = 2 * distance * tape_distance
+
+                if utils.is_legal_traingle(distance, close_distance, tape_distance):
+                    alpha = math.acos(top / bottom) * (180 / math.pi)
+                    field_angle = 90 - alpha
 
         cv2.putText(original, str(int(angle)), (x + w, y + h), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                     cv2.LINE_AA)
@@ -47,6 +50,7 @@ class Target(TargetBase):
                         cv2.LINE_AA)
 
         if field_angle:
+            print(field_angle)
             cv2.putText(original, str(int(field_angle)), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                         cv2.LINE_AA)
 

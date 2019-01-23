@@ -464,3 +464,6 @@ def get_center(cnt):
         return x, y
     except ZeroDivisionError:
         return None, None
+
+def is_legal_traingle(a, b, c):
+    return a + b > c and a + c > b and b + c > a
