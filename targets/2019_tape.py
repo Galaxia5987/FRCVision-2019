@@ -29,8 +29,14 @@ class Target(TargetBase):
         field_angle = None
 
         if self.main.results.camera == 'realsense':
-            distance1 = self.main.display.camera_provider.get_distance(x, y)
-            distance2 = self.main.display.camera_provider.get_distance(x2, y2)
+            distances = []
+            avg_distances = []
+            for tape in pair:
+                for point in tape:
+                    distances.append(self.main.display.camera_provider.get_distance(point[0], point[1]))
+                avg_distances.append(np.median(distances))
+            distance1 = avg_distances[0]
+            distance2 = avg_distances[1]
             if distance1 and distance2:
                 distance = (distance1 + distance2) / 2
                 close_distance = min(distance1, distance2)
