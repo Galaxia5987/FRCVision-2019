@@ -33,8 +33,9 @@ class Target(TargetBase):
             avg_distances = []
             for tape in pair:
                 for point in tape:
-                    distances.append(self.main.display.camera_provider.get_distance(point[0], point[1]))
+                    distances.append(self.main.display.camera_provider.get_distance(point[0][0], point[0][1]))
                 avg_distances.append(np.median(distances))
+                distances = []
             distance1 = avg_distances[0]
             distance2 = avg_distances[1]
             if distance1 and distance2:
@@ -56,7 +57,6 @@ class Target(TargetBase):
                         cv2.LINE_AA)
 
         if field_angle:
-            print(field_angle)
             cv2.putText(original, str(int(field_angle)), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 1,
                         cv2.LINE_AA)
 
